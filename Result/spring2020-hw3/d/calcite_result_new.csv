@@ -1,0 +1,1079 @@
+"WITH beercounts as (SELECT beer.name as beer, count(drinker) as cnt
+FROM beer LEFT OUTER JOIN likes ON beer.name = likes.beer
+GROUP BY beer.name),
+  avprice as (SELECT name as beer, avg(price) as avg FROM beer left join serves on name = beer GROUP BY name)
+SELECT beercounts.beer as beer, cnt, avg
+FROM beercounts, avprice
+WHERE beercounts.beer = avprice.beer
+ORDER BY cnt desc, beer asc ;","{""failed"":true,""errorMsg"":""Parsing error at line 4, column 50. Query syntax may be incorrect""}
+"
+"WITH 
+pop AS
+(SELECT COUNT(drinker) AS cnt, beer
+FROM likes
+GROUP BY beer),
+
+tempPop AS
+(SELECT name, cnt
+FROM beer FULL OUTER JOIN pop
+ON name = beer),
+
+nullPop AS
+(SELECT name, COUNT(name)-COUNT(name) AS cnt
+FROM tempPop
+WHERE cnt IS NULL
+GROUP BY name),
+
+fullPop AS
+((SELECT * FROM tempPop WHERE cnt IS NOT NULL) UNION (SELECT * FROM nullPop)),
+
+price AS
+(SELECT beer, AVG(price) AS avg
+FROM serves
+GROUP BY beer), 
+
+fullPrice AS
+(SELECT name, avg
+FROM beer FULL OUTER JOIN price
+ON name = beer)
+
+
+SELECT fullPop.name, cnt, avg
+FROM fullPop, fullPrice
+WHERE fullPop.name = fullPrice.name
+ORDER BY name asc, cnt desc;","{""failed"":true,""errorMsg"":""Parsing error at line 22, column 29. Query syntax may be incorrect""}
+"
+"WITH d AS (select DISTINCT drinker, name from likes RIGHT OUTER JOIN beer on likes.beer = name), a AS (select beer, avg(price) from serves group by beer), c AS (select count(drinker), name from d group by name) Select c.name, count as cnt, avg from c LEFT OUTER JOIN a on a.beer = c.name ORDER BY count DESC, beer;","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 227. Query syntax may be incorrect""}
+"
+"
+WITH beers AS
+	(SELECT DISTINCT name
+	FROM beer),
+
+ counts AS 
+	(SELECT beers.name AS beer, COUNT(likes.beer) AS c
+	FROM beers
+		LEFT JOIN likes ON likes.beer = beers.name
+	GROUP BY beers.name),
+
+ ser AS 
+	(SELECT beers.name AS beer, serves.price AS price
+	FROM beers
+		LEFT OUTER JOIN serves ON serves.beer = beers.name),
+
+ averages AS 
+	(SELECT beers.name AS beer, AVG(price) AS a
+	FROM ser, beers
+	WHERE ser.beer = beers.name
+	GROUP BY beers.name)
+
+SELECT counts.beer, counts.c, averages.a
+FROM counts, averages
+WHERE counts.beer = averages.beer
+ORDER BY counts.c DESC, counts.beer;
+","{""blocks"":{""id"":""BLOCK_SELECT@ff6077"",""fields"":[""BEER VARCHAR(100)"",""C BIGINT"",""A DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@de88ac6"",""value"":""NS_IDENT@1d96d872.BEER"",""pos"":{""lineNum"":23,""columnNum"":8,""endLineNum"":23,""endColumnNum"":18,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@5bca7664"",""value"":""NS_IDENT@1d96d872.C"",""pos"":{""lineNum"":23,""columnNum"":21,""endLineNum"":23,""endColumnNum"":28,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@105b693d"",""value"":""NS_IDENT@5c748168.A"",""pos"":{""lineNum"":23,""columnNum"":31,""endLineNum"":23,""endColumnNum"":40,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@1d96d872"",""NS_IDENT@5c748168""],""fromNode"":{""id"":""OP_JOIN@abbc908"",""value"":""COMMA"",""pos"":{""lineNum"":24,""columnNum"":12,""endLineNum"":24,""endColumnNum"":12,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@44afefd5"",""value"":""NS_IDENT@1d96d872"",""pos"":{""lineNum"":24,""columnNum"":6,""endLineNum"":24,""endColumnNum"":11,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@9a7a808"",""value"":""NS_IDENT@5c748168"",""pos"":{""lineNum"":24,""columnNum"":14,""endLineNum"":24,""endColumnNum"":21,""quoted"":false},""children"":[]}],""natural"":false},""whereNode"":{""id"":""OP_BINARY@1d25c1c"",""value"":""="",""pos"":{""lineNum"":25,""columnNum"":7,""endLineNum"":25,""endColumnNum"":33,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@333cb916"",""value"":""NS_IDENT@1d96d872.BEER"",""pos"":{""lineNum"":25,""columnNum"":7,""endLineNum"":25,""endColumnNum"":17,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@629ae7e"",""value"":""NS_IDENT@5c748168.BEER"",""pos"":{""lineNum"":25,""columnNum"":21,""endLineNum"":25,""endColumnNum"":33,""quoted"":false},""children"":[]}]},""isAggregate"":false,""orderByList"":[{""id"":""OP_POSTFIX@42fcc7e6"",""value"":""DESC"",""pos"":{""lineNum"":26,""columnNum"":10,""endLineNum"":26,""endColumnNum"":22,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@4a0df195"",""value"":""NS_IDENT@1d96d872.C"",""pos"":{""lineNum"":26,""columnNum"":10,""endLineNum"":26,""endColumnNum"":17,""quoted"":false},""children"":[]}]},{""id"":""COLUMN_LOCAL@9255c05"",""value"":""NS_IDENT@1d96d872.BEER"",""pos"":{""lineNum"":26,""columnNum"":25,""endLineNum"":26,""endColumnNum"":35,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@4a0df195"",""value"":""NS_IDENT@1d96d872.C"",""pos"":{""lineNum"":26,""columnNum"":10,""endLineNum"":26,""endColumnNum"":17,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@de88ac6"",""value"":""NS_IDENT@1d96d872.BEER"",""pos"":{""lineNum"":23,""columnNum"":8,""endLineNum"":23,""endColumnNum"":18,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@333cb916"",""value"":""NS_IDENT@1d96d872.BEER"",""pos"":{""lineNum"":25,""columnNum"":7,""endLineNum"":25,""endColumnNum"":17,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@9255c05"",""value"":""NS_IDENT@1d96d872.BEER"",""pos"":{""lineNum"":26,""columnNum"":25,""endLineNum"":26,""endColumnNum"":35,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@105b693d"",""value"":""NS_IDENT@5c748168.A"",""pos"":{""lineNum"":23,""columnNum"":31,""endLineNum"":23,""endColumnNum"":40,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@629ae7e"",""value"":""NS_IDENT@5c748168.BEER"",""pos"":{""lineNum"":25,""columnNum"":21,""endLineNum"":25,""endColumnNum"":33,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@5bca7664"",""value"":""NS_IDENT@1d96d872.C"",""pos"":{""lineNum"":23,""columnNum"":21,""endLineNum"":23,""endColumnNum"":28,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":23,""columnNum"":1,""endLineNum"":25,""endColumnNum"":33,""quoted"":false},""children"":{}},""tables"":{""NS_IDENT@5c748168"":{""tableId"":""NS_IDENT@5c748168"",""identifier"":""AVERAGES"",""dbTableName"":""AVERAGES"",""fields"":[""BEER VARCHAR(100)"",""A DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":24,""columnNum"":14,""endLineNum"":24,""endColumnNum"":21,""quoted"":false}},""NS_IDENT@58a4a74d"":{""tableId"":""NS_IDENT@58a4a74d"",""identifier"":""BEERS"",""dbTableName"":""BEERS"",""fields"":[""NAME VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":14,""columnNum"":7,""endLineNum"":14,""endColumnNum"":11,""quoted"":false}},""NS_IDENT@67e28be3"":{""tableId"":""NS_IDENT@67e28be3"",""identifier"":""BEER"",""dbTableName"":""BEER"",""fields"":[""name VARCHAR(100)"",""brewer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":4,""columnNum"":7,""endLineNum"":4,""endColumnNum"":10,""quoted"":false}},""NS_IDENT@1d96d872"":{""tableId"":""NS_IDENT@1d96d872"",""identifier"":""COUNTS"",""dbTableName"":""COUNTS"",""fields"":[""BEER VARCHAR(100)"",""C BIGINT""],""cursor"":[0],""pos"":{""lineNum"":24,""columnNum"":6,""endLineNum"":24,""endColumnNum"":11,""quoted"":false}},""NS_IDENT@4cbf4f53"":{""tableId"":""NS_IDENT@4cbf4f53"",""identifier"":""LIKES"",""dbTableName"":""LIKES"",""fields"":[""drinker VARCHAR(100)"",""beer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":9,""columnNum"":13,""endLineNum"":9,""endColumnNum"":17,""quoted"":false}},""NS_IDENT@59532566"":{""tableId"":""NS_IDENT@59532566"",""identifier"":""BEERS"",""dbTableName"":""BEERS"",""fields"":[""NAME VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":19,""columnNum"":12,""endLineNum"":19,""endColumnNum"":16,""quoted"":false}},""NS_IDENT@54aca26f"":{""tableId"":""NS_IDENT@54aca26f"",""identifier"":""SERVES"",""dbTableName"":""SERVES"",""fields"":[""bar VARCHAR(100)"",""beer VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":15,""columnNum"":19,""endLineNum"":15,""endColumnNum"":24,""quoted"":false}},""NS_IDENT@4f63e3c7"":{""tableId"":""NS_IDENT@4f63e3c7"",""identifier"":""SER"",""dbTableName"":""SER"",""fields"":[""BEER VARCHAR(100)"",""PRICE DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":19,""columnNum"":7,""endLineNum"":19,""endColumnNum"":9,""quoted"":false}},""NS_IDENT@b18c4"":{""tableId"":""NS_IDENT@b18c4"",""identifier"":""BEERS"",""dbTableName"":""BEERS"",""fields"":[""NAME VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":8,""columnNum"":7,""endLineNum"":8,""endColumnNum"":11,""quoted"":false}}},""corrTables"":[],""withBlocks"":[{""id"":""BLOCK_SELECT@72ed9aad"",""alias"":""BEERS"",""fields"":[""NAME VARCHAR(100)""],""isDistinct"":true,""selectList"":[{""id"":""COLUMN_LOCAL@4f8b4bd0"",""value"":""NS_IDENT@67e28be3.NAME"",""pos"":{""lineNum"":3,""columnNum"":19,""endLineNum"":3,""endColumnNum"":22,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@67e28be3""],""fromNode"":{""id"":""JOIN_OPERAND@5e3a39cd"",""value"":""NS_IDENT@67e28be3"",""pos"":{""lineNum"":4,""columnNum"":7,""endLineNum"":4,""endColumnNum"":10,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@4f8b4bd0"",""value"":""NS_IDENT@67e28be3.NAME"",""pos"":{""lineNum"":3,""columnNum"":19,""endLineNum"":3,""endColumnNum"":22,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":3,""columnNum"":3,""endLineNum"":4,""endColumnNum"":10,""quoted"":false},""children"":{}},{""id"":""BLOCK_SELECT@1917d90f"",""alias"":""COUNTS"",""fields"":[""BEER VARCHAR(100)"",""C BIGINT""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@2822c6ff"",""value"":""NS_IDENT@b18c4.NAME"",""pos"":{""lineNum"":7,""columnNum"":10,""endLineNum"":7,""endColumnNum"":19,""quoted"":false},""children"":[],""alias"":""BEER""},{""id"":""OP_AGG_FUNC@15dd5ac2"",""value"":""COUNT"",""pos"":{""lineNum"":7,""columnNum"":30,""endLineNum"":7,""endColumnNum"":46,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@4d48bd85"",""value"":""NS_IDENT@4cbf4f53.BEER"",""pos"":{""lineNum"":7,""columnNum"":36,""endLineNum"":7,""endColumnNum"":45,""quoted"":false},""children"":[]}],""alias"":""C""}],""fromItemIds"":[""NS_IDENT@b18c4"",""NS_IDENT@4cbf4f53""],""fromNode"":{""id"":""OP_JOIN@6079cf5"",""value"":""LEFT"",""pos"":{""lineNum"":9,""columnNum"":8,""endLineNum"":9,""endColumnNum"":11,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@1e6308a9"",""value"":""NS_IDENT@b18c4"",""pos"":{""lineNum"":8,""columnNum"":7,""endLineNum"":8,""endColumnNum"":11,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@30cecdca"",""value"":""NS_IDENT@4cbf4f53"",""pos"":{""lineNum"":9,""columnNum"":13,""endLineNum"":9,""endColumnNum"":17,""quoted"":false},""children"":[]}],""natural"":false,""joinCondition"":{""id"":""OP_BINARY@5b12012e"",""value"":""="",""pos"":{""lineNum"":9,""columnNum"":22,""endLineNum"":9,""endColumnNum"":44,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@54562ea6"",""value"":""NS_IDENT@4cbf4f53.beer"",""pos"":{""lineNum"":9,""columnNum"":22,""endLineNum"":9,""endColumnNum"":31,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@1a35993f"",""value"":""NS_IDENT@b18c4.NAME"",""pos"":{""lineNum"":9,""columnNum"":35,""endLineNum"":9,""endColumnNum"":44,""quoted"":false},""children"":[]}]}},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@621f89b8"",""value"":""NS_IDENT@b18c4.NAME"",""pos"":{""lineNum"":10,""columnNum"":11,""endLineNum"":10,""endColumnNum"":20,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@2822c6ff"",""value"":""NS_IDENT@b18c4.NAME"",""pos"":{""lineNum"":7,""columnNum"":10,""endLineNum"":7,""endColumnNum"":19,""quoted"":false},""children"":[],""alias"":""BEER""},{""id"":""COLUMN_LOCAL@621f89b8"",""value"":""NS_IDENT@b18c4.NAME"",""pos"":{""lineNum"":10,""columnNum"":11,""endLineNum"":10,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4d48bd85"",""value"":""NS_IDENT@4cbf4f53.BEER"",""pos"":{""lineNum"":7,""columnNum"":36,""endLineNum"":7,""endColumnNum"":45,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@1a35993f"",""value"":""NS_IDENT@b18c4.NAME"",""pos"":{""lineNum"":9,""columnNum"":35,""endLineNum"":9,""endColumnNum"":44,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@54562ea6"",""value"":""NS_IDENT@4cbf4f53.beer"",""pos"":{""lineNum"":9,""columnNum"":22,""endLineNum"":9,""endColumnNum"":31,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":7,""columnNum"":3,""endLineNum"":10,""endColumnNum"":20,""quoted"":false},""children"":{}},{""id"":""BLOCK_SELECT@512d4583"",""alias"":""SER"",""fields"":[""BEER VARCHAR(100)"",""PRICE DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@2ce45a7b"",""value"":""NS_IDENT@58a4a74d.NAME"",""pos"":{""lineNum"":13,""columnNum"":10,""endLineNum"":13,""endColumnNum"":19,""quoted"":false},""children"":[],""alias"":""BEER""},{""id"":""COLUMN_LOCAL@35088e87"",""value"":""NS_IDENT@54aca26f.PRICE"",""pos"":{""lineNum"":13,""columnNum"":30,""endLineNum"":13,""endColumnNum"":41,""quoted"":false},""children"":[],""alias"":""PRICE""}],""fromItemIds"":[""NS_IDENT@58a4a74d"",""NS_IDENT@54aca26f""],""fromNode"":{""id"":""OP_JOIN@2abc224d"",""value"":""LEFT"",""pos"":{""lineNum"":15,""columnNum"":14,""endLineNum"":15,""endColumnNum"":17,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@13cd7ea5"",""value"":""NS_IDENT@58a4a74d"",""pos"":{""lineNum"":14,""columnNum"":7,""endLineNum"":14,""endColumnNum"":11,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@102d92c4"",""value"":""NS_IDENT@54aca26f"",""pos"":{""lineNum"":15,""columnNum"":19,""endLineNum"":15,""endColumnNum"":24,""quoted"":false},""children"":[]}],""natural"":false,""joinCondition"":{""id"":""OP_BINARY@1be59f28"",""value"":""="",""pos"":{""lineNum"":15,""columnNum"":29,""endLineNum"":15,""endColumnNum"":52,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@540dbda9"",""value"":""NS_IDENT@54aca26f.beer"",""pos"":{""lineNum"":15,""columnNum"":29,""endLineNum"":15,""endColumnNum"":39,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@22bb5646"",""value"":""NS_IDENT@58a4a74d.NAME"",""pos"":{""lineNum"":15,""columnNum"":43,""endLineNum"":15,""endColumnNum"":52,""quoted"":false},""children"":[]}]}},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@22bb5646"",""value"":""NS_IDENT@58a4a74d.NAME"",""pos"":{""lineNum"":15,""columnNum"":43,""endLineNum"":15,""endColumnNum"":52,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@540dbda9"",""value"":""NS_IDENT@54aca26f.beer"",""pos"":{""lineNum"":15,""columnNum"":29,""endLineNum"":15,""endColumnNum"":39,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@2ce45a7b"",""value"":""NS_IDENT@58a4a74d.NAME"",""pos"":{""lineNum"":13,""columnNum"":10,""endLineNum"":13,""endColumnNum"":19,""quoted"":false},""children"":[],""alias"":""BEER""},{""id"":""COLUMN_LOCAL@35088e87"",""value"":""NS_IDENT@54aca26f.PRICE"",""pos"":{""lineNum"":13,""columnNum"":30,""endLineNum"":13,""endColumnNum"":41,""quoted"":false},""children"":[],""alias"":""PRICE""}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":13,""columnNum"":3,""endLineNum"":15,""endColumnNum"":52,""quoted"":false},""children"":{}},{""id"":""BLOCK_SELECT@60723d6a"",""alias"":""AVERAGES"",""fields"":[""BEER VARCHAR(100)"",""A DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@3350ebdd"",""value"":""NS_IDENT@59532566.NAME"",""pos"":{""lineNum"":18,""columnNum"":10,""endLineNum"":18,""endColumnNum"":19,""quoted"":false},""children"":[],""alias"":""BEER""},{""id"":""OP_AGG_FUNC@421a4ee1"",""value"":""AVG"",""pos"":{""lineNum"":18,""columnNum"":30,""endLineNum"":18,""endColumnNum"":39,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@1237e0be"",""value"":""NS_IDENT@4f63e3c7.PRICE"",""pos"":{""lineNum"":18,""columnNum"":34,""endLineNum"":18,""endColumnNum"":38,""quoted"":false},""children"":[]}],""alias"":""A""}],""fromItemIds"":[""NS_IDENT@4f63e3c7"",""NS_IDENT@59532566""],""fromNode"":{""id"":""OP_JOIN@18324f97"",""value"":""COMMA"",""pos"":{""lineNum"":19,""columnNum"":10,""endLineNum"":19,""endColumnNum"":10,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@64f555e7"",""value"":""NS_IDENT@4f63e3c7"",""pos"":{""lineNum"":19,""columnNum"":7,""endLineNum"":19,""endColumnNum"":9,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@71178a52"",""value"":""NS_IDENT@59532566"",""pos"":{""lineNum"":19,""columnNum"":12,""endLineNum"":19,""endColumnNum"":16,""quoted"":false},""children"":[]}],""natural"":false},""whereNode"":{""id"":""OP_BINARY@2ab2710"",""value"":""="",""pos"":{""lineNum"":20,""columnNum"":8,""endLineNum"":20,""endColumnNum"":28,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@42f9c19a"",""value"":""NS_IDENT@4f63e3c7.BEER"",""pos"":{""lineNum"":20,""columnNum"":8,""endLineNum"":20,""endColumnNum"":15,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@64bfd6fd"",""value"":""NS_IDENT@59532566.NAME"",""pos"":{""lineNum"":20,""columnNum"":19,""endLineNum"":20,""endColumnNum"":28,""quoted"":false},""children"":[]}]},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@29c2c826"",""value"":""NS_IDENT@59532566.NAME"",""pos"":{""lineNum"":21,""columnNum"":11,""endLineNum"":21,""endColumnNum"":20,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@1237e0be"",""value"":""NS_IDENT@4f63e3c7.PRICE"",""pos"":{""lineNum"":18,""columnNum"":34,""endLineNum"":18,""endColumnNum"":38,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@64bfd6fd"",""value"":""NS_IDENT@59532566.NAME"",""pos"":{""lineNum"":20,""columnNum"":19,""endLineNum"":20,""endColumnNum"":28,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@42f9c19a"",""value"":""NS_IDENT@4f63e3c7.BEER"",""pos"":{""lineNum"":20,""columnNum"":8,""endLineNum"":20,""endColumnNum"":15,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@29c2c826"",""value"":""NS_IDENT@59532566.NAME"",""pos"":{""lineNum"":21,""columnNum"":11,""endLineNum"":21,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@3350ebdd"",""value"":""NS_IDENT@59532566.NAME"",""pos"":{""lineNum"":18,""columnNum"":10,""endLineNum"":18,""endColumnNum"":19,""quoted"":false},""children"":[],""alias"":""BEER""}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":18,""columnNum"":3,""endLineNum"":21,""endColumnNum"":20,""quoted"":false},""children"":{}}]}
+"
+"WITH myBeers AS
+(SELECT name, count(beer) as cnt
+FROM beer
+LEFT JOIN likes on beer.name = likes.beer
+GROUP BY name
+ORDER BY count(beer) DESC, name),
+myPrice AS
+(SELECT beer, AVG(price) as avgPrice
+FROM serves
+GROUP BY beer)
+
+SELECT myBeers.name, myBeers.cnt, myPrice.avgPrice
+FROM myBeers
+LEFT JOIN myPrice ON myBeers.name = myPrice.beer
+ORDER BY myBeers.cnt DESC, myBeers.name;","{""blocks"":{""id"":""BLOCK_SELECT@71178a52"",""fields"":[""NAME VARCHAR(100)"",""CNT BIGINT"",""AVGPRICE DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@105b693d"",""value"":""NS_IDENT@7965a51c.NAME"",""pos"":{""lineNum"":12,""columnNum"":8,""endLineNum"":12,""endColumnNum"":19,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@3fae596"",""value"":""NS_IDENT@7965a51c.CNT"",""pos"":{""lineNum"":12,""columnNum"":22,""endLineNum"":12,""endColumnNum"":32,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4a0df195"",""value"":""NS_IDENT@3eee3e2b.AVGPRICE"",""pos"":{""lineNum"":12,""columnNum"":35,""endLineNum"":12,""endColumnNum"":50,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@7965a51c"",""NS_IDENT@3eee3e2b""],""fromNode"":{""id"":""OP_JOIN@ff6077"",""value"":""LEFT"",""pos"":{""lineNum"":14,""columnNum"":6,""endLineNum"":14,""endColumnNum"":9,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@abbc908"",""value"":""NS_IDENT@7965a51c"",""pos"":{""lineNum"":13,""columnNum"":6,""endLineNum"":13,""endColumnNum"":12,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@44afefd5"",""value"":""NS_IDENT@3eee3e2b"",""pos"":{""lineNum"":14,""columnNum"":11,""endLineNum"":14,""endColumnNum"":17,""quoted"":false},""children"":[]}],""natural"":false,""joinCondition"":{""id"":""OP_BINARY@5bca7664"",""value"":""="",""pos"":{""lineNum"":14,""columnNum"":22,""endLineNum"":14,""endColumnNum"":48,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@1d25c1c"",""value"":""NS_IDENT@7965a51c.NAME"",""pos"":{""lineNum"":14,""columnNum"":22,""endLineNum"":14,""endColumnNum"":33,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@de88ac6"",""value"":""NS_IDENT@3eee3e2b.BEER"",""pos"":{""lineNum"":14,""columnNum"":37,""endLineNum"":14,""endColumnNum"":48,""quoted"":false},""children"":[]}]}},""isAggregate"":false,""orderByList"":[{""id"":""OP_POSTFIX@5da7cee2"",""value"":""DESC"",""pos"":{""lineNum"":15,""columnNum"":10,""endLineNum"":15,""endColumnNum"":25,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@9255c05"",""value"":""NS_IDENT@7965a51c.CNT"",""pos"":{""lineNum"":15,""columnNum"":10,""endLineNum"":15,""endColumnNum"":20,""quoted"":false},""children"":[]}]},{""id"":""COLUMN_LOCAL@78830d9a"",""value"":""NS_IDENT@7965a51c.NAME"",""pos"":{""lineNum"":15,""columnNum"":28,""endLineNum"":15,""endColumnNum"":39,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@105b693d"",""value"":""NS_IDENT@7965a51c.NAME"",""pos"":{""lineNum"":12,""columnNum"":8,""endLineNum"":12,""endColumnNum"":19,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@1d25c1c"",""value"":""NS_IDENT@7965a51c.NAME"",""pos"":{""lineNum"":14,""columnNum"":22,""endLineNum"":14,""endColumnNum"":33,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@3fae596"",""value"":""NS_IDENT@7965a51c.CNT"",""pos"":{""lineNum"":12,""columnNum"":22,""endLineNum"":12,""endColumnNum"":32,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@de88ac6"",""value"":""NS_IDENT@3eee3e2b.BEER"",""pos"":{""lineNum"":14,""columnNum"":37,""endLineNum"":14,""endColumnNum"":48,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@78830d9a"",""value"":""NS_IDENT@7965a51c.NAME"",""pos"":{""lineNum"":15,""columnNum"":28,""endLineNum"":15,""endColumnNum"":39,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@9255c05"",""value"":""NS_IDENT@7965a51c.CNT"",""pos"":{""lineNum"":15,""columnNum"":10,""endLineNum"":15,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4a0df195"",""value"":""NS_IDENT@3eee3e2b.AVGPRICE"",""pos"":{""lineNum"":12,""columnNum"":35,""endLineNum"":12,""endColumnNum"":50,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":12,""columnNum"":1,""endLineNum"":14,""endColumnNum"":48,""quoted"":false},""children"":{}},""tables"":{""NS_IDENT@3eee3e2b"":{""tableId"":""NS_IDENT@3eee3e2b"",""identifier"":""MYPRICE"",""dbTableName"":""MYPRICE"",""fields"":[""BEER VARCHAR(100)"",""AVGPRICE DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":14,""columnNum"":11,""endLineNum"":14,""endColumnNum"":17,""quoted"":false}},""NS_IDENT@67e28be3"":{""tableId"":""NS_IDENT@67e28be3"",""identifier"":""BEER"",""dbTableName"":""BEER"",""fields"":[""name VARCHAR(100)"",""brewer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":3,""columnNum"":6,""endLineNum"":3,""endColumnNum"":9,""quoted"":false}},""NS_IDENT@7965a51c"":{""tableId"":""NS_IDENT@7965a51c"",""identifier"":""MYBEERS"",""dbTableName"":""MYBEERS"",""fields"":[""NAME VARCHAR(100)"",""CNT BIGINT""],""cursor"":[0],""pos"":{""lineNum"":13,""columnNum"":6,""endLineNum"":13,""endColumnNum"":12,""quoted"":false}},""NS_IDENT@6345e7b9"":{""tableId"":""NS_IDENT@6345e7b9"",""identifier"":""LIKES"",""dbTableName"":""LIKES"",""fields"":[""drinker VARCHAR(100)"",""beer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":4,""columnNum"":11,""endLineNum"":4,""endColumnNum"":15,""quoted"":false}},""NS_IDENT@2ff95fc6"":{""tableId"":""NS_IDENT@2ff95fc6"",""identifier"":""SERVES"",""dbTableName"":""SERVES"",""fields"":[""bar VARCHAR(100)"",""beer VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":9,""columnNum"":6,""endLineNum"":9,""endColumnNum"":11,""quoted"":false}}},""corrTables"":[],""withBlocks"":[{""id"":""BLOCK_SELECT@488b50ec"",""alias"":""MYBEERS"",""fields"":[""NAME VARCHAR(100)"",""CNT BIGINT""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@7b3315a5"",""value"":""NS_IDENT@67e28be3.NAME"",""pos"":{""lineNum"":2,""columnNum"":9,""endLineNum"":2,""endColumnNum"":12,""quoted"":false},""children"":[]},{""id"":""OP_AGG_FUNC@540dbda9"",""value"":""COUNT"",""pos"":{""lineNum"":2,""columnNum"":15,""endLineNum"":2,""endColumnNum"":25,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@b18c4"",""value"":""NS_IDENT@6345e7b9.BEER"",""pos"":{""lineNum"":2,""columnNum"":21,""endLineNum"":2,""endColumnNum"":24,""quoted"":false},""children"":[]}],""alias"":""CNT""}],""fromItemIds"":[""NS_IDENT@67e28be3"",""NS_IDENT@6345e7b9""],""fromNode"":{""id"":""OP_JOIN@6d2d99fc"",""value"":""LEFT"",""pos"":{""lineNum"":4,""columnNum"":6,""endLineNum"":4,""endColumnNum"":9,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@27b22f74"",""value"":""NS_IDENT@67e28be3"",""pos"":{""lineNum"":3,""columnNum"":6,""endLineNum"":3,""endColumnNum"":9,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@21fff664"",""value"":""NS_IDENT@6345e7b9"",""pos"":{""lineNum"":4,""columnNum"":11,""endLineNum"":4,""endColumnNum"":15,""quoted"":false},""children"":[]}],""natural"":false,""joinCondition"":{""id"":""OP_BINARY@ecfbe91"",""value"":""="",""pos"":{""lineNum"":4,""columnNum"":20,""endLineNum"":4,""endColumnNum"":41,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@74fe5966"",""value"":""NS_IDENT@67e28be3.name"",""pos"":{""lineNum"":4,""columnNum"":20,""endLineNum"":4,""endColumnNum"":28,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@1542af63"",""value"":""NS_IDENT@6345e7b9.beer"",""pos"":{""lineNum"":4,""columnNum"":32,""endLineNum"":4,""endColumnNum"":41,""quoted"":false},""children"":[]}]}},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@353efdbf"",""value"":""NS_IDENT@67e28be3.name"",""pos"":{""lineNum"":5,""columnNum"":10,""endLineNum"":5,""endColumnNum"":13,""quoted"":false},""children"":[]}],""orderByList"":[{""id"":""OP_POSTFIX@2b8d084"",""value"":""DESC"",""pos"":{""lineNum"":6,""columnNum"":10,""endLineNum"":6,""endColumnNum"":25,""quoted"":false},""children"":[{""id"":""OP_AGG_FUNC@23e44287"",""value"":""COUNT"",""pos"":{""lineNum"":6,""columnNum"":10,""endLineNum"":6,""endColumnNum"":20,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@49601f82"",""value"":""NS_IDENT@6345e7b9.beer"",""pos"":{""lineNum"":6,""columnNum"":16,""endLineNum"":6,""endColumnNum"":19,""quoted"":false},""children"":[]}]}]},{""id"":""COLUMN_LOCAL@6daf2337"",""value"":""NS_IDENT@67e28be3.NAME"",""pos"":{""lineNum"":6,""columnNum"":28,""endLineNum"":6,""endColumnNum"":31,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@353efdbf"",""value"":""NS_IDENT@67e28be3.name"",""pos"":{""lineNum"":5,""columnNum"":10,""endLineNum"":5,""endColumnNum"":13,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@74fe5966"",""value"":""NS_IDENT@67e28be3.name"",""pos"":{""lineNum"":4,""columnNum"":20,""endLineNum"":4,""endColumnNum"":28,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@7b3315a5"",""value"":""NS_IDENT@67e28be3.NAME"",""pos"":{""lineNum"":2,""columnNum"":9,""endLineNum"":2,""endColumnNum"":12,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@1542af63"",""value"":""NS_IDENT@6345e7b9.beer"",""pos"":{""lineNum"":4,""columnNum"":32,""endLineNum"":4,""endColumnNum"":41,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@b18c4"",""value"":""NS_IDENT@6345e7b9.BEER"",""pos"":{""lineNum"":2,""columnNum"":21,""endLineNum"":2,""endColumnNum"":24,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@6daf2337"",""value"":""NS_IDENT@67e28be3.NAME"",""pos"":{""lineNum"":6,""columnNum"":28,""endLineNum"":6,""endColumnNum"":31,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@49601f82"",""value"":""NS_IDENT@6345e7b9.beer"",""pos"":{""lineNum"":6,""columnNum"":16,""endLineNum"":6,""endColumnNum"":19,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":2,""columnNum"":2,""endLineNum"":5,""endColumnNum"":13,""quoted"":false},""children"":{}},{""id"":""BLOCK_SELECT@18324f97"",""alias"":""MYPRICE"",""fields"":[""BEER VARCHAR(100)"",""AVGPRICE DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@9d1a267"",""value"":""NS_IDENT@2ff95fc6.BEER"",""pos"":{""lineNum"":8,""columnNum"":9,""endLineNum"":8,""endColumnNum"":12,""quoted"":false},""children"":[]},{""id"":""OP_AGG_FUNC@54aca26f"",""value"":""AVG"",""pos"":{""lineNum"":8,""columnNum"":15,""endLineNum"":8,""endColumnNum"":24,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@314ed053"",""value"":""NS_IDENT@2ff95fc6.PRICE"",""pos"":{""lineNum"":8,""columnNum"":19,""endLineNum"":8,""endColumnNum"":23,""quoted"":false},""children"":[]}],""alias"":""AVGPRICE""}],""fromItemIds"":[""NS_IDENT@2ff95fc6""],""fromNode"":{""id"":""JOIN_OPERAND@64f555e7"",""value"":""NS_IDENT@2ff95fc6"",""pos"":{""lineNum"":9,""columnNum"":6,""endLineNum"":9,""endColumnNum"":11,""quoted"":false},""children"":[]},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@3350ebdd"",""value"":""NS_IDENT@2ff95fc6.beer"",""pos"":{""lineNum"":10,""columnNum"":10,""endLineNum"":10,""endColumnNum"":13,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@9d1a267"",""value"":""NS_IDENT@2ff95fc6.BEER"",""pos"":{""lineNum"":8,""columnNum"":9,""endLineNum"":8,""endColumnNum"":12,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@314ed053"",""value"":""NS_IDENT@2ff95fc6.PRICE"",""pos"":{""lineNum"":8,""columnNum"":19,""endLineNum"":8,""endColumnNum"":23,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@3350ebdd"",""value"":""NS_IDENT@2ff95fc6.beer"",""pos"":{""lineNum"":10,""columnNum"":10,""endLineNum"":10,""endColumnNum"":13,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":8,""columnNum"":2,""endLineNum"":10,""endColumnNum"":13,""quoted"":false},""children"":{}}]}
+"
+"select A.beer, cnt, avg
+from 
+
+(SELECT B1.name AS beer, COUNT(L1.drinker) AS cnt
+FROM beer B1 left outer join likes L1
+on B1.name = L1.beer
+GROUP BY B1.name) A left outer join
+
+(SELECT B1.name AS beer, AVG(S1.price) AS avg
+FROM beer B1 left outer join serves S1
+on B1.name = S1.beer
+GROUP BY B1.name) B
+
+on A.beer = B.beer
+order by cnt desc, A.beer","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 21. Query syntax may be incorrect""}
+"
+"with like_count as (
+select name, count(drinker)
+  from beer left join likes
+  on likes.beer = beer.name
+  group by beer.name
+),
+avg_price as (
+select name, avg(price)
+  from beer left join serves
+  on serves.beer = beer.name
+  group by beer.name
+)
+
+select like_count.name as beer, count, avg
+  from like_count join avg_price
+  on like_count.name = avg_price.name
+  order by count desc, like_count.name
+","{""failed"":true,""errorMsg"":""Parsing error at line 14, column 33. Query syntax may be incorrect""}
+"
+"With beersAndDrinkers as (SELECT drinker, name FROM likes
+RIGHT OUTER JOIN beer ON beer.name = likes.beer)
+
+select beersAndPrices.name, beersAndPrices.count, AVG(price)
+FROM (select name, COUNT(drinker)
+FROM beersAndDrinkers GROUP BY name) AS beersAndPrices
+LEFT OUTER JOIN serves 
+ON serves.beer = beersAndPrices.name
+GROUP BY beersAndPrices.name, beersAndPrices.count
+ORDER BY beersAndPrices.count DESC, beersAndPrices.name","{""failed"":true,""errorMsg"":""Parsing error at line 4, column 43. Query syntax may be incorrect""}
+"
+"WITH beerPrice AS 
+  (SELECT beer.name, AVG(price)
+  FROM (beer LEFT OUTER JOIN serves ON beer.name = serves.beer) GROUP BY beer.name),
+  beerCount AS
+  (SELECT beer.name, COUNT(likes.beer)
+  FROM beer LEFT OUTER JOIN likes on beer.name = likes.beer GROUP BY beer.name)
+SELECT beerPrice.name AS beer, beerCount.count as cnt, beerPrice.avg
+FROM beerPrice, beerCount 
+WHERE beerPrice.name = beerCount.name
+ORDER BY beerCount.count DESC, beerCount.name ASC","{""failed"":true,""errorMsg"":""Parsing error at line 3, column 9. Query syntax may be incorrect""}
+"
+"SELECT B.name as beer, (SELECT COUNT(beer)
+						FROM likes
+						WHERE  beer = B.name) as cnt, 
+	   					(SELECT AVG(price)
+	   					FROM serves
+	   					WHERE beer =  B.name) as avg
+FROM beer B
+GROUP BY B.name
+ORDER BY cnt DESC, beer ASC","{""failed"":true,""errorMsg"":""Parsing error at line 6, column 35. Query syntax may be incorrect""}
+"
+"WITH joinedLikes AS
+(SELECT name, drinker
+FROM (beer LEFT OUTER JOIN likes ON (beer.name = likes.beer))),
+countsDone AS
+(SELECT joinedLikes.name AS ""beer"", COUNT(drinker) AS ""cnt""
+FROM joinedlikes
+GROUP by name),
+aprice AS
+(SELECT beer, AVG(price) AS ""avg""
+FROM serves
+GROUP BY beer),
+lastCombo AS
+(SELECT countsDone.beer AS ""beer"", cnt, avg
+FROM countsDone
+LEFT OUTER JOIN
+aprice ON (aprice.beer = countsDone.beer))
+
+SELECT *
+FROM lastCombo
+ORDER by cnt DESC, beer ASC;
+","{""failed"":true,""errorMsg"":""Parsing error at line 3, column 7. Query syntax may be incorrect""}
+"
+"with beer_count as 
+(select beer, count(*)
+from likes
+group by beer),
+
+allbeers as (
+select name
+from beer
+),
+
+avg_price as 
+(select beer, avg(price)
+from serves
+group by beer
+),
+
+f as (select name, count
+from allbeers
+left join beer_count 
+on beer_count.beer = allbeers.name
+),
+
+final as (
+select *
+from f
+left outer join avg_price
+on avg_price.beer = f.name
+)
+
+
+select name, coalesce(count, 0) as count, avg
+from final
+order by count desc, name
+
+","{""failed"":true,""errorMsg"":""Parsing error at line 17, column 20. Query syntax may be incorrect""}
+"
+"with like_cnt as
+(select name, count(drinker)
+from beer left outer join likes on beer.name = likes.beer
+group by name),
+price_avg as
+(select name, avg(price)
+from beer left outer join serves on beer.name = serves.beer
+group by name)
+select like_cnt.name, count, avg from like_cnt, price_avg where like_cnt.name = price_avg.name
+order by count DESC, name ASC","{""failed"":true,""errorMsg"":""Parsing error at line 9, column 23. Query syntax may be incorrect""}
+"
+"Select beer.name, coalesce(tempy.count, 0), avg(price)
+From beer
+Left outer join serves on serves.beer=beer.name
+Left outer join likes on beer.name = likes.beer
+Left outer join (Select beer,count(*) from likes group by beer) tempy on tempy.beer=beer.name
+Group by name, tempy.count
+Order by tempy.count desc nulls last, name;
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 33. Query syntax may be incorrect""}
+"
+"With PeopleLikesBeer(drinker, name) as(
+Select
+          L1.drinker,
+          name
+        From
+          likes as L1
+          RIGHT JOIN beer as b1 ON b1.name = L1.beer
+)
+
+Select
+  counter.name,
+  counter.count,
+  avg(price)
+From
+  (
+    select
+      name,
+      count(drinker)
+    From
+      (
+        Select
+          Drinker,
+          name
+        From
+          PeopleLikesBeer
+      ) as addi
+    Group by
+      name
+  ) as counter
+  Left join serves ON serves.beer = counter.name
+Group by
+  counter.count,
+  counter.name
+Order by
+  counter.count DESC,
+  counter.name","{""failed"":true,""errorMsg"":""Parsing error at line 12, column 10. Query syntax may be incorrect""}
+"
+"with likecount as
+(select b.name as beer , count(l.drinker)
+from beer b left outer join likes l on b.name = l.beer
+group by b.name),
+
+avgprice as
+(select l.name as beer, avg(s.price)
+from beer l left outer join serves s on l.name = s.beer
+group by l.name)
+
+
+select l.beer, l.count as cnt, a.avg as avg
+from likecount l, avgprice a 
+where l.beer = a.beer
+order by l.count desc, l.beer asc","{""failed"":true,""errorMsg"":""Parsing error at line 12, column 17. Query syntax may be incorrect""}
+"
+"WITH 
+	beerlikes(beer, drinker) AS
+	(SELECT beer.name, likes.drinker
+	FROM beer
+	LEFT OUTER JOIN likes ON beer.name = likes.beer),
+
+	beercounts(beer, count) AS
+	(SELECT beer, COUNT(drinker)
+	FROM beerlikes
+	GROUP BY beer),
+
+	beerserves(beer, price) AS
+	(SELECT beer.name, serves.price
+	FROM beer
+	LEFT OUTER JOIN serves ON beer.name = serves.beer),
+
+	priceavg(beer, priceav) AS
+	(SELECT beer, AVG(price)
+	FROM beerserves
+	GROUP BY beer)
+
+SELECT beercounts.beer, beercounts.count, priceavg.priceav
+FROM beercounts, priceavg
+WHERE beercounts.beer = priceavg.beer
+ORDER BY beercounts.count DESC, beercounts.beer ASC;
+","{""failed"":true,""errorMsg"":""Parsing error at line 7, column 19. Query syntax may be incorrect""}
+"
+"WITH beerFrequency AS
+  (SELECT likes.beer, count(likes.drinker) frequency
+  FROM likes
+  GROUP BY likes.beer),
+  servesPrice AS
+  (SELECT serves.beer, avg(serves.price) priceAverage
+  FROM serves
+  GROUP BY serves.beer),
+  nullBeers AS
+  (SELECT beerFrequency.beer, beerFrequency.frequency FROM beerFrequency 
+  WHERE beerFrequency.beer NOT IN (SELECT serves.beer FROM serves)),
+  zeroFrequents AS (
+  SELECT servesPrice.beer, 0, servesPrice.priceAverage FROM servesPrice
+  WHERE servesPrice.beer NOT IN (SELECT likes.beer FROM likes)
+  )
+SELECT beerFrequency.beer, beerFrequency.frequency, servesPrice.priceAverage 
+FROM beerFrequency JOIN servesPrice ON beerFrequency.beer = servesPrice.beer
+UNION (SELECT nullbeers.beer, nullbeers.frequency, NULL FROM nullBeers)
+UNION (SELECT zeroFrequents.beer, 0, zeroFrequents.priceAverage FROM zeroFrequents)
+UNION (SELECT beer.name, 0, NULL FROM beer WHERE beer.name NOT IN 
+(SELECT likes.beer FROM likes UNION (SELECT serves.beer FROM serves)))","{""blocks"":{""id"":""BLOCK_SETOP@703feacd"",""fields"":[""BEER VARCHAR(100)"",""FREQUENCY BIGINT"",""PRICEAVERAGE DECIMAL(5, 2)""],""opName"":""UNION"",""all"":false,""leftBlockId"":""BLOCK_SETOP@7051777c"",""rightBlockId"":""BLOCK_SELECT@72209d93"",""pos"":{""lineNum"":16,""columnNum"":1,""endLineNum"":21,""endColumnNum"":69,""quoted"":false},""children"":{""BLOCK_SELECT@72209d93"":{""id"":""BLOCK_SELECT@72209d93"",""parentId"":""BLOCK_SETOP@703feacd"",""fields"":[""NAME VARCHAR(100)"",""EXPR$1 INTEGER"",""EXPR$2 NULL""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@12f8b1d8"",""value"":""NS_IDENT@7f9ab969.NAME"",""pos"":{""lineNum"":20,""columnNum"":15,""endLineNum"":20,""endColumnNum"":23,""quoted"":false},""children"":[]},{""id"":""LITERAL_NUMERIC@54f66455"",""value"":""0"",""pos"":{""lineNum"":20,""columnNum"":26,""endLineNum"":20,""endColumnNum"":26,""quoted"":false},""children"":[]},{""id"":""LITERAL_KEYWORD@65ae095c"",""pos"":{""lineNum"":20,""columnNum"":29,""endLineNum"":20,""endColumnNum"":32,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@7f9ab969""],""fromNode"":{""id"":""JOIN_OPERAND@30135202"",""value"":""NS_IDENT@7f9ab969"",""pos"":{""lineNum"":20,""columnNum"":39,""endLineNum"":20,""endColumnNum"":42,""quoted"":false},""children"":[]},""whereNode"":{""id"":""OP_BINARY@15cea7b0"",""value"":""NOT IN"",""pos"":{""lineNum"":20,""columnNum"":50,""endLineNum"":21,""endColumnNum"":67,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@29c5ee1d"",""value"":""NS_IDENT@7f9ab969.name"",""pos"":{""lineNum"":20,""columnNum"":50,""endLineNum"":20,""endColumnNum"":58,""quoted"":false},""children"":[]},{""id"":""BLOCK_SETOP@2687f956"",""value"":""BLOCK_SETOP@2687f956"",""pos"":{""lineNum"":21,""columnNum"":2,""endLineNum"":21,""endColumnNum"":67,""quoted"":false},""children"":[]}]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@29c5ee1d"",""value"":""NS_IDENT@7f9ab969.name"",""pos"":{""lineNum"":20,""columnNum"":50,""endLineNum"":20,""endColumnNum"":58,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@12f8b1d8"",""value"":""NS_IDENT@7f9ab969.NAME"",""pos"":{""lineNum"":20,""columnNum"":15,""endLineNum"":20,""endColumnNum"":23,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":20,""columnNum"":8,""endLineNum"":21,""endColumnNum"":69,""quoted"":false},""children"":{""BLOCK_SETOP@2687f956"":{""id"":""BLOCK_SETOP@2687f956"",""parentId"":""BLOCK_SELECT@72209d93"",""fields"":[""BEER VARCHAR(100)""],""opName"":""UNION"",""all"":false,""leftBlockId"":""BLOCK_SELECT@1ded7b14"",""rightBlockId"":""BLOCK_SELECT@5f84abe8"",""pos"":{""lineNum"":21,""columnNum"":2,""endLineNum"":21,""endColumnNum"":67,""quoted"":false},""children"":{""BLOCK_SELECT@1ded7b14"":{""id"":""BLOCK_SELECT@1ded7b14"",""parentId"":""BLOCK_SETOP@2687f956"",""fields"":[""BEER VARCHAR(100)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@1e6cc850"",""value"":""NS_IDENT@2098d37d.BEER"",""pos"":{""lineNum"":21,""columnNum"":9,""endLineNum"":21,""endColumnNum"":18,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@2098d37d""],""fromNode"":{""id"":""JOIN_OPERAND@29be7749"",""value"":""NS_IDENT@2098d37d"",""pos"":{""lineNum"":21,""columnNum"":25,""endLineNum"":21,""endColumnNum"":29,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@1e6cc850"",""value"":""NS_IDENT@2098d37d.BEER"",""pos"":{""lineNum"":21,""columnNum"":9,""endLineNum"":21,""endColumnNum"":18,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":21,""columnNum"":2,""endLineNum"":21,""endColumnNum"":29,""quoted"":false},""children"":{}},""BLOCK_SELECT@5f84abe8"":{""id"":""BLOCK_SELECT@5f84abe8"",""parentId"":""BLOCK_SETOP@2687f956"",""fields"":[""BEER VARCHAR(100)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@63ec445c"",""value"":""NS_IDENT@65fd6708.BEER"",""pos"":{""lineNum"":21,""columnNum"":45,""endLineNum"":21,""endColumnNum"":55,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@65fd6708""],""fromNode"":{""id"":""JOIN_OPERAND@4650a407"",""value"":""NS_IDENT@65fd6708"",""pos"":{""lineNum"":21,""columnNum"":62,""endLineNum"":21,""endColumnNum"":67,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@63ec445c"",""value"":""NS_IDENT@65fd6708.BEER"",""pos"":{""lineNum"":21,""columnNum"":45,""endLineNum"":21,""endColumnNum"":55,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":21,""columnNum"":38,""endLineNum"":21,""endColumnNum"":67,""quoted"":false},""children"":{}}}}}},""BLOCK_SETOP@7051777c"":{""id"":""BLOCK_SETOP@7051777c"",""parentId"":""BLOCK_SETOP@703feacd"",""fields"":[""BEER VARCHAR(100)"",""FREQUENCY BIGINT"",""PRICEAVERAGE DECIMAL(5, 2)""],""opName"":""UNION"",""all"":false,""leftBlockId"":""BLOCK_SETOP@3241713e"",""rightBlockId"":""BLOCK_SELECT@44afefd5"",""pos"":{""lineNum"":16,""columnNum"":1,""endLineNum"":19,""endColumnNum"":82,""quoted"":false},""children"":{""BLOCK_SELECT@44afefd5"":{""id"":""BLOCK_SELECT@44afefd5"",""parentId"":""BLOCK_SETOP@7051777c"",""fields"":[""BEER VARCHAR(100)"",""EXPR$1 INTEGER"",""PRICEAVERAGE DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@7ac9af2a"",""value"":""NS_IDENT@34dc85a.BEER"",""pos"":{""lineNum"":19,""columnNum"":15,""endLineNum"":19,""endColumnNum"":32,""quoted"":false},""children"":[]},{""id"":""LITERAL_NUMERIC@7bb004b8"",""value"":""0"",""pos"":{""lineNum"":19,""columnNum"":35,""endLineNum"":19,""endColumnNum"":35,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@78e89bfe"",""value"":""NS_IDENT@34dc85a.PRICEAVERAGE"",""pos"":{""lineNum"":19,""columnNum"":38,""endLineNum"":19,""endColumnNum"":63,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@34dc85a""],""fromNode"":{""id"":""JOIN_OPERAND@9a7a808"",""value"":""NS_IDENT@34dc85a"",""pos"":{""lineNum"":19,""columnNum"":70,""endLineNum"":19,""endColumnNum"":82,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@7ac9af2a"",""value"":""NS_IDENT@34dc85a.BEER"",""pos"":{""lineNum"":19,""columnNum"":15,""endLineNum"":19,""endColumnNum"":32,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@78e89bfe"",""value"":""NS_IDENT@34dc85a.PRICEAVERAGE"",""pos"":{""lineNum"":19,""columnNum"":38,""endLineNum"":19,""endColumnNum"":63,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":19,""columnNum"":8,""endLineNum"":19,""endColumnNum"":82,""quoted"":false},""children"":{}},""BLOCK_SETOP@3241713e"":{""id"":""BLOCK_SETOP@3241713e"",""parentId"":""BLOCK_SETOP@7051777c"",""fields"":[""BEER VARCHAR(100)"",""FREQUENCY BIGINT"",""PRICEAVERAGE DECIMAL(5, 2)""],""opName"":""UNION"",""all"":false,""leftBlockId"":""BLOCK_SELECT@5ecba515"",""rightBlockId"":""BLOCK_SELECT@ff6077"",""pos"":{""lineNum"":16,""columnNum"":1,""endLineNum"":18,""endColumnNum"":70,""quoted"":false},""children"":{""BLOCK_SELECT@5ecba515"":{""id"":""BLOCK_SELECT@5ecba515"",""parentId"":""BLOCK_SETOP@3241713e"",""fields"":[""BEER VARCHAR(100)"",""FREQUENCY BIGINT"",""PRICEAVERAGE DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@25a73de1"",""value"":""NS_IDENT@2d746ce4.BEER"",""pos"":{""lineNum"":16,""columnNum"":8,""endLineNum"":16,""endColumnNum"":25,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@29852487"",""value"":""NS_IDENT@2d746ce4.FREQUENCY"",""pos"":{""lineNum"":16,""columnNum"":28,""endLineNum"":16,""endColumnNum"":50,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@771db12c"",""value"":""NS_IDENT@5dbf5634.PRICEAVERAGE"",""pos"":{""lineNum"":16,""columnNum"":53,""endLineNum"":16,""endColumnNum"":76,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@2d746ce4"",""NS_IDENT@5dbf5634""],""fromNode"":{""id"":""OP_JOIN@102d92c4"",""value"":""INNER"",""pos"":{""lineNum"":17,""columnNum"":20,""endLineNum"":17,""endColumnNum"":23,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@2b97cc1f"",""value"":""NS_IDENT@2d746ce4"",""pos"":{""lineNum"":17,""columnNum"":6,""endLineNum"":17,""endColumnNum"":18,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@60723d6a"",""value"":""NS_IDENT@5dbf5634"",""pos"":{""lineNum"":17,""columnNum"":25,""endLineNum"":17,""endColumnNum"":35,""quoted"":false},""children"":[]}],""natural"":false,""joinCondition"":{""id"":""OP_BINARY@2e380628"",""value"":""="",""pos"":{""lineNum"":17,""columnNum"":40,""endLineNum"":17,""endColumnNum"":76,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@4632cfc"",""value"":""NS_IDENT@2d746ce4.BEER"",""pos"":{""lineNum"":17,""columnNum"":40,""endLineNum"":17,""endColumnNum"":57,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@6e1f8469"",""value"":""NS_IDENT@5dbf5634.BEER"",""pos"":{""lineNum"":17,""columnNum"":61,""endLineNum"":17,""endColumnNum"":76,""quoted"":false},""children"":[]}]}},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@25a73de1"",""value"":""NS_IDENT@2d746ce4.BEER"",""pos"":{""lineNum"":16,""columnNum"":8,""endLineNum"":16,""endColumnNum"":25,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@29852487"",""value"":""NS_IDENT@2d746ce4.FREQUENCY"",""pos"":{""lineNum"":16,""columnNum"":28,""endLineNum"":16,""endColumnNum"":50,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@771db12c"",""value"":""NS_IDENT@5dbf5634.PRICEAVERAGE"",""pos"":{""lineNum"":16,""columnNum"":53,""endLineNum"":16,""endColumnNum"":76,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4632cfc"",""value"":""NS_IDENT@2d746ce4.BEER"",""pos"":{""lineNum"":17,""columnNum"":40,""endLineNum"":17,""endColumnNum"":57,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@6e1f8469"",""value"":""NS_IDENT@5dbf5634.BEER"",""pos"":{""lineNum"":17,""columnNum"":61,""endLineNum"":17,""endColumnNum"":76,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":16,""columnNum"":1,""endLineNum"":17,""endColumnNum"":76,""quoted"":false},""children"":{}},""BLOCK_SELECT@ff6077"":{""id"":""BLOCK_SELECT@ff6077"",""parentId"":""BLOCK_SETOP@3241713e"",""fields"":[""BEER VARCHAR(100)"",""FREQUENCY BIGINT"",""EXPR$2 NULL""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@26ae880a"",""value"":""NS_IDENT@545607f2.BEER"",""pos"":{""lineNum"":18,""columnNum"":15,""endLineNum"":18,""endColumnNum"":28,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@260f2144"",""value"":""NS_IDENT@545607f2.FREQUENCY"",""pos"":{""lineNum"":18,""columnNum"":31,""endLineNum"":18,""endColumnNum"":49,""quoted"":false},""children"":[]},{""id"":""LITERAL_KEYWORD@3c017078"",""pos"":{""lineNum"":18,""columnNum"":52,""endLineNum"":18,""endColumnNum"":55,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@545607f2""],""fromNode"":{""id"":""JOIN_OPERAND@abbc908"",""value"":""NS_IDENT@545607f2"",""pos"":{""lineNum"":18,""columnNum"":62,""endLineNum"":18,""endColumnNum"":70,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@26ae880a"",""value"":""NS_IDENT@545607f2.BEER"",""pos"":{""lineNum"":18,""columnNum"":15,""endLineNum"":18,""endColumnNum"":28,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@260f2144"",""value"":""NS_IDENT@545607f2.FREQUENCY"",""pos"":{""lineNum"":18,""columnNum"":31,""endLineNum"":18,""endColumnNum"":49,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":18,""columnNum"":8,""endLineNum"":18,""endColumnNum"":70,""quoted"":false},""children"":{}}}}}}}},""tables"":{""NS_IDENT@646811d6"":{""tableId"":""NS_IDENT@646811d6"",""identifier"":""LIKES"",""dbTableName"":""LIKES"",""fields"":[""drinker VARCHAR(100)"",""beer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":3,""columnNum"":8,""endLineNum"":3,""endColumnNum"":12,""quoted"":false}},""NS_IDENT@141e879d"":{""tableId"":""NS_IDENT@141e879d"",""identifier"":""SERVES"",""dbTableName"":""SERVES"",""fields"":[""bar VARCHAR(100)"",""beer VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":7,""columnNum"":8,""endLineNum"":7,""endColumnNum"":13,""quoted"":false}},""NS_IDENT@34dc85a"":{""tableId"":""NS_IDENT@34dc85a"",""identifier"":""ZEROFREQUENTS"",""dbTableName"":""ZEROFREQUENTS"",""fields"":[""BEER VARCHAR(100)"",""EXPR$1 INTEGER"",""PRICEAVERAGE DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":19,""columnNum"":70,""endLineNum"":19,""endColumnNum"":82,""quoted"":false}},""NS_IDENT@99a78d7"":{""tableId"":""NS_IDENT@99a78d7"",""identifier"":""SERVES"",""dbTableName"":""SERVES"",""fields"":[""bar VARCHAR(100)"",""beer VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":11,""columnNum"":60,""endLineNum"":11,""endColumnNum"":65,""quoted"":false}},""NS_IDENT@65fd6708"":{""tableId"":""NS_IDENT@65fd6708"",""identifier"":""SERVES"",""dbTableName"":""SERVES"",""fields"":[""bar VARCHAR(100)"",""beer VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":21,""columnNum"":62,""endLineNum"":21,""endColumnNum"":67,""quoted"":false}},""NS_IDENT@2d746ce4"":{""tableId"":""NS_IDENT@2d746ce4"",""identifier"":""BEERFREQUENCY"",""dbTableName"":""BEERFREQUENCY"",""fields"":[""BEER VARCHAR(100)"",""FREQUENCY BIGINT""],""cursor"":[0],""pos"":{""lineNum"":17,""columnNum"":6,""endLineNum"":17,""endColumnNum"":18,""quoted"":false}},""NS_IDENT@545607f2"":{""tableId"":""NS_IDENT@545607f2"",""identifier"":""NULLBEERS"",""dbTableName"":""NULLBEERS"",""fields"":[""BEER VARCHAR(100)"",""FREQUENCY BIGINT""],""cursor"":[0],""pos"":{""lineNum"":18,""columnNum"":62,""endLineNum"":18,""endColumnNum"":70,""quoted"":false}},""NS_IDENT@42e22a53"":{""tableId"":""NS_IDENT@42e22a53"",""identifier"":""BEERFREQUENCY"",""dbTableName"":""BEERFREQUENCY"",""fields"":[""BEER VARCHAR(100)"",""FREQUENCY BIGINT""],""cursor"":[0],""pos"":{""lineNum"":10,""columnNum"":60,""endLineNum"":10,""endColumnNum"":72,""quoted"":false}},""NS_IDENT@121c54fa"":{""tableId"":""NS_IDENT@121c54fa"",""identifier"":""LIKES"",""dbTableName"":""LIKES"",""fields"":[""drinker VARCHAR(100)"",""beer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":14,""columnNum"":57,""endLineNum"":14,""endColumnNum"":61,""quoted"":false}},""NS_IDENT@2098d37d"":{""tableId"":""NS_IDENT@2098d37d"",""identifier"":""LIKES"",""dbTableName"":""LIKES"",""fields"":[""drinker VARCHAR(100)"",""beer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":21,""columnNum"":25,""endLineNum"":21,""endColumnNum"":29,""quoted"":false}},""NS_IDENT@7f9ab969"":{""tableId"":""NS_IDENT@7f9ab969"",""identifier"":""BEER"",""dbTableName"":""BEER"",""fields"":[""name VARCHAR(100)"",""brewer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":20,""columnNum"":39,""endLineNum"":20,""endColumnNum"":42,""quoted"":false}},""NS_IDENT@5dbf5634"":{""tableId"":""NS_IDENT@5dbf5634"",""identifier"":""SERVESPRICE"",""dbTableName"":""SERVESPRICE"",""fields"":[""BEER VARCHAR(100)"",""PRICEAVERAGE DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":17,""columnNum"":25,""endLineNum"":17,""endColumnNum"":35,""quoted"":false}},""NS_IDENT@61c76850"":{""tableId"":""NS_IDENT@61c76850"",""identifier"":""SERVESPRICE"",""dbTableName"":""SERVESPRICE"",""fields"":[""BEER VARCHAR(100)"",""PRICEAVERAGE DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":13,""columnNum"":61,""endLineNum"":13,""endColumnNum"":71,""quoted"":false}}},""corrTables"":[],""withBlocks"":[{""id"":""BLOCK_SELECT@2f879bab"",""alias"":""BEERFREQUENCY"",""fields"":[""BEER VARCHAR(100)"",""FREQUENCY BIGINT""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@2a389173"",""value"":""NS_IDENT@646811d6.BEER"",""pos"":{""lineNum"":2,""columnNum"":11,""endLineNum"":2,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""OP_AGG_FUNC@4ba89729"",""value"":""COUNT"",""pos"":{""lineNum"":2,""columnNum"":23,""endLineNum"":2,""endColumnNum"":42,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@178270b2"",""value"":""NS_IDENT@646811d6.DRINKER"",""pos"":{""lineNum"":2,""columnNum"":29,""endLineNum"":2,""endColumnNum"":41,""quoted"":false},""children"":[]}],""alias"":""FREQUENCY""}],""fromItemIds"":[""NS_IDENT@646811d6""],""fromNode"":{""id"":""JOIN_OPERAND@18a645fd"",""value"":""NS_IDENT@646811d6"",""pos"":{""lineNum"":3,""columnNum"":8,""endLineNum"":3,""endColumnNum"":12,""quoted"":false},""children"":[]},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@5cf8edcf"",""value"":""NS_IDENT@646811d6.beer"",""pos"":{""lineNum"":4,""columnNum"":12,""endLineNum"":4,""endColumnNum"":21,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@2a389173"",""value"":""NS_IDENT@646811d6.BEER"",""pos"":{""lineNum"":2,""columnNum"":11,""endLineNum"":2,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@178270b2"",""value"":""NS_IDENT@646811d6.DRINKER"",""pos"":{""lineNum"":2,""columnNum"":29,""endLineNum"":2,""endColumnNum"":41,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@5cf8edcf"",""value"":""NS_IDENT@646811d6.beer"",""pos"":{""lineNum"":4,""columnNum"":12,""endLineNum"":4,""endColumnNum"":21,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":2,""columnNum"":4,""endLineNum"":4,""endColumnNum"":21,""quoted"":false},""children"":{}},{""id"":""BLOCK_SELECT@21fff664"",""alias"":""SERVESPRICE"",""fields"":[""BEER VARCHAR(100)"",""PRICEAVERAGE DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@109d724c"",""value"":""NS_IDENT@141e879d.BEER"",""pos"":{""lineNum"":6,""columnNum"":11,""endLineNum"":6,""endColumnNum"":21,""quoted"":false},""children"":[]},{""id"":""OP_AGG_FUNC@e4d2696"",""value"":""AVG"",""pos"":{""lineNum"":6,""columnNum"":24,""endLineNum"":6,""endColumnNum"":40,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@6e0f7aad"",""value"":""NS_IDENT@141e879d.PRICE"",""pos"":{""lineNum"":6,""columnNum"":28,""endLineNum"":6,""endColumnNum"":39,""quoted"":false},""children"":[]}],""alias"":""PRICEAVERAGE""}],""fromItemIds"":[""NS_IDENT@141e879d""],""fromNode"":{""id"":""JOIN_OPERAND@6079cf5"",""value"":""NS_IDENT@141e879d"",""pos"":{""lineNum"":7,""columnNum"":8,""endLineNum"":7,""endColumnNum"":13,""quoted"":false},""children"":[]},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@28d79cba"",""value"":""NS_IDENT@141e879d.beer"",""pos"":{""lineNum"":8,""columnNum"":12,""endLineNum"":8,""endColumnNum"":22,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@28d79cba"",""value"":""NS_IDENT@141e879d.beer"",""pos"":{""lineNum"":8,""columnNum"":12,""endLineNum"":8,""endColumnNum"":22,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@6e0f7aad"",""value"":""NS_IDENT@141e879d.PRICE"",""pos"":{""lineNum"":6,""columnNum"":28,""endLineNum"":6,""endColumnNum"":39,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@109d724c"",""value"":""NS_IDENT@141e879d.BEER"",""pos"":{""lineNum"":6,""columnNum"":11,""endLineNum"":6,""endColumnNum"":21,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":6,""columnNum"":4,""endLineNum"":8,""endColumnNum"":22,""quoted"":false},""children"":{}},{""id"":""BLOCK_SELECT@30cecdca"",""alias"":""NULLBEERS"",""fields"":[""BEER VARCHAR(100)"",""FREQUENCY BIGINT""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@16a9a4f1"",""value"":""NS_IDENT@42e22a53.BEER"",""pos"":{""lineNum"":10,""columnNum"":11,""endLineNum"":10,""endColumnNum"":28,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@1f1cae23"",""value"":""NS_IDENT@42e22a53.FREQUENCY"",""pos"":{""lineNum"":10,""columnNum"":31,""endLineNum"":10,""endColumnNum"":53,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@42e22a53""],""fromNode"":{""id"":""JOIN_OPERAND@783ec989"",""value"":""NS_IDENT@42e22a53"",""pos"":{""lineNum"":10,""columnNum"":60,""endLineNum"":10,""endColumnNum"":72,""quoted"":false},""children"":[]},""whereNode"":{""id"":""OP_BINARY@23e44287"",""value"":""NOT IN"",""pos"":{""lineNum"":11,""columnNum"":9,""endLineNum"":11,""endColumnNum"":65,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@49601f82"",""value"":""NS_IDENT@42e22a53.BEER"",""pos"":{""lineNum"":11,""columnNum"":9,""endLineNum"":11,""endColumnNum"":26,""quoted"":false},""children"":[]},{""id"":""BLOCK_SELECT@6edc4161"",""value"":""BLOCK_SELECT@6edc4161"",""pos"":{""lineNum"":11,""columnNum"":36,""endLineNum"":11,""endColumnNum"":65,""quoted"":false},""children"":[]}]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@49601f82"",""value"":""NS_IDENT@42e22a53.BEER"",""pos"":{""lineNum"":11,""columnNum"":9,""endLineNum"":11,""endColumnNum"":26,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@1f1cae23"",""value"":""NS_IDENT@42e22a53.FREQUENCY"",""pos"":{""lineNum"":10,""columnNum"":31,""endLineNum"":10,""endColumnNum"":53,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@16a9a4f1"",""value"":""NS_IDENT@42e22a53.BEER"",""pos"":{""lineNum"":10,""columnNum"":11,""endLineNum"":10,""endColumnNum"":28,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":10,""columnNum"":4,""endLineNum"":11,""endColumnNum"":66,""quoted"":false},""children"":{""BLOCK_SELECT@6edc4161"":{""id"":""BLOCK_SELECT@6edc4161"",""parentId"":""BLOCK_SELECT@30cecdca"",""fields"":[""BEER VARCHAR(100)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@24fabd0f"",""value"":""NS_IDENT@99a78d7.BEER"",""pos"":{""lineNum"":11,""columnNum"":43,""endLineNum"":11,""endColumnNum"":53,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@99a78d7""],""fromNode"":{""id"":""JOIN_OPERAND@5486887b"",""value"":""NS_IDENT@99a78d7"",""pos"":{""lineNum"":11,""columnNum"":60,""endLineNum"":11,""endColumnNum"":65,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@24fabd0f"",""value"":""NS_IDENT@99a78d7.BEER"",""pos"":{""lineNum"":11,""columnNum"":43,""endLineNum"":11,""endColumnNum"":53,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":11,""columnNum"":36,""endLineNum"":11,""endColumnNum"":65,""quoted"":false},""children"":{}}}},{""id"":""BLOCK_SELECT@f973499"",""alias"":""ZEROFREQUENTS"",""fields"":[""BEER VARCHAR(100)"",""EXPR$1 INTEGER"",""PRICEAVERAGE DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@56303475"",""value"":""NS_IDENT@61c76850.BEER"",""pos"":{""lineNum"":13,""columnNum"":10,""endLineNum"":13,""endColumnNum"":25,""quoted"":false},""children"":[]},{""id"":""LITERAL_NUMERIC@30506c0d"",""value"":""0"",""pos"":{""lineNum"":13,""columnNum"":28,""endLineNum"":13,""endColumnNum"":28,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@1dcca8d3"",""value"":""NS_IDENT@61c76850.PRICEAVERAGE"",""pos"":{""lineNum"":13,""columnNum"":31,""endLineNum"":13,""endColumnNum"":54,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@61c76850""],""fromNode"":{""id"":""JOIN_OPERAND@37c5fc56"",""value"":""NS_IDENT@61c76850"",""pos"":{""lineNum"":13,""columnNum"":61,""endLineNum"":13,""endColumnNum"":71,""quoted"":false},""children"":[]},""whereNode"":{""id"":""OP_BINARY@215a34b4"",""value"":""NOT IN"",""pos"":{""lineNum"":14,""columnNum"":9,""endLineNum"":14,""endColumnNum"":61,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@5bcde458"",""value"":""NS_IDENT@61c76850.BEER"",""pos"":{""lineNum"":14,""columnNum"":9,""endLineNum"":14,""endColumnNum"":24,""quoted"":false},""children"":[]},{""id"":""BLOCK_SELECT@4d33940d"",""value"":""BLOCK_SELECT@4d33940d"",""pos"":{""lineNum"":14,""columnNum"":34,""endLineNum"":14,""endColumnNum"":61,""quoted"":false},""children"":[]}]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@1dcca8d3"",""value"":""NS_IDENT@61c76850.PRICEAVERAGE"",""pos"":{""lineNum"":13,""columnNum"":31,""endLineNum"":13,""endColumnNum"":54,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@5bcde458"",""value"":""NS_IDENT@61c76850.BEER"",""pos"":{""lineNum"":14,""columnNum"":9,""endLineNum"":14,""endColumnNum"":24,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@56303475"",""value"":""NS_IDENT@61c76850.BEER"",""pos"":{""lineNum"":13,""columnNum"":10,""endLineNum"":13,""endColumnNum"":25,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":13,""columnNum"":3,""endLineNum"":14,""endColumnNum"":62,""quoted"":false},""children"":{""BLOCK_SELECT@4d33940d"":{""id"":""BLOCK_SELECT@4d33940d"",""parentId"":""BLOCK_SELECT@f973499"",""fields"":[""BEER VARCHAR(100)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@10876a6"",""value"":""NS_IDENT@121c54fa.BEER"",""pos"":{""lineNum"":14,""columnNum"":41,""endLineNum"":14,""endColumnNum"":50,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@121c54fa""],""fromNode"":{""id"":""JOIN_OPERAND@43cf6ea3"",""value"":""NS_IDENT@121c54fa"",""pos"":{""lineNum"":14,""columnNum"":57,""endLineNum"":14,""endColumnNum"":61,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@10876a6"",""value"":""NS_IDENT@121c54fa.BEER"",""pos"":{""lineNum"":14,""columnNum"":41,""endLineNum"":14,""endColumnNum"":50,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":14,""columnNum"":34,""endLineNum"":14,""endColumnNum"":61,""quoted"":false},""children"":{}}}}]}
+"
+"WITH Temp1 as
+    (SELECT beer.name as beer, serves.price
+    FROM serves
+    FULL OUTER JOIN beer on beer.name = serves.beer),
+    Temp2 as
+    (
+    SELECT likes.drinker, Temp1.beer, Temp1.price
+    FROM likes
+    RIGHT OUTER JOIN Temp1 on likes.beer = Temp1.beer)
+SELECT beer, COUNT(DISTINCT drinker) as cnt, AVG(price)
+FROM Temp2
+GROUP BY beer
+ORDER BY cnt DESC, beer","{""failed"":true}
+"
+"/* Can't use views?
+CREATE VIEW AvgPrices AS
+SELECT name, avg(price) AS avg
+FROM beer LEFT OUTER JOIN serves
+  ON beer.name = serves.beer
+GROUP BY beer.name;
+
+CREATE VIEW BeerCounts AS
+SELECT beer.name AS beer, count(beer) AS cnt
+FROM likes RIGHT OUTER JOIN beer
+  ON likes.beer = beer.name
+GROUP BY beer.name;
+
+SELECT beer, cnt, avg
+FROM BeerCounts FULL OUTER JOIN AvgPrices
+  ON BeerCounts.beer = AvgPrices.name
+ORDER BY cnt DESC, beer ASC;
+*/
+
+
+
+
+WITH AvgPrices AS
+  (SELECT name, avg(price) AS avg
+  FROM beer LEFT OUTER JOIN serves
+    ON beer.name = serves.beer
+  GROUP BY beer.name)
+
+SELECT beer, cnt, avg
+FROM
+(SELECT beer.name AS beer, count(beer) AS cnt
+FROM likes RIGHT OUTER JOIN beer
+  ON likes.beer = beer.name
+GROUP BY beer.name) AS BeerCounts
+FULL OUTER JOIN AvgPrices
+  ON BeerCounts.beer = AvgPrices.name
+ORDER BY cnt DESC, beer ASC;","{""failed"":true,""errorMsg"":""Parsing error at line 24, column 31. Query syntax may be incorrect""}
+"
+"select part1.beer as beer , part1.cnt as cnt, part2.avg as avg
+from 
+
+(select b.name as beer , count(l.beer) as cnt 
+from beer b 
+left join likes l 
+on b.name = l.beer 
+group by b.name 
+order by cnt DESC) as part1,
+
+(select b.name as beer, avg(s.price) as avg 
+from beer  b 
+left join serves s 
+on b.name = s.beer 
+group by b.name) as part2  
+
+where part1.beer = part2.beer
+order by cnt DESC;","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 52. Query syntax may be incorrect""}
+"
+"with x as (select a.name, count(a.drinker)
+from (beer b left join likes l on b.name = l.beer) a
+group by a.name),
+
+y as (select d.name, avg(d.price)
+from (beer b left join serves s on b.name = s.beer) d
+group by d.name)
+
+select *
+from x natural join y
+order by count desc, avg ","{""failed"":true,""errorMsg"":""Parsing error at line 2, column 7. Query syntax may be incorrect""}
+"
+"WITH Temp1 AS (SELECT B.name as beer, AVG(S.price) as price
+FROM beer B LEFT OUTER JOIN serves S ON B.name = S.beer
+GROUP BY B.name)
+SELECT B.name as beer, COUNT(L.drinker) as cnt, AVG(Temp1.price) as avg
+FROM (beer B LEFT OUTER JOIN likes L ON B.name = L.beer), Temp1
+WHERE Temp1.beer = B.name
+GROUP BY B.name
+ORDER BY COUNT(L.drinker) DESC, B.name ASC;","{""failed"":true,""errorMsg"":""Parsing error at line 4, column 69. Query syntax may be incorrect""}
+"
+"With LikeCount as (
+SELECT beer.name, COUNT(likes.beer)
+FROM likes
+RIGHT OUTER JOIN beer
+ON likes.beer = beer.name
+GROUP BY beer.name
+),
+AvgPrice as (
+SELECT name, avg(price)
+FROM serves
+RIGHT OUTER JOIN beer
+ON serves.beer = beer.name
+GROUP BY beer.name
+)
+SELECT LikeCount.name, count as cnt, avg
+FROM LikeCount, AvgPrice
+WHERE LikeCount.name = AvgPrice.name
+ORDER BY count DESC, LikeCount.name
+
+","{""failed"":true,""errorMsg"":""Parsing error at line 15, column 24. Query syntax may be incorrect""}
+"
+"SELECT name AS beer, COUNT(DISTINCT a.drinker) AS cnt, AVG(a.price) AS avg
+FROM Beer LEFT OUTER JOIN 
+
+(SELECT Serves.bar AS bar, Serves.beer AS beer, Serves.price AS price, Likes.drinker AS drinker, Likes.beer AS beer2
+FROM Serves FULL OUTER JOIN Likes ON Likes.beer = Serves.beer) AS a ON name = beer OR name = beer2
+GROUP BY name
+ORDER BY cnt DESC, beer","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 72. Query syntax may be incorrect""}
+"
+"WITH likesB as
+(SELECT DISTINCT name, count(l.drinker)
+FROM beer b LEFT OUTER JOIN likes l ON l.beer = b.name
+GROUP BY name),
+servesB as
+(SELECT beer, avg(price)
+FROM serves s 
+GROUP BY beer)
+SELECT l.name AS beer, count cnt, avg
+FROM likesB l FULL OUTER JOIN servesB s ON s.beer = l.name","{""failed"":true,""errorMsg"":""Parsing error at line 9, column 24. Query syntax may be incorrect""}
+"
+"select a.name as beer, cnt, avg from (select beer.name, avg(serves.price) as avg from beer left outer join serves on beer.name = serves.beer group by beer.name) as a full outer join (select beer.name, count(likes.drinker) as cnt from beer left outer join likes on beer.name = likes.beer group by beer.name) as b on a.name = b.name order by cnt desc, beer asc","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 29. Query syntax may be incorrect""}
+"
+"WITH one AS
+(SELECT joined1.name, count(joined1.drinker)
+ FROM (beer LEFT JOIN likes on beer.name = likes.beer) joined1
+ GROUP BY joined1.name),
+
+two AS
+(SELECT joined2.name, avg(joined2.price)
+ FROM (beer LEFT JOIN serves on beer.name = serves.beer) joined2
+ GROUP BY joined2.name)
+
+SELECT *
+FROM one NATURAL JOIN two
+ORDER BY count DESC, avg","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 6. Query syntax may be incorrect""}
+"
+"WITH allbeer AS (
+	(SELECT beer FROM likes)
+	UNION
+	(SELECT beer FROM serves)
+	UNION
+	(SELECT name FROM beer)
+), counting AS (
+	SELECT f.beer, COUNT(l.drinker)
+	FROM (SELECT * FROM allbeer) AS f
+	LEFT OUTER JOIN likes l
+	ON f.beer = l.beer
+	GROUP BY f.beer
+), pricing AS (
+	SELECT f.beer, AVG(s.price)
+	FROM (SELECT * FROM allbeer) AS f
+	LEFT OUTER JOIN serves s
+	ON f.beer = s.beer
+	GROUP BY f.beer
+)
+SELECT l.beer, l.count, s.avg
+FROM (SELECT * FROM counting) AS l
+FULL OUTER JOIN (SELECT * FROM pricing) AS s
+ON l.beer = s.beer
+ORDER BY l.count desc, s.beer
+","{""failed"":true,""errorMsg"":""Parsing error at line 20, column 17. Query syntax may be incorrect""}
+"
+"WITH temp1 as (select count(likes.beer), beer.name
+from beer left join likes on beer.name = likes.beer
+group by beer.name),
+temp2 as (select avg(price), serves.beer
+from serves
+group by serves.beer)
+select temp1.name, temp1.count, temp2.avg
+from temp1 left join temp2 on temp1.name = temp2.beer
+order by count desc, beer asc","{""failed"":true,""errorMsg"":""Parsing error at line 7, column 25. Query syntax may be incorrect""}
+"
+"WITH popularity AS (SELECT count(drinker), beer.name FROM likes FULL OUTER JOIN beer ON likes.beer = beer.name Group By beer.name Order By count, beer.name),
+averages AS (SELECT avg(price), beer FROM serves Group By beer)
+SELECT popularity.name, popularity.count, averages.avg FROM popularity LEFT OUTER JOIN averages ON popularity.name = averages.beer;","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 140. Query syntax may be incorrect""}
+"
+" SELECT b.name as beer, 
+(SELECT COUNT(beer) c
+FROM likes
+WHERE beer = b.name) AS cnt,
+(SELECT AVG(price)
+FROM serves
+WHERE beer = b.name) AS avg
+FROM beer b
+GROUP BY beer
+ORDER BY cnt, beer asc
+","{""failed"":true,""errorMsg"":""Parsing error at line 7, column 25. Query syntax may be incorrect""}
+"
+"SELECT B.name as beer, 
+(SELECT COUNT(beer) FROM likes WHERE beer = b.name) AS count,
+(SELECT AVG(price) FROM serves WHERE beer = b.name) AS average
+FROM beer b
+GROUP BY beer
+ORDER BY count desc, beer asc","{""failed"":true,""errorMsg"":""Parsing error at line 2, column 56. Query syntax may be incorrect""}
+"
+"SELECT c.beer AS beer, cnt, avg
+FROM
+(SELECT name AS beer, COUNT(drinker) AS cnt
+FROM beer
+FULL OUTER JOIN likes
+ON name = beer
+GROUP BY name) AS c,
+(SELECT name AS beer, AVG(price) AS avg
+FROM beer
+FULL OUTER JOIN serves
+ON name = beer
+GROUP BY name) AS a
+WHERE c.beer = a.beer
+ORDER BY cnt DESC, beer;
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 29. Query syntax may be incorrect""}
+"
+"with temp1 as (SELECT beer.name, COUNT(distinct drinker)
+FROM likes right outer join beer
+on likes.beer=beer.name
+GROUP BY beer.name),
+
+temp2 as (Select beer.name, avg(price)
+From serves right outer join beer
+on serves.beer=beer.name
+Group by beer.name)
+
+select temp1.name, count, avg
+from temp1, temp2
+where temp1.name=temp2.name
+","{""failed"":true,""errorMsg"":""Parsing error at line 11, column 20. Query syntax may be incorrect""}
+"
+"WITH me AS (SELECT J.name, count(J.drinker)
+FROM (beer B LEFT JOIN likes L ON B.name = L.beer) AS J
+GROUP BY J.name),
+
+you AS (SELECT E.name, avg(E.price)
+FROM (beer B LEFT JOIN serves S ON B.name = S.beer) E
+GROUP BY E.name)
+
+SELECT *
+FROM me NATURAL JOIN you
+ORDER BY count DESC, avg","{""failed"":true,""errorMsg"":""Parsing error at line 2, column 7. Query syntax may be incorrect""}
+"
+"WITH X AS (SELECT J1.name, count(J1.drinker) AS cnt
+FROM (beer B LEFT JOIN likes L ON B.name = L.beer) AS J1
+GROUP BY J1.name),
+Y AS (SELECT J2.name, avg(J2.price)
+FROM (beer B LEFT JOIN serves S ON B.name = S.beer) J2
+GROUP BY J2.name)
+SELECT *
+FROM X NATURAL JOIN Y
+ORDER BY cnt DESC, avg","{""failed"":true,""errorMsg"":""Parsing error at line 2, column 7. Query syntax may be incorrect""}
+"
+"select beer.name, coalesce(number, 0) number, average 
+from beer left outer join (select beer, count(beer) number from likes group by beer) t1 
+on t1.beer = beer.name
+  left outer join
+(select beer, avg(price) average from serves group by beer) t2 
+on t2.beer = beer.name
+order by t1.number desc nulls last, t1.beer asc;","{""failed"":true}
+"
+"select bd.beer as beer, COUNT(distinct drinker) as cnt, AVG(price) from (select b.name as beer, l.drinker as drinker from beer b LEFT OUTER JOIN likes l ON b.name=l.beer) as bd LEFT OUTER JOIN serves s ON bd.beer=s.beer group by bd.beer order by cnt desc, bd.beer asc
+","{""failed"":true}
+"
+"select distinct B.name as beer, 
+(select count(drinker) from likes where beer=B.name) as cnt, 
+(select avg(price) from serves where beer=B.name) as avg
+from beer B
+group by B.name","{""failed"":true,""errorMsg"":""Parsing error at line 3, column 54. Query syntax may be incorrect""}
+"
+"select a.beer, count(distinct(a.drinker)), avg(a.price) from (select likes.drinker, serves.bar, serves.beer, serves.price from likes, serves where likes.beer=serves.beer) AS a GROUP BY a.beer ORDER BY a.count DESC, a.beer;","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 203. Query syntax may be incorrect""}
+"
+"select distinct beer.name as beer,
+  case
+  when cnt is NULL then 0 else cnt
+  end, avg
+from beer
+
+left join
+(select likes.beer, count(distinct likes.drinker) as cnt
+from likes
+group by likes.beer) as b
+on beer.name = b.beer
+
+left join
+(select serves.beer, avg(serves.price) as avg
+from serves
+group by serves.beer) as a
+on a.beer = beer.name
+
+order by cnt desc,beer.name asc","{""failed"":true,""errorMsg"":""Parsing error at line 4, column 8. Query syntax may be incorrect""}
+"
+"with cnt as(SELECT beer, COUNT(*)
+FROM likes 
+GROUP BY beer), average as (SELECT beer, AVG(price)
+FROM serves
+GROUP BY beer), countquery1 as(select * from beer left join cnt on beer.name = cnt.beer),
+averagequery1 as(select* from beer left join average on beer.name=average.beer)
+select countquery1.name as beer, coalesce(countquery1.count,0) as cnt, averagequery1.avg as avg
+from countquery1 join averagequery1 on countquery1.name=averagequery1.name
+order by count desc nulls last, beer asc nulls last","{""failed"":true,""errorMsg"":""Parsing error at line 7, column 54. Query syntax may be incorrect""}
+"
+"with temp1 as (select beer.name as beer from beer except select serves.beer from serves),
+     temp2 as (select temp1.beer, null::int4 as avg from temp1),
+     temp3 as (select serves.beer, AVG(serves.price) as avg from serves group by serves.beer),
+     temp4 as (select* from temp2 union select * from temp3),
+     temp5 as (select beer.name as beer from beer except select likes.beer from likes),
+     temp6 as (select temp5.beer, 0 as cnt from temp5),
+     temp7 as (select likes.beer, COUNT(*) as cnt from likes group by likes.beer),
+     temp8 as (select* from temp6 union select * from temp7)
+select temp4.beer, temp8.cnt, temp4.avg::numeric from temp4, temp8 where temp4.beer = temp8.beer ","{""failed"":true,""errorMsg"":""Parsing error at line 2, column 39. Query syntax may be incorrect""}
+"
+"
+ /*For each beer, find the number of drinkers who like it, as well as its average price as served by bars. 
+Sort the output by the number of drinkers who like the beer (the most popular beer should be listed first).
+In the case of ties, sort by beer name (ascending). If a beer is not served anywhere, its average price 
+should be listed as NULL.(x) [Output columns: beer, cnt, avg] 
+
+The Plan:
+
+avgPriceOfServedBeers -- group serves by beer, select beer and avg(price). 
+avgPriceOfAllBeers -- Left Join beer with avgPriceOfServedBeers on beer, select beer and avgPrice (will be NULL for beers unserved)
+
+numDrinkersWhoLikeBeer -- group likes by beer, select beer and count(*) ??.
+
+avgPriceAndNumLikers -- left join avgPriceOfAllBeers with numDrinkersWhoLikeBeer on beer (all beers in numDrinkersWhoLikeBeer
+      should be contained by the beers in avgPriceOfAllBeers bc we included all beers in the beer relation)
+      
+Sort avgPriceAndNumLikers, first alphabetically, then by popularity.
+
+*/
+
+WITH avgPriceOfServedBeers AS (SELECT beer, avg(price) as avgPrice FROM serves GROUP BY beer),
+
+avgPriceOfAllBeers AS (SELECT beer.name as beer, avgPrice
+FROM (beer LEFT JOIN avgPriceOfServedBeers on beer.name = avgPriceOfServedBeers.beer)),
+
+numDrinkersWhoLikeBeer AS (SELECT beer, count(*) as popularity FROM likes GROUP BY beer)
+
+(SELECT avgPriceOfALlBeers.beer, coalesce(popularity,0) as cnt, avgPrice FROM (avgPriceOfAllBeers LEFT JOIN numDrinkersWhoLikeBeer 
+ON avgPriceOfAllBeers.beer = numDrinkersWhoLikeBeer.beer)) ORDER BY beer, cnt DESC
+
+","{""failed"":true,""errorMsg"":""Parsing error at line 24, column 7. Query syntax may be incorrect""}
+"
+"SELECT b.name allbeers, COALESCE(t1.beercount,0) finalcount, t2.avgprice
+FROM Beer b
+LEFT JOIN 
+(SELECT L1.beer likebeer, Count(L1.beer) beercount
+FROM Likes L1
+Group By likebeer) t1 
+on t1.likebeer = b.name
+LEFT JOIN 
+(SELECT s1.beer servedbeer, Avg(s1.price) avgprice
+FROM Serves s1 
+Group By s1.beer)t2 
+ON t2.servedbeer= b.name
+ORDER BY finalcount DESC, allbeers ASC;","{""failed"":true,""errorMsg"":""From line 6, column 10 to line 6, column 17: Column 'LIKEBEER' not found in any table""}
+"
+"with cntlist as(SELECT l.beer, COUNT(drinker) cnt 
+FROM likes l GROUP BY l.beer), 
+avglist as (SELECT s.beer, AVG(s.price) avg FROM serves s GROUP BY s.beer),
+newcnt as (SELECT beer.name beer, cntlist.cnt FROM beer LEFT JOIN cntlist ON beer.name = cntlist.beer)
+
+SELECT newcnt.beer, coalesce(newcnt.cnt, 0), avglist.avg FROM newcnt LEFT JOIN avglist ON newcnt.beer = avglist.beer ORDER BY cnt DESC, beer ASC ","{""failed"":true,""errorMsg"":""Parsing error at line 3, column 41. Query syntax may be incorrect""}
+"
+"
+WITH drinker_count AS (
+        SELECT beer, COUNT(drinker) cnt
+        FROM likes
+        GROUP BY beer
+), average_price AS (
+        SELECT beer, AVG(price) avg
+        FROM serves
+        GROUP BY beer
+)
+
+SELECT beer.name, COALESCE(drinker_count.cnt, 0), average_price.avg
+FROM beer
+LEFT JOIN average_price ON beer.name = average_price.beer 
+LEFT JOIN drinker_count ON drinker_count.beer = beer.name;","{""failed"":true,""errorMsg"":""Parsing error at line 7, column 33. Query syntax may be incorrect""}
+"
+"WITH t1 AS (SELECT p1.name, count(p1.drinker)
+FROM (Beer B left join Likes L on B.name = L.beer) p1
+GROUP BY p1.name),
+
+t2 AS (SELECT p2.name, avg(p2.price)
+FROM (Beer B left join Serves S on B.name = S.beer) p2
+GROUP BY p2.name)
+
+SELECT *
+FROM t1 natural join t2
+ORDER BY count DESC, avg","{""failed"":true,""errorMsg"":""Parsing error at line 2, column 7. Query syntax may be incorrect""}
+"
+"with x as (select n.name, count(n.drinker)
+from (beer b left join likes l on b.name = l.beer) n
+group by n.name),
+
+y as (select d.name, avg(d.price)
+from (beer b left join serves s on b.name = s.beer) d
+group by d.name)
+
+select *
+from x natural join y
+order by count desc, avg","{""failed"":true,""errorMsg"":""Parsing error at line 2, column 7. Query syntax may be incorrect""}
+"
+"select avgprice.beer, likescount.cnt, avgprice.avg
+from 
+    (select b.name beer, COUNT(l.drinker) as cnt 
+    from likes l right outer join beer b on l.beer = b.name
+    group by b.name
+    ) as likescount 
+full outer join 
+    (select b.name beer, avg(s.price)
+    from serves s right outer join beer b on s.beer = b.name
+    group by b.name 
+    ) as avgprice
+on likescount.beer = avgprice.beer
+order by likescount.cnt desc, avgprice.beer asc 
+
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 47. Query syntax may be incorrect""}
+"
+"with num as 
+(select a.name, count(a.drinker)
+from (beer b left join likes l on b.name = l.beer) a
+group by a.name),
+
+pri as (select d.name, avg(d.price)
+from (beer b left join serves s on b.name = s.beer) d
+group by d.name)
+
+select *
+from num natural join pri
+order by count desc, avg","{""failed"":true,""errorMsg"":""Parsing error at line 3, column 7. Query syntax may be incorrect""}
+"
+"WITH numberOfLikersWith0 AS (
+WITH numberOfLikers AS(
+  SELECT beer.name AS beer, cnt
+  FROM beer LEFT JOIN (SELECT beer, COUNT(DISTINCT drinker) AS cnt FROM likes GROUP BY beer) AS likedBeers 
+  ON beer.name = beer
+)
+SELECT numberOfLikers.beer, 
+    CASE WHEN numberOfLikers.cnt IS NULL 
+            THEN 0 
+            ELSE numberOfLikers.cnt 
+    END AS cnt
+FROM numberOfLikers
+)
+SELECT numberOfLikersWith0.beer, cnt, avgPrice
+FROM numberOfLikersWith0 LEFT JOIN (SELECT beer, AVG(price) as avgPrice
+FROM serves
+GROUP BY beer) AS averagePrice ON numberOfLikersWith0.beer = averagePrice.beer
+ORDER BY cnt DESC, beer","{""failed"":true}
+"
+"SELECT A.name AS beer, A.count as cnt, B.avg
+FROM 
+(SELECT name, COUNT(drinker)
+FROM beer LEFT OUTER JOIN likes ON beer.name=likes.beer
+GROUP BY name) as A,
+(SELECT name, AVG(price)
+FROM beer LEFT OUTER JOIN serves ON beer.name=serves.beer
+GROUP BY name) as B
+WHERE A.name=B.name;","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 25. Query syntax may be incorrect""}
+"
+"
+
+
+WITH beercount2  AS (select beer, count(drinker) as cnt
+from likes
+group by beer),
+
+beercount as (
+select beer.name as beer, beercount2.cnt
+from beer
+left join beercount2
+on beercount2.beer = beer.name),
+
+beerprice  AS (select beer, AVG(price) as avg
+from serves
+group by beer), final as (
+
+SELECT beercount.beer, cnt, avg
+FROM beercount
+LEFT JOIN beerprice
+ON beercount.beer = beerprice.beer
+ORDER BY cnt DESC, beer ASC), 
+
+result as (
+SELECT beerprice.beer, cnt, beerprice.avg
+FROM beerprice
+left JOIN final
+ON beerprice.beer = final.beer and beerprice.avg = final.avg)
+SELECT beer,COALESCE(cnt, 0) as cnt, avg from result
+ORDER BY cnt DESC, beer ASC
+
+
+
+
+","{""failed"":true,""errorMsg"":""Parsing error at line 14, column 43. Query syntax may be incorrect""}
+"
+"SELECT l.beer, count(distinct l.drinker), avg(s.price)
+from likes l, serves s
+where l.beer = s.beer
+group by l.beer","{""blocks"":{""id"":""BLOCK_SELECT@4a1c0752"",""fields"":[""BEER VARCHAR(100)"",""EXPR$1 BIGINT"",""EXPR$2 DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@79ab34c1"",""value"":""NS_IDENT@49dbaaf3.BEER"",""pos"":{""lineNum"":1,""columnNum"":8,""endLineNum"":1,""endColumnNum"":13,""quoted"":false},""children"":[]},{""id"":""OP_AGG_FUNC@281f23f2"",""value"":""COUNT"",""pos"":{""lineNum"":1,""columnNum"":16,""endLineNum"":1,""endColumnNum"":40,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@87abc48"",""value"":""NS_IDENT@49dbaaf3.DRINKER"",""pos"":{""lineNum"":1,""columnNum"":31,""endLineNum"":1,""endColumnNum"":39,""quoted"":false},""children"":[]}]},{""id"":""OP_AGG_FUNC@782168b7"",""value"":""AVG"",""pos"":{""lineNum"":1,""columnNum"":43,""endLineNum"":1,""endColumnNum"":54,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@29f0c4f2"",""value"":""NS_IDENT@1f443fae.PRICE"",""pos"":{""lineNum"":1,""columnNum"":47,""endLineNum"":1,""endColumnNum"":53,""quoted"":false},""children"":[]}]}],""fromItemIds"":[""NS_IDENT@49dbaaf3"",""NS_IDENT@1f443fae""],""fromNode"":{""id"":""OP_JOIN@1dab9dd6"",""value"":""COMMA"",""pos"":{""lineNum"":2,""columnNum"":13,""endLineNum"":2,""endColumnNum"":13,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@2f879bab"",""value"":""NS_IDENT@49dbaaf3"",""pos"":{""lineNum"":2,""columnNum"":6,""endLineNum"":2,""endColumnNum"":10,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@1d207fad"",""value"":""NS_IDENT@1f443fae"",""pos"":{""lineNum"":2,""columnNum"":15,""endLineNum"":2,""endColumnNum"":20,""quoted"":false},""children"":[]}],""natural"":false},""whereNode"":{""id"":""OP_BINARY@aa004a0"",""value"":""="",""pos"":{""lineNum"":3,""columnNum"":7,""endLineNum"":3,""endColumnNum"":21,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@7dd00705"",""value"":""NS_IDENT@49dbaaf3.beer"",""pos"":{""lineNum"":3,""columnNum"":7,""endLineNum"":3,""endColumnNum"":12,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@6d4a65c6"",""value"":""NS_IDENT@1f443fae.beer"",""pos"":{""lineNum"":3,""columnNum"":16,""endLineNum"":3,""endColumnNum"":21,""quoted"":false},""children"":[]}]},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@5cf8edcf"",""value"":""NS_IDENT@49dbaaf3.beer"",""pos"":{""lineNum"":4,""columnNum"":10,""endLineNum"":4,""endColumnNum"":15,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@5cf8edcf"",""value"":""NS_IDENT@49dbaaf3.beer"",""pos"":{""lineNum"":4,""columnNum"":10,""endLineNum"":4,""endColumnNum"":15,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@79ab34c1"",""value"":""NS_IDENT@49dbaaf3.BEER"",""pos"":{""lineNum"":1,""columnNum"":8,""endLineNum"":1,""endColumnNum"":13,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@6d4a65c6"",""value"":""NS_IDENT@1f443fae.beer"",""pos"":{""lineNum"":3,""columnNum"":16,""endLineNum"":3,""endColumnNum"":21,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@7dd00705"",""value"":""NS_IDENT@49dbaaf3.beer"",""pos"":{""lineNum"":3,""columnNum"":7,""endLineNum"":3,""endColumnNum"":12,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@87abc48"",""value"":""NS_IDENT@49dbaaf3.DRINKER"",""pos"":{""lineNum"":1,""columnNum"":31,""endLineNum"":1,""endColumnNum"":39,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@29f0c4f2"",""value"":""NS_IDENT@1f443fae.PRICE"",""pos"":{""lineNum"":1,""columnNum"":47,""endLineNum"":1,""endColumnNum"":53,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":1,""columnNum"":1,""endLineNum"":4,""endColumnNum"":15,""quoted"":false},""children"":{}},""tables"":{""NS_IDENT@1f443fae"":{""tableId"":""NS_IDENT@1f443fae"",""identifier"":""S"",""dbTableName"":""SERVES"",""fields"":[""bar VARCHAR(100)"",""beer VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":2,""columnNum"":15,""endLineNum"":2,""endColumnNum"":22,""quoted"":false}},""NS_IDENT@49dbaaf3"":{""tableId"":""NS_IDENT@49dbaaf3"",""identifier"":""L"",""dbTableName"":""LIKES"",""fields"":[""drinker VARCHAR(100)"",""beer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":2,""columnNum"":6,""endLineNum"":2,""endColumnNum"":12,""quoted"":false}}},""corrTables"":[]}
+"
+"with servedbeers as (select b1.name, avg(price)
+from serves as s1 right outer join beer as b1
+on s1.beer=b1.name
+group by b1.name),
+
+likedbeers as (select b1.name, count(distinct drinker)
+from likes as l1 right outer join beer as b1
+on l1.beer=b1.name
+group by b1.name)
+
+select servedbeers.name, count, avg
+from servedbeers, likedbeers
+where servedbeers.name=likedbeers.name
+
+","{""failed"":true,""errorMsg"":""Parsing error at line 11, column 26. Query syntax may be incorrect""}
+"
+"SELECT b.name,
+	   (SELECT COUNT(*) FROM likes l WHERE l.beer = b.name) AS cnt, 
+	   (SELECT AVG(price) FROM serves s WHERE s.beer = b.name) AS avg
+FROM beer b
+ORDER BY cnt DESC, b.name;","{""failed"":true,""errorMsg"":""Parsing error at line 3, column 64. Query syntax may be incorrect""}
+"
+"with 
+likedBeers as (select beer.name as beer, likes.drinker as drinker from beer left outer join likes on beer.name = likes.beer),
+beerCounts as (select beer, count(likedBeers.drinker) as cnt from likedBeers group by beer),
+beerPrices as (select beer.name as beer, avg(price) AS avg from beer left outer join serves on beer.name = serves.beer group by beer.name)
+select * from beerCounts natural join beerPrices order by cnt desc, beer asc;
+","{""failed"":true,""errorMsg"":""Parsing error at line 4, column 56. Query syntax may be incorrect""}
+"
+"SELECT counts.name as beer, counts.cnt, averages.avg
+FROM
+(SELECT beer.name, count(likes.drinker) as cnt
+FROM beer
+LEFT JOIN likes
+ON likes.beer = beer.name
+GROUP BY beer.name) as counts
+LEFT JOIN 
+(SELECT beer, avg(price) as avg
+FROM serves
+GROUP BY beer) as averages
+ON averages.beer = counts.name
+ORDER BY cnt DESC, beer
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 49. Query syntax may be incorrect""}
+"
+"WITH beer_names AS  (SELECT B.name AS beer
+                    FROM beer B),
+  Temp1 AS  (SELECT BN.beer, COUNT(L.drinker) AS cnt
+            FROM Likes L FULL OUTER JOIN beer_names BN ON L.beer = BN.beer
+            GROUP BY BN.beer),
+  Temp2 AS  (SELECT S.beer, AVG(price) AS avg
+            FROM serves S
+            GROUP BY S.beer)
+SELECT Temp1.beer, Temp1.cnt, Temp2.avg 
+FROM  
+  Temp1 FULL OUTER JOIN Temp2
+  ON Temp1.beer = Temp2.beer
+ORDER BY Temp1.cnt DESC, Temp1.beer ASC","{""failed"":true,""errorMsg"":""Parsing error at line 6, column 43. Query syntax may be incorrect""}
+"
+"WITH Temp1 AS (SELECT name FROM beer),
+Temp2 AS (SELECT AVG(price), beer FROM serves GROUP BY beer),
+Temp3 AS (SELECT COUNT(DISTINCT drinker), Temp1.name FROM likes RIGHT OUTER JOIN Temp1 ON likes.beer = Temp1.name GROUP BY Temp1.name)
+SELECT name,count, avg FROM Temp3 FULL OUTER JOIN Temp2 ON Temp3.name = Temp2.beer ORDER BY count desc, name asc","{""failed"":true,""errorMsg"":""Parsing error at line 4, column 13. Query syntax may be incorrect""}
+"
+"with beer_likes as
+  (select beer.name as beer, count(likes.drinker) as cnt
+  from beer left outer join likes
+  on beer.name = likes.beer
+  group by beer.name),
+  beer_prices as
+  (select beer.name as beer, avg(serves.price) as avg
+  from beer left outer join serves
+  on beer.name = serves.beer
+  group by beer.name)
+select beer_likes.beer, beer_likes.cnt, beer_prices.avg
+from beer_likes full outer join beer_prices
+on beer_likes.beer = beer_prices.beer
+order by beer_likes.cnt desc, beer_likes.beer asc","{""failed"":true,""errorMsg"":""Parsing error at line 7, column 51. Query syntax may be incorrect""}
+"
+"SELECT name, coalesce(pop.count, 0), AVG(price)
+FROM beer
+LEFT OUTER JOIN serves ON beer.name = serves.beer
+LEFT OUTER JOIN likes ON beer.name = likes.beer
+LEFT OUTER JOIN (SELECT beer, count(*) FROM likes GROUP BY beer) pop ON pop.beer = beer.name
+GROUP BY name, pop.count
+ORDER BY pop.count desc NULLS LAST, name;
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 26. Query syntax may be incorrect""}
+"
+"WITH numLike AS (
+    SELECT likes.beer, count(*) count
+    FROM likes
+    GROUP BY likes.beer
+),
+
+avgPrice AS (
+    SELECT serves.beer, avg(serves.price) average
+    FROM serves
+    GROUP BY serves.beer
+),
+  
+notServed AS (
+    SELECT numLike.beer, numLike.count 
+    FROM numLike 
+    WHERE numLike.beer NOT IN (
+        SELECT serves.beer 
+        FROM serves
+    )
+),
+  
+notLiked AS (
+    SELECT avgPrice.beer, 0, avgPrice.average 
+    FROM avgPrice
+    WHERE avgPrice.beer NOT IN (
+        SELECT likes.beer 
+        FROM likes
+    )
+)
+
+SELECT numLike.beer, numLike.count, avgPrice.average 
+FROM numLike JOIN avgPrice 
+ON numLike.beer = avgPrice.beer
+UNION (
+    SELECT notServed.beer, notServed.count, NULL 
+    FROM notServed
+)
+UNION (
+    SELECT notLiked.beer, 0, notLiked.average
+    FROM notLiked
+)
+UNION (
+    SELECT beer.name, 0, NULL 
+    FROM beer 
+    WHERE beer.name NOT IN (
+        SELECT likes.beer 
+        FROM likes UNION (
+            SELECT serves.beer FROM serves
+        )
+    )
+)
+
+ORDER BY count DESC, beer ASC","{""failed"":true,""errorMsg"":""Parsing error at line 2, column 33. Query syntax may be incorrect""}
+"
+"WITH beer_counts AS
+(SELECT name, COUNT(beer) as cnt
+FROM beer
+LEFT JOIN likes ON beer.name = likes.beer
+GROUP BY name),
+ avg_prices AS
+(SELECT beer, AVG(price) as price
+FROM serves
+LEFT JOIN beer ON beer.name = serves.beer
+GROUP BY beer)
+
+(SELECT beer_counts.name, cnt, avg_prices.price 
+FROM beer_counts
+LEFT JOIN avg_prices ON beer_counts.name = avg_prices.beer
+ORDER BY cnt DESC, beer ASC);","{""blocks"":{""id"":""BLOCK_SELECT@2b97cc1f"",""fields"":[""NAME VARCHAR(100)"",""CNT BIGINT"",""PRICE DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@6dd91637"",""value"":""NS_IDENT@7965a51c.NAME"",""pos"":{""lineNum"":12,""columnNum"":9,""endLineNum"":12,""endColumnNum"":24,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@5bca7664"",""value"":""NS_IDENT@7965a51c.CNT"",""pos"":{""lineNum"":12,""columnNum"":27,""endLineNum"":12,""endColumnNum"":29,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@706cb08"",""value"":""NS_IDENT@3eee3e2b.PRICE"",""pos"":{""lineNum"":12,""columnNum"":32,""endLineNum"":12,""endColumnNum"":47,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@7965a51c"",""NS_IDENT@3eee3e2b""],""fromNode"":{""id"":""OP_JOIN@60723d6a"",""value"":""LEFT"",""pos"":{""lineNum"":14,""columnNum"":6,""endLineNum"":14,""endColumnNum"":9,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@18324f97"",""value"":""NS_IDENT@7965a51c"",""pos"":{""lineNum"":13,""columnNum"":6,""endLineNum"":13,""endColumnNum"":16,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@64f555e7"",""value"":""NS_IDENT@3eee3e2b"",""pos"":{""lineNum"":14,""columnNum"":11,""endLineNum"":14,""endColumnNum"":20,""quoted"":false},""children"":[]}],""natural"":false,""joinCondition"":{""id"":""OP_BINARY@71870da7"",""value"":""="",""pos"":{""lineNum"":14,""columnNum"":25,""endLineNum"":14,""endColumnNum"":58,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@35d3ab60"",""value"":""NS_IDENT@7965a51c.NAME"",""pos"":{""lineNum"":14,""columnNum"":25,""endLineNum"":14,""endColumnNum"":40,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@10876a6"",""value"":""NS_IDENT@3eee3e2b.BEER"",""pos"":{""lineNum"":14,""columnNum"":44,""endLineNum"":14,""endColumnNum"":58,""quoted"":false},""children"":[]}]}},""isAggregate"":false,""orderByList"":[{""id"":""OP_POSTFIX@675ffd1d"",""value"":""DESC"",""pos"":{""lineNum"":15,""columnNum"":10,""endLineNum"":15,""endColumnNum"":17,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@6b68cb27"",""value"":""NS_IDENT@7965a51c.CNT"",""pos"":{""lineNum"":15,""columnNum"":10,""endLineNum"":15,""endColumnNum"":12,""quoted"":false},""children"":[]}]},{""id"":""COLUMN_LOCAL@56303475"",""value"":""NS_IDENT@3eee3e2b.BEER"",""pos"":{""lineNum"":15,""columnNum"":20,""endLineNum"":15,""endColumnNum"":23,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@6dd91637"",""value"":""NS_IDENT@7965a51c.NAME"",""pos"":{""lineNum"":12,""columnNum"":9,""endLineNum"":12,""endColumnNum"":24,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@35d3ab60"",""value"":""NS_IDENT@7965a51c.NAME"",""pos"":{""lineNum"":14,""columnNum"":25,""endLineNum"":14,""endColumnNum"":40,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@5bca7664"",""value"":""NS_IDENT@7965a51c.CNT"",""pos"":{""lineNum"":12,""columnNum"":27,""endLineNum"":12,""endColumnNum"":29,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@10876a6"",""value"":""NS_IDENT@3eee3e2b.BEER"",""pos"":{""lineNum"":14,""columnNum"":44,""endLineNum"":14,""endColumnNum"":58,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@56303475"",""value"":""NS_IDENT@3eee3e2b.BEER"",""pos"":{""lineNum"":15,""columnNum"":20,""endLineNum"":15,""endColumnNum"":23,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@6b68cb27"",""value"":""NS_IDENT@7965a51c.CNT"",""pos"":{""lineNum"":15,""columnNum"":10,""endLineNum"":15,""endColumnNum"":12,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@706cb08"",""value"":""NS_IDENT@3eee3e2b.PRICE"",""pos"":{""lineNum"":12,""columnNum"":32,""endLineNum"":12,""endColumnNum"":47,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":12,""columnNum"":2,""endLineNum"":14,""endColumnNum"":58,""quoted"":false},""children"":{}},""tables"":{""NS_IDENT@3eee3e2b"":{""tableId"":""NS_IDENT@3eee3e2b"",""identifier"":""AVG_PRICES"",""dbTableName"":""AVG_PRICES"",""fields"":[""BEER VARCHAR(100)"",""PRICE DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":14,""columnNum"":11,""endLineNum"":14,""endColumnNum"":20,""quoted"":false}},""NS_IDENT@3daa82be"":{""tableId"":""NS_IDENT@3daa82be"",""identifier"":""BEER"",""dbTableName"":""BEER"",""fields"":[""name VARCHAR(100)"",""brewer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":3,""columnNum"":6,""endLineNum"":3,""endColumnNum"":9,""quoted"":false}},""NS_IDENT@7bbbb6a8"":{""tableId"":""NS_IDENT@7bbbb6a8"",""identifier"":""SERVES"",""dbTableName"":""SERVES"",""fields"":[""bar VARCHAR(100)"",""beer VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":8,""columnNum"":6,""endLineNum"":8,""endColumnNum"":11,""quoted"":false}},""NS_IDENT@7965a51c"":{""tableId"":""NS_IDENT@7965a51c"",""identifier"":""BEER_COUNTS"",""dbTableName"":""BEER_COUNTS"",""fields"":[""NAME VARCHAR(100)"",""CNT BIGINT""],""cursor"":[0],""pos"":{""lineNum"":13,""columnNum"":6,""endLineNum"":13,""endColumnNum"":16,""quoted"":false}},""NS_IDENT@58a120b0"":{""tableId"":""NS_IDENT@58a120b0"",""identifier"":""BEER"",""dbTableName"":""BEER"",""fields"":[""name VARCHAR(100)"",""brewer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":9,""columnNum"":11,""endLineNum"":9,""endColumnNum"":14,""quoted"":false}},""NS_IDENT@e344ad3"":{""tableId"":""NS_IDENT@e344ad3"",""identifier"":""LIKES"",""dbTableName"":""LIKES"",""fields"":[""drinker VARCHAR(100)"",""beer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":4,""columnNum"":11,""endLineNum"":4,""endColumnNum"":15,""quoted"":false}}},""corrTables"":[],""withBlocks"":[{""id"":""BLOCK_SELECT@488b50ec"",""alias"":""BEER_COUNTS"",""fields"":[""NAME VARCHAR(100)"",""CNT BIGINT""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@108bdbd8"",""value"":""NS_IDENT@3daa82be.NAME"",""pos"":{""lineNum"":2,""columnNum"":9,""endLineNum"":2,""endColumnNum"":12,""quoted"":false},""children"":[]},{""id"":""OP_AGG_FUNC@4f8b4bd0"",""value"":""COUNT"",""pos"":{""lineNum"":2,""columnNum"":15,""endLineNum"":2,""endColumnNum"":25,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@4e904fd5"",""value"":""NS_IDENT@e344ad3.BEER"",""pos"":{""lineNum"":2,""columnNum"":21,""endLineNum"":2,""endColumnNum"":24,""quoted"":false},""children"":[]}],""alias"":""CNT""}],""fromItemIds"":[""NS_IDENT@3daa82be"",""NS_IDENT@e344ad3""],""fromNode"":{""id"":""OP_JOIN@6d2d99fc"",""value"":""LEFT"",""pos"":{""lineNum"":4,""columnNum"":6,""endLineNum"":4,""endColumnNum"":9,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@27b22f74"",""value"":""NS_IDENT@3daa82be"",""pos"":{""lineNum"":3,""columnNum"":6,""endLineNum"":3,""endColumnNum"":9,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@21fff664"",""value"":""NS_IDENT@e344ad3"",""pos"":{""lineNum"":4,""columnNum"":11,""endLineNum"":4,""endColumnNum"":15,""quoted"":false},""children"":[]}],""natural"":false,""joinCondition"":{""id"":""OP_BINARY@3adbe50f"",""value"":""="",""pos"":{""lineNum"":4,""columnNum"":20,""endLineNum"":4,""endColumnNum"":41,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@677b8e13"",""value"":""NS_IDENT@3daa82be.name"",""pos"":{""lineNum"":4,""columnNum"":20,""endLineNum"":4,""endColumnNum"":28,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@20ed3303"",""value"":""NS_IDENT@e344ad3.beer"",""pos"":{""lineNum"":4,""columnNum"":32,""endLineNum"":4,""endColumnNum"":41,""quoted"":false},""children"":[]}]}},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@660591fb"",""value"":""NS_IDENT@3daa82be.name"",""pos"":{""lineNum"":5,""columnNum"":10,""endLineNum"":5,""endColumnNum"":13,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@108bdbd8"",""value"":""NS_IDENT@3daa82be.NAME"",""pos"":{""lineNum"":2,""columnNum"":9,""endLineNum"":2,""endColumnNum"":12,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@660591fb"",""value"":""NS_IDENT@3daa82be.name"",""pos"":{""lineNum"":5,""columnNum"":10,""endLineNum"":5,""endColumnNum"":13,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@20ed3303"",""value"":""NS_IDENT@e344ad3.beer"",""pos"":{""lineNum"":4,""columnNum"":32,""endLineNum"":4,""endColumnNum"":41,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4e904fd5"",""value"":""NS_IDENT@e344ad3.BEER"",""pos"":{""lineNum"":2,""columnNum"":21,""endLineNum"":2,""endColumnNum"":24,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@677b8e13"",""value"":""NS_IDENT@3daa82be.name"",""pos"":{""lineNum"":4,""columnNum"":20,""endLineNum"":4,""endColumnNum"":28,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":2,""columnNum"":2,""endLineNum"":5,""endColumnNum"":13,""quoted"":false},""children"":{}},{""id"":""BLOCK_SELECT@512d4583"",""alias"":""AVG_PRICES"",""fields"":[""BEER VARCHAR(100)"",""PRICE DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@27d57a2c"",""value"":""NS_IDENT@7bbbb6a8.BEER"",""pos"":{""lineNum"":7,""columnNum"":9,""endLineNum"":7,""endColumnNum"":12,""quoted"":false},""children"":[]},{""id"":""OP_AGG_FUNC@9d1a267"",""value"":""AVG"",""pos"":{""lineNum"":7,""columnNum"":15,""endLineNum"":7,""endColumnNum"":24,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@58a4a74d"",""value"":""NS_IDENT@7bbbb6a8.PRICE"",""pos"":{""lineNum"":7,""columnNum"":19,""endLineNum"":7,""endColumnNum"":23,""quoted"":false},""children"":[]}],""alias"":""PRICE""}],""fromItemIds"":[""NS_IDENT@7bbbb6a8"",""NS_IDENT@58a120b0""],""fromNode"":{""id"":""OP_JOIN@2abc224d"",""value"":""LEFT"",""pos"":{""lineNum"":9,""columnNum"":6,""endLineNum"":9,""endColumnNum"":9,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@13cd7ea5"",""value"":""NS_IDENT@7bbbb6a8"",""pos"":{""lineNum"":8,""columnNum"":6,""endLineNum"":8,""endColumnNum"":11,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@102d92c4"",""value"":""NS_IDENT@58a120b0"",""pos"":{""lineNum"":9,""columnNum"":11,""endLineNum"":9,""endColumnNum"":14,""quoted"":false},""children"":[]}],""natural"":false,""joinCondition"":{""id"":""OP_BINARY@69c93ca4"",""value"":""="",""pos"":{""lineNum"":9,""columnNum"":19,""endLineNum"":9,""endColumnNum"":41,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@60e5272"",""value"":""NS_IDENT@58a120b0.name"",""pos"":{""lineNum"":9,""columnNum"":19,""endLineNum"":9,""endColumnNum"":27,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@7d755813"",""value"":""NS_IDENT@7bbbb6a8.beer"",""pos"":{""lineNum"":9,""columnNum"":31,""endLineNum"":9,""endColumnNum"":41,""quoted"":false},""children"":[]}]}},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@40d10481"",""value"":""NS_IDENT@7bbbb6a8.beer"",""pos"":{""lineNum"":10,""columnNum"":10,""endLineNum"":10,""endColumnNum"":13,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@58a4a74d"",""value"":""NS_IDENT@7bbbb6a8.PRICE"",""pos"":{""lineNum"":7,""columnNum"":19,""endLineNum"":7,""endColumnNum"":23,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@40d10481"",""value"":""NS_IDENT@7bbbb6a8.beer"",""pos"":{""lineNum"":10,""columnNum"":10,""endLineNum"":10,""endColumnNum"":13,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@27d57a2c"",""value"":""NS_IDENT@7bbbb6a8.BEER"",""pos"":{""lineNum"":7,""columnNum"":9,""endLineNum"":7,""endColumnNum"":12,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@60e5272"",""value"":""NS_IDENT@58a120b0.name"",""pos"":{""lineNum"":9,""columnNum"":19,""endLineNum"":9,""endColumnNum"":27,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@7d755813"",""value"":""NS_IDENT@7bbbb6a8.beer"",""pos"":{""lineNum"":9,""columnNum"":31,""endLineNum"":9,""endColumnNum"":41,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":7,""columnNum"":2,""endLineNum"":10,""endColumnNum"":13,""quoted"":false},""children"":{}}]}
+"
+"WITH BeerAvg AS (SELECT name, AVG(price) priceAvg
+FROM serves right OUTER JOIN beer
+ON serves.beer = beer.name
+GROUP BY name),
+DrinkerLikes AS (SELECT name,COUNT(drinker) num
+FROM likes l right OUTER JOIN beer
+ON l.beer = beer.name
+GROUP BY name)
+
+SELECT ba.name,num,priceAvg
+FROM BeerAvg ba JOIN DrinkerLikes dl
+ON ba.name = dl.name
+ORDER BY name desc","{""failed"":true}
+"
+"select beer,cnt,avg from ((select serves.beer as beer, count(distinct drinker) as cnt, avg(price) from likes,serves where likes.beer=serves.beer group by serves.beer) union
+(select serves.beer,0,avg(price) from serves where serves.beer not in (select beer from likes) group by serves.beer) union (select likes.beer,count(drinker),NULL from likes where likes.beer not in (select beer from serves) group by likes.beer) 
+union (select beer.name as beer,0,NULL from beer where beer.name not in (select beer from serves) and beer.name not in (select beer from likes))) as c2 order by cnt desc, beer","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 17. Query syntax may be incorrect""}
+"
+"
+
+WITH counts AS (SELECT beer.name as beer, count(likes.drinker) from beer left outer join likes on beer.name = likes.beer group by beer.name), 
+  avgprice AS (SELECT beer, avg(price) FROM serves GROUP BY beer)
+
+select counts.beer, count, avg from (counts left outer join avgprice on counts.beer = avgprice.beer) order by count desc, counts.beer
+
+","{""failed"":true,""errorMsg"":""Parsing error at line 6, column 21. Query syntax may be incorrect""}
+"
+"WITH temp1 AS (
+SELECT beer.name AS beerName, avg(serves.price) AS avgPrice
+FROM beer LEFT OUTER JOIN serves
+ON beer.name=serves.beer
+GROUP BY beer.name 
+), temp2 AS (
+SELECT beer.name as beerName, count(likes.drinker) AS countLikes
+FROM beer LEFT OUTER JOIN likes
+ON beer.name=likes.beer
+GROUP BY beer.name
+)
+SELECT t1.beerName AS beer, t2.countLikes AS cnt, t1.avgPrice AS avg
+FROM  temp1 t1, temp2 t2
+WHERE t1.beerName=t2.beerName 
+ORDER BY t2.countLikes, t1.beerName;
+","{""failed"":true,""errorMsg"":""Parsing error at line 12, column 66. Query syntax may be incorrect""}
+"
+"select a.name, a.count, b.avg
+from 
+
+(select x.name, count(x.drinker)
+  from (beer b left join likes l on b.name = l.beer) x
+  group by x.name) a
+  
+left join
+  
+(select b.name, avg(s.price)
+from beer b left join serves s on b.name = s.beer
+group by b.name) b
+
+on a.name = b.name
+order by a.count desc, a.name","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 17. Query syntax may be incorrect""}
+"
+"with bjs as
+    (select name, avg(price) as avg
+      from beer left outer join serves
+        on beer.name = serves.beer
+          group by name),
+  bjsjl as
+    (select name, count(drinker) cnt, avg
+      from bjs left outer join likes
+        on bjs.name = likes.beer
+          group by bjs.name, avg)
+select * from bjsjl
+  order by cnt desc, name asc","{""failed"":true,""errorMsg"":""Parsing error at line 2, column 33. Query syntax may be incorrect""}
+"

@@ -1,0 +1,41 @@
+A all parse
+
+B
+1. ambigious (Fail 10)
+
+C
+1. price(decimal string)
+
+D
+1. Count as column name
+
+E
+
+F
+1. != and <>(56 54)
+2. With query(55)?
+
+G
+1. Max column (78success and 47 46fail) 
+
+H
+1. Except (drinker and name) (Fail 4)
+
+I
+1. JOIN ()
+  select frequents.drinker, serves.beer from
+  (frequents join serves on frequents.bar=serves.bar) (Fail 4)
+2. Ambigious (fail 8)
+3. Except (Fail 9)
+4. class org.apache.calcite.sql.SqlNodeList cannot be cast to class org.apache.calcite.sql.SqlCall (org.apache.calcite.sql.SqlNodeList and org.apache.calcite.sql.SqlCall are in unnamed module of loader 'app')
+
+J
+1. != and <>(4)
+2. Error: class org.apache.calcite.sql.SqlNodeList cannot be cast to class org.apache.calcite.sql.SqlCall (org.apache.calcite.sql.SqlNodeList and org.apache.calcite.sql.SqlCall are in unnamed module of loader 'app') (4)
+
+
+
+
+K
+1. Result column(fail 7)
+2. Ambigious (fail 19)

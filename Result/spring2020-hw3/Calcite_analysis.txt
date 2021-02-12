@@ -1,0 +1,19 @@
+A
+1. "Max" column not supported (fail1) fixed(fail25)
+2. Two columns in IN clause(Fail 2)
+
+B
+
+C
+1. Except in from(fail4,)?
+
+
+D
+1. Aggregation supported
+
+E
+1. AS? (Fail 4, )
+2. Time hold (alias)
+3. Column 'DRINKER' is ambiguous(Fail 29)
+4. :: double colon notation not supported
+

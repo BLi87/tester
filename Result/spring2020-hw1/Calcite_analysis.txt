@@ -1,0 +1,16 @@
+1
+
+2
+
+3
+1. != and <> (success4, fail3)
+
+4
+
+
+5
+1. SMALLINT String
+
+
+6
+1. one.bar error (fail 5 success 1)

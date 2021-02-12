@@ -1,0 +1,2643 @@
+"SELECT bar, amount FROM ((SELECT bar, SUM(price) FROM serves AS bar1 GROUP BY bar) LEFT JOIN (SELECT bar, times_a_week FROM (likes NATURAL JOIN (serves NATURAL JOIN frequents)) AS amount) ON bar1.bar=amount.bar ORDER BY name, amount DESC);
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 84. Query syntax may be incorrect""}
+"
+"ALTER TABLE drinker
+ADD earnings INTEGER
+
+(SELECT drinker.name
+FROM drinker
+
+EXCEPT
+
+SELECT frequents.drinker
+FROM frequents)
+
+UNION
+
+(SELECT foo1.bar1, SUM(earnings) AS money
+FROM (
+  SELECT bar1, prices.times * prices.cost AS earnings
+  FROM (SELECT frequents.times_a_week as times, serves.price as cost, frequents.bar as bar1
+      FROM frequents, serves, likes
+      WHERE frequents.bar = serves.bar) AS prices)
+  AS foo1 GROUP BY bar1)
+ORDER BY money DESC;
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 7. Query syntax may be incorrect""}
+"
+"SELECT SUM(price), bar FROM (SELECT DISTINCT drinker, bar, Serves.beer, price FROM Serves FULL OUTER JOIN Likes ON Serves.beer = Likes.beer) AS foo GROUP BY bar;
+
+
+
+SELECT SUM(times_a_week), bar FROM Frequents GROUP BY bar
+
+SELECT SUM(price), bar FROM Serves GROUP BY bar ORDER BY sum DESC, bar ASC
+","{""blocks"":{""id"":""BLOCK_SELECT@4a1c0752"",""fields"":[""EXPR$0 DECIMAL(19, 2)"",""BAR VARCHAR(100)""],""isDistinct"":false,""selectList"":[{""id"":""OP_AGG_FUNC@f72203"",""value"":""SUM"",""pos"":{""lineNum"":1,""columnNum"":8,""endLineNum"":1,""endColumnNum"":17,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@377008df"",""value"":""NS_SELECT@17271176.PRICE"",""pos"":{""lineNum"":1,""columnNum"":12,""endLineNum"":1,""endColumnNum"":16,""quoted"":false},""children"":[]}]},{""id"":""COLUMN_LOCAL@22bb5646"",""value"":""NS_SELECT@17271176.BAR"",""pos"":{""lineNum"":1,""columnNum"":20,""endLineNum"":1,""endColumnNum"":22,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_SELECT@17271176""],""fromNode"":{""id"":""JOIN_OPERAND@30af7377"",""value"":""BLOCK_SELECT@30af7377"",""pos"":{""lineNum"":1,""columnNum"":30,""endLineNum"":1,""endColumnNum"":139,""quoted"":false},""children"":[]},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@2b4786dd"",""value"":""NS_SELECT@17271176.BAR"",""pos"":{""lineNum"":1,""columnNum"":158,""endLineNum"":1,""endColumnNum"":160,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@377008df"",""value"":""NS_SELECT@17271176.PRICE"",""pos"":{""lineNum"":1,""columnNum"":12,""endLineNum"":1,""endColumnNum"":16,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@22bb5646"",""value"":""NS_SELECT@17271176.BAR"",""pos"":{""lineNum"":1,""columnNum"":20,""endLineNum"":1,""endColumnNum"":22,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@2b4786dd"",""value"":""NS_SELECT@17271176.BAR"",""pos"":{""lineNum"":1,""columnNum"":158,""endLineNum"":1,""endColumnNum"":160,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":1,""columnNum"":1,""endLineNum"":1,""endColumnNum"":160,""quoted"":false},""children"":{""BLOCK_SELECT@30af7377"":{""id"":""BLOCK_SELECT@30af7377"",""parentId"":""BLOCK_SELECT@4a1c0752"",""alias"":""FOO"",""fields"":[""DRINKER VARCHAR(100)"",""BAR VARCHAR(100)"",""BEER VARCHAR(100)"",""PRICE DECIMAL(5, 2)""],""isDistinct"":true,""selectList"":[{""id"":""COLUMN_LOCAL@67c277a0"",""value"":""NS_IDENT@57d0fc89.DRINKER"",""pos"":{""lineNum"":1,""columnNum"":46,""endLineNum"":1,""endColumnNum"":52,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@3fa76c61"",""value"":""NS_IDENT@2e3cdec2.BAR"",""pos"":{""lineNum"":1,""columnNum"":55,""endLineNum"":1,""endColumnNum"":57,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@59546cfe"",""value"":""NS_IDENT@2e3cdec2.BEER"",""pos"":{""lineNum"":1,""columnNum"":60,""endLineNum"":1,""endColumnNum"":70,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@2d2acd89"",""value"":""NS_IDENT@2e3cdec2.PRICE"",""pos"":{""lineNum"":1,""columnNum"":73,""endLineNum"":1,""endColumnNum"":77,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@2e3cdec2"",""NS_IDENT@57d0fc89""],""fromNode"":{""id"":""OP_JOIN@5c20ffa8"",""value"":""FULL"",""pos"":{""lineNum"":1,""columnNum"":102,""endLineNum"":1,""endColumnNum"":105,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@59712875"",""value"":""NS_IDENT@2e3cdec2"",""pos"":{""lineNum"":1,""columnNum"":84,""endLineNum"":1,""endColumnNum"":89,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@488b50ec"",""value"":""NS_IDENT@57d0fc89"",""pos"":{""lineNum"":1,""columnNum"":107,""endLineNum"":1,""endColumnNum"":111,""quoted"":false},""children"":[]}],""natural"":false,""joinCondition"":{""id"":""OP_BINARY@2a22ad2b"",""value"":""="",""pos"":{""lineNum"":1,""columnNum"":116,""endLineNum"":1,""endColumnNum"":139,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@42e22a53"",""value"":""NS_IDENT@2e3cdec2.beer"",""pos"":{""lineNum"":1,""columnNum"":116,""endLineNum"":1,""endColumnNum"":126,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@70242f38"",""value"":""NS_IDENT@57d0fc89.beer"",""pos"":{""lineNum"":1,""columnNum"":130,""endLineNum"":1,""endColumnNum"":139,""quoted"":false},""children"":[]}]}},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@2d2acd89"",""value"":""NS_IDENT@2e3cdec2.PRICE"",""pos"":{""lineNum"":1,""columnNum"":73,""endLineNum"":1,""endColumnNum"":77,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@70242f38"",""value"":""NS_IDENT@57d0fc89.beer"",""pos"":{""lineNum"":1,""columnNum"":130,""endLineNum"":1,""endColumnNum"":139,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@42e22a53"",""value"":""NS_IDENT@2e3cdec2.beer"",""pos"":{""lineNum"":1,""columnNum"":116,""endLineNum"":1,""endColumnNum"":126,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@67c277a0"",""value"":""NS_IDENT@57d0fc89.DRINKER"",""pos"":{""lineNum"":1,""columnNum"":46,""endLineNum"":1,""endColumnNum"":52,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@59546cfe"",""value"":""NS_IDENT@2e3cdec2.BEER"",""pos"":{""lineNum"":1,""columnNum"":60,""endLineNum"":1,""endColumnNum"":70,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@3fa76c61"",""value"":""NS_IDENT@2e3cdec2.BAR"",""pos"":{""lineNum"":1,""columnNum"":55,""endLineNum"":1,""endColumnNum"":57,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":1,""columnNum"":30,""endLineNum"":1,""endColumnNum"":139,""quoted"":false},""children"":{}}}},""tables"":{""NS_SELECT@17271176"":{""tableId"":""NS_SELECT@17271176"",""identifier"":""FOO"",""blockId"":""BLOCK_SELECT@30af7377"",""fields"":[""DRINKER VARCHAR(100)"",""BAR VARCHAR(100)"",""BEER VARCHAR(100)"",""PRICE DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":1,""columnNum"":30,""endLineNum"":1,""endColumnNum"":147,""quoted"":false}},""NS_IDENT@2e3cdec2"":{""tableId"":""NS_IDENT@2e3cdec2"",""identifier"":""SERVES"",""dbTableName"":""SERVES"",""fields"":[""bar VARCHAR(100)"",""beer VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":1,""columnNum"":84,""endLineNum"":1,""endColumnNum"":89,""quoted"":false}},""NS_IDENT@57d0fc89"":{""tableId"":""NS_IDENT@57d0fc89"",""identifier"":""LIKES"",""dbTableName"":""LIKES"",""fields"":[""drinker VARCHAR(100)"",""beer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":1,""columnNum"":107,""endLineNum"":1,""endColumnNum"":111,""quoted"":false}}},""corrTables"":[]}
+"
+,"{""failed"":true,""errorMsg"":""Parsing error at line 0, column 0. Query syntax may be incorrect""}
+"
+,"{""failed"":true,""errorMsg"":""Parsing error at line 0, column 0. Query syntax may be incorrect""}
+"
+"
+
+
+
+select bar, sum(much) as much from
+((select bar.name as bar, 0.0 as much from bar)
+union (select bar, SUM(much) AS much
+from(select likeTable.bar,(likeTable.times_a_week *likeTable.price) as much from (select frequents.times_a_week, serves.bar, serves.price from drinker,
+group by  bar
+group by much desc, bar)) as ending
+group by bar
+","{""failed"":true,""errorMsg"":""Parsing error at line 8, column 151. Query syntax may be incorrect""}
+"
+"select bar, amount from ((select bar, sum(times_a_week*price) as amount from(select distinct l.drinker, l.beer, f.bar, f.times_a_week, s.price from likes l, frequents f, serves s where l.drinker=f.drinker and f.bar=s.bar and l.beer=s.beer) as N group by bar order by amount desc, bar) union (select distinct bar, sum(price*0) as amount from(select bar, beer, price from serves where bar in (((select name as bar from bar) except (select distinct bar from (select distinct l.drinker, l.beer, f.bar, f.times_a_week, s.price from likes l, frequents f, serves s where l.drinker=f.drinker and f.bar=s.bar and l.beer=s.beer) as T)))) as E group by bar order by bar)) as W order by amount desc, bar;
+
+
+
+
+
+
+","{""failed"":true}
+"
+"SELECT Bar.name,COALESCE(sum(amount),0) AS result
+FROM Bar
+LEFT JOIN (SELECT Serves.bar AS bar_name, Serves.price * Frequents.times_a_week AS amount
+FROM Serves, Frequents, Likes
+WHERE Frequents.bar = Serves.bar
+AND Likes.drinker = Frequents.drinker
+AND Serves.beer = Likes.beer) AS temp 
+ON Bar.name = temp.bar_name
+GROUP BY Bar.name
+ORDER BY result DESC, Bar.name ASC;","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 44. Query syntax may be incorrect""}
+"
+"SELECT name AS bar, coalesce(sum, 0) AS amount FROM
+        (SELECT bar.name, result.sum FROM bar LEFT OUTER JOIN
+                (SELECT bar AS name, SUM(times_a_week * price) FROM
+                        (SELECT bar, times_a_week, beer, price  FROM
+                        frequents NATURAL JOIN (SELECT * FROM likes NATURAL JOIN serves) AS likeserve)
+                        AS rightchart GROUP BY bar)
+                        AS result ON bar.name = result.name) AS resultwithnull ORDER BY amount DESC, bar ASC;
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 30. Query syntax may be incorrect""}
+"
+"WITH perBarBeerPriceDrinkerTimesaweek AS
+(SELECT f.bar AS bar, s.beer AS beer, s.price AS price, l.drinker AS drinker, f.times_a_week as TAW, SUM(s.price * f.times_a_week) AS total
+FROM likes as l, serves as s, frequents AS f
+WHERE f.bar = s.bar AND s.beer = l.beer AND l.drinker = f.drinker
+GROUP BY f.bar, s.beer, s.price, l.drinker, f.times_a_week),
+
+perBarTotal AS
+(SELECT bar AS barName, SUM(total) AS grandTotal FROM perBarBeerPriceDrinkerTimesaweek GROUP BY bar),
+
+barRoster AS
+(SELECT DISTINCT bar
+FROM Serves)
+
+SELECT DISTINCT bar,
+CASE WHEN (bar IN (SELECT barName FROM perBarTotal))
+THEN (SELECT grandTotal FROM perBarTotal WHERE bar = barName)
+ELSE 0
+END
+AS amount
+FROM barRoster, perBarTotal
+ORDER BY amount DESC, bar ASC;
+","{""failed"":true}
+"
+"SELECT fin.bar AS bar, fin.amount
+FROM(    
+    (
+      SELECT DISTINCT tab.bar AS bar, SUM(tab.num) AS amount
+      FROM(
+          SELECT F.drinker AS drinker, F.times_a_week*S.price AS num, F.bar AS bar /* gets table of all drinkers, the bars they go to, and the weekly price for that beer*/
+          FROM Frequents AS F, Serves AS S 
+          WHERE F.bar = S.bar AND S.beer IN ( /* checks to see if the beer served by that bar is one that the drinker likes; aka checks to see if drinker will buy the beer*/
+              SELECT Likes.beer FROM Likes WHERE F.drinker = Likes.drinker) /* all beers that a drinker likes*/
+
+      ) AS tab
+    GROUP BY tab.bar /* groups it by bar; the sum totals all users' expenses per bar */
+    )
+    UNION ALL 
+   (SELECT DISTINCT b.name AS bar , 0 AS amount FROM Bar AS b WHERE NOT EXISTS
+        (SELECT Frequents.bar FROM Likes, Serves, Frequents WHERE Likes.beer = Serves.beer AND Frequents.drinker = Likes.drinker AND Frequents.bar = Serves.bar AND b.name = Frequents.bar)
+    ) 
+) AS fin
+ORDER by fin.amount DESC, bar;
+    
+ ","{""failed"":true}
+"
+"select br.bar, case when amount is null then 0
+  else amount
+  end
+from
+(select name as bar from bar) as br
+left outer join
+(select bar, sum(r) as amount from
+(select f.drinker, f.bar, f.times_a_week, s.beer, s.price, price*times_a_week as r
+ from frequents as f, serves as s, likes as l where
+  f.bar = s.bar and f.drinker = l.drinker and
+  s.beer = l.beer) as lfs group by bar) as t on br.bar = t.bar
+order by amount DESC, bar;
+","{""failed"":true}
+"
+"
+SELECT bar, SUM(amount) AS amount
+FROM (
+    /* bars set to amount 0*/
+    SELECT name AS bar, 0 AS amount
+    FROM Bar
+
+    UNION ALL
+
+    /* select bar and amount, descending*/ 
+    SELECT bar, amount 
+    FROM (
+        SELECT bar, SUM(weekly_yield) AS amount
+        FROM (
+            SELECT f.bar AS bar, price*times_a_week AS weekly_yield
+            FROM Frequents AS f
+            JOIN (
+                SELECT drinker, bar, Likes.beer, price
+                FROM Likes JOIN Serves
+                ON Likes.beer=Serves.beer
+            ) AS T
+            ON f.drinker=T.drinker AND f.bar=T.bar
+        ) AS joined
+        GROUP BY bar
+    ) AS grouped
+) AS Touter
+GROUP BY bar
+ORDER BY amount DESC, bar;","{""failed"":true}
+"
+"/* Collaborated during UTA office hours */
+WITH UnorderedBarRevenues AS ((WITH info AS 
+
+	(WITH LF AS (SELECT likes.drinker, beer, bar, times_a_week FROM likes JOIN frequents ON likes.drinker = frequents.drinker) SELECT drinker, 
+		LF.beer, LF.bar, times_a_week, price FROM LF JOIN serves ON serves.beer = LF.beer and serves.bar = LF.bar)
+
+	SELECT bar, SUM(times_a_week*price) AS amount FROM info GROUP BY bar)
+
+	UNION
+
+	(WITH zeros AS
+	(SELECT name FROM Bar
+
+	EXCEPT
+
+	(WITH info AS 
+
+		(WITH LF AS (SELECT likes.drinker, beer, bar, times_a_week FROM likes JOIN frequents ON likes.drinker = frequents.drinker) 
+			SELECT drinker, LF.beer, LF.bar, times_a_week, price FROM LF JOIN serves ON serves.beer = LF.beer AND serves.bar = LF.bar)
+
+		SELECT bar AS name FROM info GROUP BY bar))
+
+	SELECT name, 0.0 AS amount FROM zeros))
+
+SELECT * FROM UnorderedBarRevenues ORDER BY amount desc, bar;","{""failed"":true}
+"
+"select nbar, sum(foo.case) from 
+	(select nbar, likes.beer, foo.beer, amount, case when likes.beer <> foo.beer then 0 when likes.beer = foo.beer then amount end from 
+		likes inner join (select drinker, frequents.bar as nbar, beer, frequents.times_a_week*serves.price as amount from 
+			frequents inner join serves on frequents.bar = serves.bar) as foo on likes.drinker = foo.drinker) as foo group by nbar order by sum desc, nbar;
+
+--I think my problem is that there are some bars that has no person frequenting those bars. My query seems to omit those bars, thus missing some values with 0 sales.","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 21. Query syntax may be incorrect""}
+"
+"select * from (
+select * from(
+select name as bar,
+  case when name not in (select bar from (
+    select bar, sum(price)
+    from (
+    select bar, sum(price)*avg(times_a_week) as price
+    from (
+    select t1.drinker, t1.bar, t1.times_a_week, t1.beer, t1.price
+    from (
+    select frequents.drinker, frequents.bar, frequents.times_a_week, serves.beer, serves.price
+    from frequents
+    right join serves
+    on frequents.bar = serves.bar) as t1
+    full join likes
+    on t1.beer = likes.beer
+    where t1.drinker = likes.drinker) as t2
+    group by t2.drinker, t2.bar) as t3
+    group by t3.bar
+    order by sum(t3.price) desc, t3.bar asc) as v1)
+    then 0
+    else null
+  end as sum
+from bar) as v2
+where v2.bar not in ((select bar from (
+  select bar, sum(price)
+  from (
+  select bar, sum(price)*avg(times_a_week) as price
+  from (
+  select t1.drinker, t1.bar, t1.times_a_week, t1.beer, t1.price
+  from (
+  select frequents.drinker, frequents.bar, frequents.times_a_week, serves.beer, serves.price
+  from frequents
+  right join serves
+  on frequents.bar = serves.bar) as t1
+  full join likes
+  on t1.beer = likes.beer
+  where t1.drinker = likes.drinker) as t2
+  group by t2.drinker, t2.bar) as t3
+  group by t3.bar
+  order by sum(t3.price) desc, t3.bar asc) as v1))
+union (select * from (
+  select bar, sum(price)
+  from (
+  select bar, sum(price)*avg(times_a_week) as price
+  from (
+  select t1.drinker, t1.bar, t1.times_a_week, t1.beer, t1.price
+  from (
+  select frequents.drinker, frequents.bar, frequents.times_a_week, serves.beer, serves.price
+  from frequents
+  right join serves
+  on frequents.bar = serves.bar) as t1
+  full join likes
+  on t1.beer = likes.beer
+  where t1.drinker = likes.drinker) as t2
+  group by t2.drinker, t2.bar) as t3
+  group by t3.bar
+  order by sum(t3.price) desc, t3.bar asc) as v2)) as v3
+  group by v3.bar, v3.sum
+  order by sum(v3.sum) desc, v3.bar asc;
+","{""failed"":true,""errorMsg"":""Parsing error at line 23, column 10. Query syntax may be incorrect""}
+"
+"SELECT bar, SUM(earnings) AS total FROM (SELECT s.bar, CASE WHEN f.drinker IS NULL OR l.drinker IS NULL THEN 0 WHEN s.beer=l.beer THEN price*times_a_week ELSE 0 END AS earnings FROM serves AS s LEFT JOIN frequents AS f ON s.bar=f.bar LEFT JOIN likes AS l ON f.drinker=l.drinker) AS temp GROUP BY bar ORDER BY total DESC, bar;
+","{""failed"":true}
+"
+"
+
+select * from 
+
+((select bar.name, 0 profit from bar where bar.name not in 
+	(select f.bar 
+	from frequents f, likes l, serves s
+	where f.drinker = l.drinker and f.bar = s.bar and l.beer = s.beer
+	group by f.bar))
+
+union
+
+select f.bar, coalesce(sum(f.times_a_week*s.price),0) profit
+from frequents f, likes l, serves s
+where f.drinker = l.drinker and f.bar = s.bar and l.beer = s.beer
+group by f.bar)T
+order by profit desc, name;
+","{""failed"":true}
+"
+"with j as (select f.drinker, f.bar, f.times_a_week, sum(s.price) as con
+from frequents f, likes l, serves s
+where s.bar = f.bar and f.drinker = l.drinker and l.beer = s.beer
+group by f.drinker, f.bar, f.times_a_week)
+select final.bbar, final.dollars
+from (select distinct
+case when bar.name not in (select j.bar from j) then bar.name else j.bar end as bbar,
+case when bar.name not in (select j.bar from j) then 0
+when bar.name in (select j.bar from j) then sum(j.con * j.times_a_week) end as dollars
+from  j, bar
+group by bbar, bar.name
+order by dollars desc, bbar asc) as final;
+","{""failed"":true,""errorMsg"":""From line 11, column 10 to line 11, column 13: Column 'BBAR' not found in any table""}
+"
+"SELECT DISTINCT t.bar, SUM(t.amount) as amount
+FROM (SELECT bar, SUM(price * times_a_week) as amount
+FROM frequents NATURAL JOIN serves NATURAL JOIN likes
+GROUP BY bar
+UNION
+SELECT name as bar, 0 as amount
+FROM bar) as t
+GROUP BY t.bar
+ORDER BY amount DESC, bar;","{""failed"":true,""errorMsg"":""From line 4, column 10 to line 4, column 12: Column 'BAR' is ambiguous""}
+"
+"select result1.bar, result1.amount from (select bar, sum(price * times_a_week) amount from (select drinker, frequents.bar, times_a_week, beer, price from frequents join serves on frequents.bar = serves.bar) as t1 join likes on t1.beer = likes.beer where t1.drinker = likes.drinker group by bar union select x1.bar, round(serves.price-serves.price) amount from (select name as bar from bar except select bar from (select drinker, frequents.bar, times_a_week, beer, price from frequents join serves on frequents.bar = serves.bar) as t2 join likes on t2.beer = likes.beer where t2.drinker = likes.drinker) as x1, serves) as result1 order by result1.amount desc, result1.bar asc;","{""failed"":true}
+"
+"-- Group by bar, use serves as the base, append a column of number of times a beer got ordered using frequents and likes
+
+SELECT bar, SUM(total) FROM
+
+(
+SELECT bar, SUM(amount) AS total FROM
+	(SELECT serves.bar, price * times_a_week AS amount FROM
+	serves,
+	(SELECT frequents.drinker, bar, times_a_week, beer FROM frequents, likes WHERE frequents.drinker = likes.drinker) AS T
+	WHERE T.beer = serves.beer AND T.bar = serves.bar) AS N
+	GROUP BY bar
+
+UNION ALL
+
+(Select name AS bar, 0.0 AS total FROM bar)
+) AS A
+
+GROUP BY bar
+ORDER BY SUM(total) DESC, bar ASC;
+","{""failed"":true}
+"
+"SELECT name, COALESCE(temp3.amount,0) AS amount FROM Bar LEFT JOIN (SELECT temp2.bar, SUM(temp2.amount) AS amount FROM (SELECT temp1.bar, temp1.times_a_week*temp1.price AS amount FROM Likes l NATURAL JOIN (SELECT * FROM Frequents f NATURAL JOIN Serves s) AS temp1) AS temp2 GROUP BY temp2.bar) AS temp3 ON name = temp3.bar ORDER BY amount DESC, name;","{""failed"":true}
+"
+"SELECT G.name, G.total FROM
+(SELECT T.name, SUM(T.num) as total FROM
+(SELECT bar as name, 0 as num FROM serves
+UNION
+(SELECT U.bar, SUM(U.times_a_week*U.price) FROM
+(SELECT frequents.bar, serves.price, frequents.times_a_week
+FROM serves, likes, frequents
+WHERE serves.beer=likes.beer AND frequents.bar=serves.bar AND likes.drinker=frequents.drinker) AS U
+GROUP BY U.bar)) AS T
+GROUP BY T.name) AS G
+ORDER BY G.total DESC;","{""failed"":true}
+"
+"SELECT DISTINCT View6.bar, View6.amount
+FROM ((SELECT DISTINCT View3.bar, SUM(View3.amount) as amount
+FROM (SELECT DISTINCT View2.bar, View2.drinker, View2.sum * Frequents.times_a_week AS amount
+FROM Frequents, (SELECT bar, drinker, SUM(price)
+FROM (SELECT bar, drinker, price
+FROM Serves, Likes
+WHERE Serves.beer = Likes.beer) as View1
+GROUP BY bar, drinker) AS View2
+WHERE Frequents.bar = View2.bar
+AND Frequents.drinker = View2.drinker) AS View3
+GROUP BY View3.bar)
+UNION ALL
+(SELECT DISTINCT View5.name as bar, Serves.price*0 as amount
+FROM Serves, ((SELECT DISTINCT name 
+FROM Bar)
+EXCEPT ALL
+(SELECT DISTINCT View4.bar
+FROM (SELECT DISTINCT View3.bar, SUM(View3.amount) as amount
+FROM (SELECT DISTINCT View2.bar, View2.drinker, View2.sum * Frequents.times_a_week AS amount
+FROM Frequents, (SELECT bar, drinker, SUM(price)
+FROM (SELECT bar, drinker, price
+FROM Serves, Likes
+WHERE Serves.beer = Likes.beer) as View1
+GROUP BY bar, drinker) AS View2
+WHERE Frequents.bar = View2.bar
+AND Frequents.drinker = View2.drinker) AS View3
+GROUP BY View3.bar) AS View4)) as View5)) AS View6
+ORDER BY View6.amount DESC, View6.bar;","{""failed"":true,""errorMsg"":""Parsing error at line 3, column 54. Query syntax may be incorrect""}
+"
+"(SELECT f.bar bar1, SUM(s.price*f.times_a_week) AS amount FROM Frequents f, Serves s, Likes l
+WHERE f.bar = s.bar AND s.beer = l.beer AND l.drinker = f.drinker
+GROUP BY f.bar
+ORDER BY amount DESC, f.bar)
+UNION
+(SELECT name AS bar1, 0 AS amount FROM
+(SELECT name FROM bar EXCEPT SELECT bar1 FROM (SELECT f.bar bar1, SUM(s.price*f.times_a_week) AS foo FROM Frequents f, Serves s, Likes l
+WHERE f.bar = s.bar AND s.beer = l.beer AND l.drinker = f.drinker GROUP BY f.bar) AS foo) AS foo1)
+ORDER BY amount DESC, bar1;
+
+
+","{""failed"":true}
+"
+"WITH TMP(bar, amount) AS (SELECT s.bar, SUM(times_a_week * price)
+FROM likes l, serves s, frequents f 
+WHERE l.drinker = f.drinker 
+AND s.beer = l.beer
+AND s.bar = f.bar
+GROUP BY s.bar)
+
+SELECT name bar,
+       COALESCE(TMP.amount, 0) AS amount
+FROM bar FULL OUTER JOIN TMP ON bar.name = TMP.bar
+ORDER BY amount DESC, bar; ","{""failed"":true}
+"
+"with newtables(drinker,bar,times_a_week, drinker1, beer, bar1, beer1, price, name, address) as (select * 
+from frequents f, likes l, serves s, bar b where l.beer=s.beer and f.bar=s.bar and f.drinker=l.drinker and b.name=f.bar) 
+select bar, sum(times_a_week*price) as amount from newtables group by bar 
+UNION 
+
+select name, 0.0 as amount from bar except (select f.bar, 0.0 as amount from frequents f, likes l, serves s where f.drinker=l.drinker and f.bar=s.bar
+ and s.beer=l.beer group by f.bar, amount) order by amount desc, bar;
+
+	","{""failed"":true,""errorMsg"":""From line 7, column 36 to line 7, column 41: Column 'AMOUNT' not found in any table""}
+"
+"
+
+SELECT T3.name, T3.totals
+FROM (SELECT T2.name, SUM(T2.NOdrinks) as TOTALS
+	FROM (SELECT name, 0 as NOdrinks
+			FROM bar
+
+			UNION
+
+			SELECT T1.bar, SUM(T1.times_a_week*T1.price)
+				FROM (SELECT frequents.bar, serves.price, frequents.times_a_week
+						FROM serves, likes, frequents
+						WHERE serves.beer=likes.beer AND frequents.bar=serves.bar AND likes.drinker=frequents.drinker) as T1
+				GROUP BY T1.bar) as T2
+				GROUP BY T2.name) as T3
+			ORDER BY T3.TOTALS DESC, T3.name ASC;
+
+","{""failed"":true}
+"
+"
+
+SELECT fin.bar bar, SUM(fin.amount) amount FROM
+
+  ((SELECT b.bar bar, SUM(b.total) amount FROM
+
+  (SELECT t.bar, t.times, (t.times * t.price) total FROM
+
+      (SELECT f.drinker drinker, f.bar bar, f.times_a_week times, l.beer beer, s.price price
+      FROM Frequents f, Likes l, Serves s
+      WHERE f.drinker = l.drinker AND s.bar = f.bar AND l.beer = s.beer)
+        AS t
+        )
+
+    AS b GROUP BY b.bar)
+
+  UNION SELECT name, 0.0 amount FROM Bar) as fin GROUP BY fin.bar
+
+ORDER BY amount DESC, bar ASC;
+","{""failed"":true}
+"
+"SELECT name, COALESCE(sum(price * times_a_week), 0) 
+FROM Bar LEFT OUTER JOIN 
+	(SELECT Serves.bar AS bar, price, times_a_week FROM Serves, Frequents, Likes
+	WHERE Serves.bar = Frequents.bar AND Frequents.drinker = Likes.drinker AND Serves.beer = Likes.beer) AS S
+ON name = bar
+GROUP BY name
+ORDER BY COALESCE(sum(price * times_a_week), 0) DESC, name;
+","{""failed"":true}
+"
+"WITH TMP1(bar, amount) AS (
+	SELECT DISTINCT frequents.bar, 
+			SUM(serves.price*frequents.times_a_week) AS amount
+	FROM serves, likes, frequents
+	WHERE serves.beer = likes.beer AND 
+			likes.drinker = frequents.drinker AND
+			frequents.bar = serves.bar
+	GROUP BY frequents.bar
+	)
+	SELECT DISTINCT bar, amount 
+	FROM TMP1
+	UNION
+	(SELECT DISTINCT bar.name, 0 AS amount
+	FROM bar
+	WHERE NOT EXISTS(
+	SELECT DISTINCT bar, amount
+	FROM TMP1))
+	
+	ORDER BY amount DESC, bar ASC;
+
+
+","{""failed"":true}
+"
+"Select bar,amount
+from
+(
+	Select distinct bar, sum(price*times) amount
+	from
+	(
+		select tbl1.bar,tbl1.beer,tbl1.drinker,tbl1.price,frequents.times_a_week times
+		from
+		(
+			select serves.bar,likes.beer,likes.drinker,serves.price
+			from serves,likes
+			where serves.beer = likes.beer
+		) tbl1,
+		frequents
+		where frequents.drinker = tbl1.drinker
+		and frequents.bar = tbl1.bar
+	)a
+	group by bar
+	UNION
+	Select distinct name bar, 0 amount
+	from
+	(
+		Select bar.name
+		from bar
+		EXCEPT
+		select tbl1.bar
+		from
+		(
+			select serves.bar,likes.beer,likes.drinker,serves.price
+			from serves,likes
+			where serves.beer = likes.beer
+		) tbl1,
+		frequents
+		where frequents.drinker = tbl1.drinker
+		and frequents.bar = tbl1.bar
+	) tbl2
+) tbl3
+Order by amount desc, bar asc;","{""blocks"":{""id"":""BLOCK_SELECT@19593091"",""fields"":[""BAR VARCHAR(100)"",""AMOUNT DECIMAL(19, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@236134a1"",""value"":""NS_SETOP@66f659e6.BAR"",""pos"":{""lineNum"":1,""columnNum"":8,""endLineNum"":1,""endColumnNum"":10,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@76d05cc9"",""value"":""NS_SETOP@66f659e6.AMOUNT"",""pos"":{""lineNum"":1,""columnNum"":12,""endLineNum"":1,""endColumnNum"":17,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_SETOP@66f659e6""],""fromNode"":{""id"":""JOIN_OPERAND@56ccd751"",""value"":""BLOCK_SETOP@56ccd751"",""pos"":{""lineNum"":4,""columnNum"":2,""endLineNum"":36,""endColumnNum"":7,""quoted"":false},""children"":[]},""isAggregate"":false,""orderByList"":[{""id"":""OP_POSTFIX@1dc2de84"",""value"":""DESC"",""pos"":{""lineNum"":38,""columnNum"":10,""endLineNum"":38,""endColumnNum"":20,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@31c2affc"",""value"":""NS_SETOP@66f659e6.AMOUNT"",""pos"":{""lineNum"":38,""columnNum"":10,""endLineNum"":38,""endColumnNum"":15,""quoted"":false},""children"":[]}]},{""id"":""COLUMN_LOCAL@6a0659ac"",""value"":""NS_SETOP@66f659e6.BAR"",""pos"":{""lineNum"":38,""columnNum"":23,""endLineNum"":38,""endColumnNum"":25,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@31c2affc"",""value"":""NS_SETOP@66f659e6.AMOUNT"",""pos"":{""lineNum"":38,""columnNum"":10,""endLineNum"":38,""endColumnNum"":15,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@6a0659ac"",""value"":""NS_SETOP@66f659e6.BAR"",""pos"":{""lineNum"":38,""columnNum"":23,""endLineNum"":38,""endColumnNum"":25,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@236134a1"",""value"":""NS_SETOP@66f659e6.BAR"",""pos"":{""lineNum"":1,""columnNum"":8,""endLineNum"":1,""endColumnNum"":10,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@76d05cc9"",""value"":""NS_SETOP@66f659e6.AMOUNT"",""pos"":{""lineNum"":1,""columnNum"":12,""endLineNum"":1,""endColumnNum"":17,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":1,""columnNum"":1,""endLineNum"":37,""endColumnNum"":6,""quoted"":false},""children"":{""BLOCK_SETOP@56ccd751"":{""id"":""BLOCK_SETOP@56ccd751"",""parentId"":""BLOCK_SELECT@19593091"",""alias"":""TBL3"",""fields"":[""BAR VARCHAR(100)"",""AMOUNT DECIMAL(19, 2)""],""opName"":""UNION"",""all"":false,""leftBlockId"":""BLOCK_SELECT@1d207fad"",""rightBlockId"":""BLOCK_SELECT@4d33940d"",""pos"":{""lineNum"":4,""columnNum"":2,""endLineNum"":36,""endColumnNum"":7,""quoted"":false},""children"":{""BLOCK_SELECT@4d33940d"":{""id"":""BLOCK_SELECT@4d33940d"",""parentId"":""BLOCK_SETOP@56ccd751"",""fields"":[""BAR VARCHAR(100)"",""AMOUNT INTEGER""],""isDistinct"":true,""selectList"":[{""id"":""COLUMN_LOCAL@6ee8dcd3"",""value"":""NS_SETOP@44de94c3.NAME"",""pos"":{""lineNum"":20,""columnNum"":18,""endLineNum"":20,""endColumnNum"":21,""quoted"":false},""children"":[],""alias"":""BAR""},{""id"":""LITERAL_NUMERIC@58a120b0"",""value"":""0"",""pos"":{""lineNum"":20,""columnNum"":28,""endLineNum"":20,""endColumnNum"":28,""quoted"":false},""children"":[],""alias"":""AMOUNT""}],""fromItemIds"":[""NS_SETOP@44de94c3""],""fromNode"":{""id"":""JOIN_OPERAND@4abf3f0"",""value"":""BLOCK_SETOP@4abf3f0"",""pos"":{""lineNum"":23,""columnNum"":3,""endLineNum"":35,""endColumnNum"":30,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@6ee8dcd3"",""value"":""NS_SETOP@44de94c3.NAME"",""pos"":{""lineNum"":20,""columnNum"":18,""endLineNum"":20,""endColumnNum"":21,""quoted"":false},""children"":[],""alias"":""BAR""}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":20,""columnNum"":2,""endLineNum"":36,""endColumnNum"":7,""quoted"":false},""children"":{""BLOCK_SETOP@4abf3f0"":{""id"":""BLOCK_SETOP@4abf3f0"",""parentId"":""BLOCK_SELECT@4d33940d"",""alias"":""TBL2"",""fields"":[""NAME VARCHAR(100)""],""opName"":""EXCEPT"",""all"":false,""leftBlockId"":""BLOCK_SELECT@4e4c3a38"",""rightBlockId"":""BLOCK_SELECT@c27d163"",""pos"":{""lineNum"":23,""columnNum"":3,""endLineNum"":35,""endColumnNum"":30,""quoted"":false},""children"":{""BLOCK_SELECT@c27d163"":{""id"":""BLOCK_SELECT@c27d163"",""parentId"":""BLOCK_SETOP@4abf3f0"",""fields"":[""BAR VARCHAR(100)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@e344ad3"",""value"":""NS_SELECT@11de56e6.BAR"",""pos"":{""lineNum"":26,""columnNum"":10,""endLineNum"":26,""endColumnNum"":17,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_SELECT@11de56e6"",""NS_IDENT@2b56f5f8""],""fromNode"":{""id"":""OP_JOIN@57c88764"",""value"":""COMMA"",""pos"":{""lineNum"":32,""columnNum"":9,""endLineNum"":32,""endColumnNum"":9,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@78faea5f"",""value"":""BLOCK_SELECT@78faea5f"",""pos"":{""lineNum"":29,""columnNum"":4,""endLineNum"":31,""endColumnNum"":33,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@398474a2"",""value"":""NS_IDENT@2b56f5f8"",""pos"":{""lineNum"":33,""columnNum"":3,""endLineNum"":33,""endColumnNum"":11,""quoted"":false},""children"":[]}],""natural"":false},""whereNode"":{""id"":""OP_BINARY@67e28be3"",""value"":""AND"",""pos"":{""lineNum"":34,""columnNum"":9,""endLineNum"":35,""endColumnNum"":30,""quoted"":false},""children"":[{""id"":""OP_BINARY@21fdfefc"",""value"":""="",""pos"":{""lineNum"":34,""columnNum"":9,""endLineNum"":34,""endColumnNum"":40,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@34a0ef00"",""value"":""NS_IDENT@2b56f5f8.drinker"",""pos"":{""lineNum"":34,""columnNum"":9,""endLineNum"":34,""endColumnNum"":25,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@5c0f79f0"",""value"":""NS_SELECT@11de56e6.DRINKER"",""pos"":{""lineNum"":34,""columnNum"":29,""endLineNum"":34,""endColumnNum"":40,""quoted"":false},""children"":[]}]},{""id"":""OP_BINARY@29a69a35"",""value"":""="",""pos"":{""lineNum"":35,""columnNum"":7,""endLineNum"":35,""endColumnNum"":30,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@3daa82be"",""value"":""NS_IDENT@2b56f5f8.bar"",""pos"":{""lineNum"":35,""columnNum"":7,""endLineNum"":35,""endColumnNum"":19,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@ec1b2e4"",""value"":""NS_SELECT@11de56e6.BAR"",""pos"":{""lineNum"":35,""columnNum"":23,""endLineNum"":35,""endColumnNum"":30,""quoted"":false},""children"":[]}]}]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@e344ad3"",""value"":""NS_SELECT@11de56e6.BAR"",""pos"":{""lineNum"":26,""columnNum"":10,""endLineNum"":26,""endColumnNum"":17,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@ec1b2e4"",""value"":""NS_SELECT@11de56e6.BAR"",""pos"":{""lineNum"":35,""columnNum"":23,""endLineNum"":35,""endColumnNum"":30,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@34a0ef00"",""value"":""NS_IDENT@2b56f5f8.drinker"",""pos"":{""lineNum"":34,""columnNum"":9,""endLineNum"":34,""endColumnNum"":25,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@3daa82be"",""value"":""NS_IDENT@2b56f5f8.bar"",""pos"":{""lineNum"":35,""columnNum"":7,""endLineNum"":35,""endColumnNum"":19,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@5c0f79f0"",""value"":""NS_SELECT@11de56e6.DRINKER"",""pos"":{""lineNum"":34,""columnNum"":29,""endLineNum"":34,""endColumnNum"":40,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":26,""columnNum"":3,""endLineNum"":35,""endColumnNum"":30,""quoted"":false},""children"":{""BLOCK_SELECT@78faea5f"":{""id"":""BLOCK_SELECT@78faea5f"",""parentId"":""BLOCK_SELECT@c27d163"",""alias"":""TBL1"",""fields"":[""BAR VARCHAR(100)"",""BEER VARCHAR(100)"",""DRINKER VARCHAR(100)"",""PRICE DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@1f387978"",""value"":""NS_IDENT@616b241a.BAR"",""pos"":{""lineNum"":29,""columnNum"":11,""endLineNum"":29,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4441d567"",""value"":""NS_IDENT@b8e246c.BEER"",""pos"":{""lineNum"":29,""columnNum"":22,""endLineNum"":29,""endColumnNum"":31,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@62b969c4"",""value"":""NS_IDENT@b8e246c.DRINKER"",""pos"":{""lineNum"":29,""columnNum"":33,""endLineNum"":29,""endColumnNum"":45,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@47ec7422"",""value"":""NS_IDENT@616b241a.PRICE"",""pos"":{""lineNum"":29,""columnNum"":47,""endLineNum"":29,""endColumnNum"":58,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@616b241a"",""NS_IDENT@b8e246c""],""fromNode"":{""id"":""OP_JOIN@37fdfb05"",""value"":""COMMA"",""pos"":{""lineNum"":30,""columnNum"":15,""endLineNum"":30,""endColumnNum"":15,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@5e39850"",""value"":""NS_IDENT@616b241a"",""pos"":{""lineNum"":30,""columnNum"":9,""endLineNum"":30,""endColumnNum"":14,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@1603dc2f"",""value"":""NS_IDENT@b8e246c"",""pos"":{""lineNum"":30,""columnNum"":16,""endLineNum"":30,""endColumnNum"":20,""quoted"":false},""children"":[]}],""natural"":false},""whereNode"":{""id"":""OP_BINARY@105b693d"",""value"":""="",""pos"":{""lineNum"":31,""columnNum"":10,""endLineNum"":31,""endColumnNum"":33,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@de88ac6"",""value"":""NS_IDENT@616b241a.beer"",""pos"":{""lineNum"":31,""columnNum"":10,""endLineNum"":31,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@5bca7664"",""value"":""NS_IDENT@b8e246c.beer"",""pos"":{""lineNum"":31,""columnNum"":24,""endLineNum"":31,""endColumnNum"":33,""quoted"":false},""children"":[]}]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@4441d567"",""value"":""NS_IDENT@b8e246c.BEER"",""pos"":{""lineNum"":29,""columnNum"":22,""endLineNum"":29,""endColumnNum"":31,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@5bca7664"",""value"":""NS_IDENT@b8e246c.beer"",""pos"":{""lineNum"":31,""columnNum"":24,""endLineNum"":31,""endColumnNum"":33,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@47ec7422"",""value"":""NS_IDENT@616b241a.PRICE"",""pos"":{""lineNum"":29,""columnNum"":47,""endLineNum"":29,""endColumnNum"":58,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@1f387978"",""value"":""NS_IDENT@616b241a.BAR"",""pos"":{""lineNum"":29,""columnNum"":11,""endLineNum"":29,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@62b969c4"",""value"":""NS_IDENT@b8e246c.DRINKER"",""pos"":{""lineNum"":29,""columnNum"":33,""endLineNum"":29,""endColumnNum"":45,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@de88ac6"",""value"":""NS_IDENT@616b241a.beer"",""pos"":{""lineNum"":31,""columnNum"":10,""endLineNum"":31,""endColumnNum"":20,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":29,""columnNum"":4,""endLineNum"":31,""endColumnNum"":33,""quoted"":false},""children"":{}}}},""BLOCK_SELECT@4e4c3a38"":{""id"":""BLOCK_SELECT@4e4c3a38"",""parentId"":""BLOCK_SETOP@4abf3f0"",""fields"":[""NAME VARCHAR(100)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@6411d3c8"",""value"":""NS_IDENT@256aa5f2.NAME"",""pos"":{""lineNum"":23,""columnNum"":10,""endLineNum"":23,""endColumnNum"":17,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@256aa5f2""],""fromNode"":{""id"":""JOIN_OPERAND@293cde83"",""value"":""NS_IDENT@256aa5f2"",""pos"":{""lineNum"":24,""columnNum"":8,""endLineNum"":24,""endColumnNum"":10,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@6411d3c8"",""value"":""NS_IDENT@256aa5f2.NAME"",""pos"":{""lineNum"":23,""columnNum"":10,""endLineNum"":23,""endColumnNum"":17,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":23,""columnNum"":3,""endLineNum"":24,""endColumnNum"":10,""quoted"":false},""children"":{}}}}}},""BLOCK_SELECT@1d207fad"":{""id"":""BLOCK_SELECT@1d207fad"",""parentId"":""BLOCK_SETOP@56ccd751"",""fields"":[""BAR VARCHAR(100)"",""AMOUNT DECIMAL(19, 2)""],""isDistinct"":true,""selectList"":[{""id"":""COLUMN_LOCAL@77c7ed8e"",""value"":""NS_SELECT@46678e49.BAR"",""pos"":{""lineNum"":4,""columnNum"":18,""endLineNum"":4,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""OP_AGG_FUNC@66bacdbc"",""value"":""SUM"",""pos"":{""lineNum"":4,""columnNum"":23,""endLineNum"":4,""endColumnNum"":38,""quoted"":false},""children"":[{""id"":""OP_BINARY@2c6ee758"",""value"":""*"",""pos"":{""lineNum"":4,""columnNum"":27,""endLineNum"":4,""endColumnNum"":37,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@640dc4c6"",""value"":""NS_SELECT@46678e49.PRICE"",""pos"":{""lineNum"":4,""columnNum"":27,""endLineNum"":4,""endColumnNum"":31,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@7bb35cc6"",""value"":""NS_SELECT@46678e49.TIMES"",""pos"":{""lineNum"":4,""columnNum"":33,""endLineNum"":4,""endColumnNum"":37,""quoted"":false},""children"":[]}]}],""alias"":""AMOUNT""}],""fromItemIds"":[""NS_SELECT@46678e49""],""fromNode"":{""id"":""JOIN_OPERAND@72ed9aad"",""value"":""BLOCK_SELECT@72ed9aad"",""pos"":{""lineNum"":7,""columnNum"":3,""endLineNum"":16,""endColumnNum"":30,""quoted"":false},""children"":[]},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@476a736d"",""value"":""NS_SELECT@46678e49.BAR"",""pos"":{""lineNum"":18,""columnNum"":11,""endLineNum"":18,""endColumnNum"":13,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@7bb35cc6"",""value"":""NS_SELECT@46678e49.TIMES"",""pos"":{""lineNum"":4,""columnNum"":33,""endLineNum"":4,""endColumnNum"":37,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@77c7ed8e"",""value"":""NS_SELECT@46678e49.BAR"",""pos"":{""lineNum"":4,""columnNum"":18,""endLineNum"":4,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@476a736d"",""value"":""NS_SELECT@46678e49.BAR"",""pos"":{""lineNum"":18,""columnNum"":11,""endLineNum"":18,""endColumnNum"":13,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@640dc4c6"",""value"":""NS_SELECT@46678e49.PRICE"",""pos"":{""lineNum"":4,""columnNum"":27,""endLineNum"":4,""endColumnNum"":31,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":4,""columnNum"":2,""endLineNum"":18,""endColumnNum"":13,""quoted"":false},""children"":{""BLOCK_SELECT@72ed9aad"":{""id"":""BLOCK_SELECT@72ed9aad"",""parentId"":""BLOCK_SELECT@1d207fad"",""alias"":""A"",""fields"":[""BAR VARCHAR(100)"",""BEER VARCHAR(100)"",""DRINKER VARCHAR(100)"",""PRICE DECIMAL(5, 2)"",""TIMES INTEGER""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@621f89b8"",""value"":""NS_SELECT@748e9b20.BAR"",""pos"":{""lineNum"":7,""columnNum"":10,""endLineNum"":7,""endColumnNum"":17,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@f339eae"",""value"":""NS_SELECT@748e9b20.BEER"",""pos"":{""lineNum"":7,""columnNum"":19,""endLineNum"":7,""endColumnNum"":27,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@2822c6ff"",""value"":""NS_SELECT@748e9b20.DRINKER"",""pos"":{""lineNum"":7,""columnNum"":29,""endLineNum"":7,""endColumnNum"":40,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4dafba3e"",""value"":""NS_SELECT@748e9b20.PRICE"",""pos"":{""lineNum"":7,""columnNum"":42,""endLineNum"":7,""endColumnNum"":51,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4647881c"",""value"":""NS_IDENT@36dfbdaf.TIMES_A_WEEK"",""pos"":{""lineNum"":7,""columnNum"":53,""endLineNum"":7,""endColumnNum"":74,""quoted"":false},""children"":[],""alias"":""TIMES""}],""fromItemIds"":[""NS_SELECT@748e9b20"",""NS_IDENT@36dfbdaf""],""fromNode"":{""id"":""OP_JOIN@59942b48"",""value"":""COMMA"",""pos"":{""lineNum"":13,""columnNum"":9,""endLineNum"":13,""endColumnNum"":9,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@1869f114"",""value"":""BLOCK_SELECT@1869f114"",""pos"":{""lineNum"":10,""columnNum"":4,""endLineNum"":12,""endColumnNum"":33,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@1917d90f"",""value"":""NS_IDENT@36dfbdaf"",""pos"":{""lineNum"":14,""columnNum"":3,""endLineNum"":14,""endColumnNum"":11,""quoted"":false},""children"":[]}],""natural"":false},""whereNode"":{""id"":""OP_BINARY@546621c4"",""value"":""AND"",""pos"":{""lineNum"":15,""columnNum"":9,""endLineNum"":16,""endColumnNum"":30,""quoted"":false},""children"":[{""id"":""OP_BINARY@64aad6db"",""value"":""="",""pos"":{""lineNum"":15,""columnNum"":9,""endLineNum"":15,""endColumnNum"":40,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@20095ab4"",""value"":""NS_IDENT@36dfbdaf.drinker"",""pos"":{""lineNum"":15,""columnNum"":9,""endLineNum"":15,""endColumnNum"":25,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4e2916c3"",""value"":""NS_SELECT@748e9b20.DRINKER"",""pos"":{""lineNum"":15,""columnNum"":29,""endLineNum"":15,""endColumnNum"":40,""quoted"":false},""children"":[]}]},{""id"":""OP_BINARY@66c83fc8"",""value"":""="",""pos"":{""lineNum"":16,""columnNum"":7,""endLineNum"":16,""endColumnNum"":30,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@ae7950d"",""value"":""NS_IDENT@36dfbdaf.bar"",""pos"":{""lineNum"":16,""columnNum"":7,""endLineNum"":16,""endColumnNum"":19,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@60d1b21f"",""value"":""NS_SELECT@748e9b20.BAR"",""pos"":{""lineNum"":16,""columnNum"":23,""endLineNum"":16,""endColumnNum"":30,""quoted"":false},""children"":[]}]}]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@2822c6ff"",""value"":""NS_SELECT@748e9b20.DRINKER"",""pos"":{""lineNum"":7,""columnNum"":29,""endLineNum"":7,""endColumnNum"":40,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@20095ab4"",""value"":""NS_IDENT@36dfbdaf.drinker"",""pos"":{""lineNum"":15,""columnNum"":9,""endLineNum"":15,""endColumnNum"":25,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@60d1b21f"",""value"":""NS_SELECT@748e9b20.BAR"",""pos"":{""lineNum"":16,""columnNum"":23,""endLineNum"":16,""endColumnNum"":30,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4e2916c3"",""value"":""NS_SELECT@748e9b20.DRINKER"",""pos"":{""lineNum"":15,""columnNum"":29,""endLineNum"":15,""endColumnNum"":40,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4dafba3e"",""value"":""NS_SELECT@748e9b20.PRICE"",""pos"":{""lineNum"":7,""columnNum"":42,""endLineNum"":7,""endColumnNum"":51,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@621f89b8"",""value"":""NS_SELECT@748e9b20.BAR"",""pos"":{""lineNum"":7,""columnNum"":10,""endLineNum"":7,""endColumnNum"":17,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@f339eae"",""value"":""NS_SELECT@748e9b20.BEER"",""pos"":{""lineNum"":7,""columnNum"":19,""endLineNum"":7,""endColumnNum"":27,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4647881c"",""value"":""NS_IDENT@36dfbdaf.TIMES_A_WEEK"",""pos"":{""lineNum"":7,""columnNum"":53,""endLineNum"":7,""endColumnNum"":74,""quoted"":false},""children"":[],""alias"":""TIMES""},{""id"":""COLUMN_LOCAL@ae7950d"",""value"":""NS_IDENT@36dfbdaf.bar"",""pos"":{""lineNum"":16,""columnNum"":7,""endLineNum"":16,""endColumnNum"":19,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":7,""columnNum"":3,""endLineNum"":16,""endColumnNum"":30,""quoted"":false},""children"":{""BLOCK_SELECT@1869f114"":{""id"":""BLOCK_SELECT@1869f114"",""parentId"":""BLOCK_SELECT@72ed9aad"",""alias"":""TBL1"",""fields"":[""BAR VARCHAR(100)"",""BEER VARCHAR(100)"",""DRINKER VARCHAR(100)"",""PRICE DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@6a0ac48e"",""value"":""NS_IDENT@2063c53e.BAR"",""pos"":{""lineNum"":10,""columnNum"":11,""endLineNum"":10,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@77cb9cd1"",""value"":""NS_IDENT@6e57b5e9.BEER"",""pos"":{""lineNum"":10,""columnNum"":22,""endLineNum"":10,""endColumnNum"":31,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@35636217"",""value"":""NS_IDENT@6e57b5e9.DRINKER"",""pos"":{""lineNum"":10,""columnNum"":33,""endLineNum"":10,""endColumnNum"":45,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@3e4f80cb"",""value"":""NS_IDENT@2063c53e.PRICE"",""pos"":{""lineNum"":10,""columnNum"":47,""endLineNum"":10,""endColumnNum"":58,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@2063c53e"",""NS_IDENT@6e57b5e9""],""fromNode"":{""id"":""OP_JOIN@488b50ec"",""value"":""COMMA"",""pos"":{""lineNum"":11,""columnNum"":15,""endLineNum"":11,""endColumnNum"":15,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@5d58c727"",""value"":""NS_IDENT@2063c53e"",""pos"":{""lineNum"":11,""columnNum"":9,""endLineNum"":11,""endColumnNum"":14,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@54da32dc"",""value"":""NS_IDENT@6e57b5e9"",""pos"":{""lineNum"":11,""columnNum"":16,""endLineNum"":11,""endColumnNum"":20,""quoted"":false},""children"":[]}],""natural"":false},""whereNode"":{""id"":""OP_BINARY@1ba05e38"",""value"":""="",""pos"":{""lineNum"":12,""columnNum"":10,""endLineNum"":12,""endColumnNum"":33,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@749ab7b4"",""value"":""NS_IDENT@2063c53e.beer"",""pos"":{""lineNum"":12,""columnNum"":10,""endLineNum"":12,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@3b0ee03a"",""value"":""NS_IDENT@6e57b5e9.beer"",""pos"":{""lineNum"":12,""columnNum"":24,""endLineNum"":12,""endColumnNum"":33,""quoted"":false},""children"":[]}]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@3e4f80cb"",""value"":""NS_IDENT@2063c53e.PRICE"",""pos"":{""lineNum"":10,""columnNum"":47,""endLineNum"":10,""endColumnNum"":58,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@77cb9cd1"",""value"":""NS_IDENT@6e57b5e9.BEER"",""pos"":{""lineNum"":10,""columnNum"":22,""endLineNum"":10,""endColumnNum"":31,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@3b0ee03a"",""value"":""NS_IDENT@6e57b5e9.beer"",""pos"":{""lineNum"":12,""columnNum"":24,""endLineNum"":12,""endColumnNum"":33,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@6a0ac48e"",""value"":""NS_IDENT@2063c53e.BAR"",""pos"":{""lineNum"":10,""columnNum"":11,""endLineNum"":10,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@35636217"",""value"":""NS_IDENT@6e57b5e9.DRINKER"",""pos"":{""lineNum"":10,""columnNum"":33,""endLineNum"":10,""endColumnNum"":45,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@749ab7b4"",""value"":""NS_IDENT@2063c53e.beer"",""pos"":{""lineNum"":12,""columnNum"":10,""endLineNum"":12,""endColumnNum"":20,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":10,""columnNum"":4,""endLineNum"":12,""endColumnNum"":33,""quoted"":false},""children"":{}}}}}}}}}},""tables"":{""NS_IDENT@36dfbdaf"":{""tableId"":""NS_IDENT@36dfbdaf"",""identifier"":""FREQUENTS"",""dbTableName"":""FREQUENTS"",""fields"":[""drinker VARCHAR(100)"",""bar VARCHAR(100)"",""times_a_week INTEGER""],""cursor"":[0],""pos"":{""lineNum"":14,""columnNum"":3,""endLineNum"":14,""endColumnNum"":11,""quoted"":false}},""NS_IDENT@256aa5f2"":{""tableId"":""NS_IDENT@256aa5f2"",""identifier"":""BAR"",""dbTableName"":""BAR"",""fields"":[""name VARCHAR(100)"",""address VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":24,""columnNum"":8,""endLineNum"":24,""endColumnNum"":10,""quoted"":false}},""NS_SELECT@46678e49"":{""tableId"":""NS_SELECT@46678e49"",""identifier"":""A"",""blockId"":""BLOCK_SELECT@72ed9aad"",""fields"":[""BAR VARCHAR(100)"",""BEER VARCHAR(100)"",""DRINKER VARCHAR(100)"",""PRICE DECIMAL(5, 2)"",""TIMES INTEGER""],""cursor"":[0],""pos"":{""lineNum"":7,""columnNum"":3,""endLineNum"":17,""endColumnNum"":3,""quoted"":false}},""NS_SETOP@66f659e6"":{""tableId"":""NS_SETOP@66f659e6"",""identifier"":""TBL3"",""blockId"":""BLOCK_SETOP@56ccd751"",""fields"":[""BAR VARCHAR(100)"",""AMOUNT DECIMAL(19, 2)""],""cursor"":[0],""pos"":{""lineNum"":4,""columnNum"":2,""endLineNum"":36,""endColumnNum"":7,""quoted"":false}},""NS_IDENT@6e57b5e9"":{""tableId"":""NS_IDENT@6e57b5e9"",""identifier"":""LIKES"",""dbTableName"":""LIKES"",""fields"":[""drinker VARCHAR(100)"",""beer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":11,""columnNum"":16,""endLineNum"":11,""endColumnNum"":20,""quoted"":false}},""NS_IDENT@b8e246c"":{""tableId"":""NS_IDENT@b8e246c"",""identifier"":""LIKES"",""dbTableName"":""LIKES"",""fields"":[""drinker VARCHAR(100)"",""beer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":30,""columnNum"":16,""endLineNum"":30,""endColumnNum"":20,""quoted"":false}},""NS_IDENT@2063c53e"":{""tableId"":""NS_IDENT@2063c53e"",""identifier"":""SERVES"",""dbTableName"":""SERVES"",""fields"":[""bar VARCHAR(100)"",""beer VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":11,""columnNum"":9,""endLineNum"":11,""endColumnNum"":14,""quoted"":false}},""NS_SELECT@748e9b20"":{""tableId"":""NS_SELECT@748e9b20"",""identifier"":""TBL1"",""blockId"":""BLOCK_SELECT@1869f114"",""fields"":[""BAR VARCHAR(100)"",""BEER VARCHAR(100)"",""DRINKER VARCHAR(100)"",""PRICE DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":10,""columnNum"":4,""endLineNum"":13,""endColumnNum"":8,""quoted"":false}},""NS_IDENT@2b56f5f8"":{""tableId"":""NS_IDENT@2b56f5f8"",""identifier"":""FREQUENTS"",""dbTableName"":""FREQUENTS"",""fields"":[""drinker VARCHAR(100)"",""bar VARCHAR(100)"",""times_a_week INTEGER""],""cursor"":[0],""pos"":{""lineNum"":33,""columnNum"":3,""endLineNum"":33,""endColumnNum"":11,""quoted"":false}},""NS_SELECT@11de56e6"":{""tableId"":""NS_SELECT@11de56e6"",""identifier"":""TBL1"",""blockId"":""BLOCK_SELECT@78faea5f"",""fields"":[""BAR VARCHAR(100)"",""BEER VARCHAR(100)"",""DRINKER VARCHAR(100)"",""PRICE DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":29,""columnNum"":4,""endLineNum"":32,""endColumnNum"":8,""quoted"":false}},""NS_SETOP@44de94c3"":{""tableId"":""NS_SETOP@44de94c3"",""identifier"":""TBL2"",""blockId"":""BLOCK_SETOP@4abf3f0"",""fields"":[""NAME VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":23,""columnNum"":3,""endLineNum"":35,""endColumnNum"":30,""quoted"":false}},""NS_IDENT@616b241a"":{""tableId"":""NS_IDENT@616b241a"",""identifier"":""SERVES"",""dbTableName"":""SERVES"",""fields"":[""bar VARCHAR(100)"",""beer VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":30,""columnNum"":9,""endLineNum"":30,""endColumnNum"":14,""quoted"":false}}},""corrTables"":[]}
+"
+"select whatever.name, SUM(whatever.income) AS answer
+from
+((select name, 0 AS income from bar)
+
+union
+
+(select frequents.bar, SUM(price*times_a_week) AS income from frequents, serves, likes                                                                                       
+	 where serves.bar=frequents.bar and serves.beer=likes.beer and likes.drinker=frequents.drinker
+	 GROUP BY frequents.bar
+	 ORDER BY income DESC, frequents.bar)
+) AS whatever
+
+GROUP BY name
+ORDER BY answer DESC, name;","{""failed"":true}
+"
+"with abc as (select serves.bar as moneyBars, SUM(frequents.times_a_week*serves.price) as amount
+	from serves, frequents, likes 
+	where frequents.bar = serves.bar and 
+			serves.beer = likes.beer and 
+			likes.drinker = frequents.drinker
+	group by serves.bar
+	)
+select bar.name, 
+	case 
+		when bar.name in (select moneyBars from abc) then (select amount from abc where abc.moneyBars = bar.name)
+		else 0
+	end as value
+from bar, abc
+group by bar.name
+order by value desc, bar asc;","{""failed"":true,""errorMsg"":""Parsing error at line 12, column 9. Query syntax may be incorrect""}
+"
+"SELECT q.name, q.amount FROM (
+
+
+(
+SELECT join1.bar AS name, SUM(join1.times_a_week * join1.price) AS amount FROM
+(SELECT frequents.drinker, frequents.times_a_week, serves.beer, serves.price, frequents.bar FROM serves JOIN frequents ON serves.bar = frequents.bar JOIN likes ON likes.drinker = frequents.drinker AND likes.beer = serves.beer) join1
+GROUP BY name ORDER BY amount DESC, name)
+
+
+
+UNION
+(SELECT name, 0.0 AS amount FROM bar
+EXCEPT
+SELECT DISTINCT frequents.bar, 0.0 AS amount FROM serves JOIN frequents ON serves.bar = frequents.bar JOIN likes ON likes.drinker = frequents.drinker AND likes.beer = serves.beer
+)
+
+) q GROUP BY q.name, q.amount ORDER BY q.amount DESC, q.name;
+","{""failed"":true,""errorMsg"":""From line 7, column 10 to line 7, column 13: Column 'NAME' not found in any table""}
+"
+"SELECT name, COALESCE(t.amount,0) AS amount FROM Bar LEFT JOIN (SELECT k.bar, SUM(k.amount) AS amount FROM (SELECT b.bar, b.times_a_week*b.price AS amount FROM Likes l NATURAL JOIN (SELECT * FROM Frequents f NATURAL JOIN Serves s) AS b) AS k GROUP BY k.bar) AS t ON name = t.bar ORDER BY amount DESC, name;
+","{""failed"":true}
+"
+"SELECT name, COALESCE(amount, 0) AS amount FROM bar LEFT JOIN (SELECT bar, SUM(total) AS amount  FROM (SELECT frequents.drinker, frequents.bar, frequents.times_a_week, likes.beer, serves.price, times_a_week*price AS total FROM frequents JOIN serves ON frequents.bar = serves.bar JOIN likes ON likes.beer = serves.beer AND frequents.drinker = likes.drinker) AS foo GROUP BY bar) AS foo2 ON bar.name = foo2.bar ORDER BY amount DESC, name;","{""failed"":true}
+"
+"SELECT bar, SUM(moneymade) FROM
+	(SELECT * FROM (SELECT bar, price * times_a_week moneymade FROM
+		(SELECT drinker, frequents.bar, times_a_week, beer, price
+			FROM frequents
+			JOIN serves
+			ON frequents.bar = serves.bar) AS t1
+		JOIN likes
+		ON t1.beer = likes.beer
+	WHERE t1.drinker = likes.drinker) as t2
+
+	UNION ALL
+
+	SELECT t4.name bar, times_a_week - times_a_week FROM
+		(SELECT name FROM bar
+	
+		EXCEPT
+		SELECT bar FROM 
+			(SELECT bar, price * times_a_week moneymade FROM
+				(SELECT drinker, frequents.bar, times_a_week, beer, price
+					FROM frequents
+					JOIN serves
+					ON frequents.bar = serves.bar) AS t1
+				JOIN likes
+				ON t1.beer = likes.beer
+			WHERE t1.drinker = likes.drinker) AS t3) AS t4
+			CROSS JOIN frequents) AS t5
+GROUP BY bar
+ORDER BY sum DESC, bar ASC;","{""failed"":true,""errorMsg"":""Parsing error at line 28, column 10. Query syntax may be incorrect""}
+"
+"WITH justorder AS (WITH allbut0 AS (WITH temp AS (WITH tmp AS (SELECT serves.bar, drinker, beer, times_a_week, price FROM serves, frequents WHERE serves.bar=frequents.bar) SELECT tmp.bar, tmp.drinker, tmp.beer, tmp.price, tmp.times_a_week  FROM tmp, likes WHERE likes.drinker=tmp.drinker AND likes.beer=tmp.beer) SELECT bar, SUM(price*times_a_week) AS amount FROM temp GROUP BY bar ORDER BY amount DESC)SELECT * FROM allbut0 UNION (WITH only0 AS ((SELECT name FROM bar) EXCEPT (SELECT bar FROM allbut0)) SELECT name, 0 AS amount  FROM only0)) SELECT * FROM justorder ORDER BY amount DESC, bar;
+
+","{""failed"":true}
+"
+"-- Suppose that each time a drinker visits a bar (according to the frequency in Frequents), he or she
+-- always buys one glass of each beer served at this bar that he or she likes; if no such beer exists, he or
+-- she will not buy anything. Calculate, for each bar, the total amount of money it expects to get per
+-- week (over all drinkers in our database). List the (bar, amount) pairs in decreasing order of amount.
+-- Be sure to handle the case when a bar doesn’t expect to sell any beer to our drinkers—you need to
+-- show an amount of 0.
+
+-- select frequents.bar,
+--           CASE WHEN frequents.bar is not null THEN sum(price * times_a_week)
+--               ELSE 0
+--           END as amount
+-- from frequents
+-- join serves on frequents.bar = serves.bar
+-- join likes on frequents.drinker = likes.drinker and serves.beer = likes.beer
+-- join beer on serves.beer = beer.name
+-- right join bar on frequents.bar=bar.name
+-- group by frequents.bar
+-- order by amount desc;
+--
+-- -------
+((select frequents.bar, sum(price * times_a_week) as amount
+from frequents
+join serves on frequents.bar = serves.bar
+join likes on frequents.drinker = likes.drinker and serves.beer = likes.beer
+join beer on serves.beer = beer.name
+group by frequents.bar)
+union
+(select distinct bar, 0 as amount
+from
+  ((select distinct name as bar from bar)
+  except
+  (select distinct frequents.bar
+  from frequents
+  join serves on frequents.bar = serves.bar
+  join likes on frequents.drinker = likes.drinker and serves.beer = likes.beer
+  join beer on serves.beer = beer.name)) as tb2)
+order by amount desc, bar asc);
+","{""failed"":true}
+"
+"WITH serveamount AS
+
+(SELECT s1.bar AS barname, s1.price * f1.times_a_week AS amount
+FROM serves AS s1, likes AS l1, frequents AS f1
+WHERE (s1.bar = f1.bar AND f1.drinker = l1.drinker AND s1.beer = l1.beer))
+
+SELECT bar.name, COALESCE(sum(amount),0) AS T FROM bar
+LEFT JOIN serveamount
+ON bar.name = serveamount.barname
+GROUP BY bar.name
+ORDER BY T DESC, Bar.name ASC;
+","{""failed"":true}
+"
+"select name as bar, sum(price*times_a_week) as amount
+from (
+select drinker, name, serves.beer, times_a_week, price as price2, case when price is null then 0 else price end
+  from (select likes.drinker, name, times_a_week, beer
+    from (select drinker, bar.name, times_a_week
+      from frequents right outer join bar on frequents.bar=bar.name) as T1
+        left outer join likes on likes.drinker=T1.drinker) as T2
+        left outer join serves on serves.beer=T2.beer and serves.bar=T2.name) as foo
+group by name
+order by amount desc, bar asc;
+
+-- My query works in the small databse, but does not work in the general case.
+-- I tried to use the case syntax so that it would record the price as 0 whenever there is a case
+-- a drinker goes to the bar but does not have a beer that he/she prefers. It properly calculates the
+-- price as 0 in the column price, but doesn't happen to work in the general case.
+-- I joined all the drinkers and bar, then with frequents, then with serves so that I have a complete chart of
+-- drinker, name, beer, and price. My query successfully outputs the bar and amount, but still can't handle the case when
+-- there is a bar with amount 0. It outputs as none, which puts it at the top of the list, outputing an incorrect answer.
+-- Right outer join was used between frequents and bars because I wanted to include the bars that might have no one frequenting
+-- to be included on the final table. Left outer join was used between T1 and likes because I wanted to include
+-- all the drinekrs that frequented a bar even though it doesn't have a beer that they liked.
+","{""failed"":true,""errorMsg"":""From line 1, column 25 to line 1, column 29: Column 'PRICE' not found in any table""}
+"
+"with answer as ((with info as 
+
+(with likers as (select likes.drinker, beer, bar, times_a_week from likes join frequents on likes.drinker = frequents.drinker) select drinker, likers.beer, likers.bar, times_a_week, price from likers join serves on serves.beer = likers.beer and serves.bar = likers.bar)
+
+select bar, sum(times_a_week*price) as amount from info group by bar)
+
+union
+
+(with zeros as
+(select name from bar
+except
+
+(with info as 
+
+(with likers as (select likes.drinker, beer, bar, times_a_week from likes join frequents on likes.drinker = frequents.drinker) select drinker, likers.beer, likers.bar, times_a_week, price from likers join serves on serves.beer = likers.beer and serves.bar = likers.bar)
+
+select bar as name from info group by bar))
+
+select name, 0.0 as amount from zeros))
+
+select * from answer order by amount desc, bar;","{""failed"":true}
+"
+"select name, coalesce(t.amount,0) as amount 
+from Bar 
+left join 
+(select c.bar, SUM(c.amount) as amount from 
+(select b.bar, b.times_a_week*b.price as amount from likes l natural join 
+(select * from frequents f natural join serves s) 
+as b) 
+as c group by c.bar) 
+as t on name = t.bar order by amount desc, name;","{""failed"":true}
+"
+"with TMP1(bar,sumEarn) as (select bar,sumEarn from (select consume.bar,sum(spend) as sumEarn from (select s.bar,s.beer,f.drinker,f.times_a_week,s.price,(s.price*f.times_a_week)as spend from Serves s, Likes l, Frequents f where f.drinker=l.drinker and f.bar=s.bar and s.beer=l.beer) consume group by consume.bar) toInsert),
+
+
+TMP2(bar,sumEarn) as (select b.name,0 from Bar b,
+
+(select consume.bar,sum(spend) as sumEarn from (select s.bar,s.beer,f.drinker,f.times_a_week,s.price,(s.price*f.times_a_week)as spend from Serves s, Likes l, Frequents f where f.drinker=l.drinker and f.bar=s.bar and s.beer=l.beer) consume group by consume.bar) earns
+
+where b.name not in 
+
+(select consume.bar from (select s.bar,s.beer,f.drinker,f.times_a_week,s.price,(s.price*f.times_a_week)as spend from Serves s, Likes l, Frequents f where f.drinker=l.drinker and f.bar=s.bar and s.beer=l.beer) consume group by consume.bar))
+(select * from TMP1) union (select * from TMP2) order by sumEarn DESC,bar;","{""failed"":true}
+"
+"SELECT bar, SUM(subtotal) AS amount 
+FROM 
+	(
+		SELECT Serves.bar, Likes.drinker, Serves.beer, 
+			CASE 
+				WHEN times_a_week IS NOT NULL THEN (price * times_a_week) 
+				ELSE 0 
+			END 
+			AS subtotal 
+		FROM Serves LEFT OUTER JOIN (Frequents JOIN Likes ON Frequents.drinker = Likes.drinker) ON Serves.beer = Likes.beer AND Serves.bar = Frequents.bar
+	) AS FOO
+GROUP BY bar 
+ORDER BY amount DESC, bar;","{""failed"":true,""errorMsg"":""Parsing error at line 10, column 32. Query syntax may be incorrect""}
+"
+"(SELECT bar, SUM(price * times_a_week) FROM (FREQUENTS NATURAL JOIN LIKES NATURAL JOIN SERVES) as d GROUP BY bar ORDER BY sum DESC, bar ASC) UNION ALL (SELECT name as bar, 0 as sum FROM bar WHERE name NOT IN (SELECT bar FROM (FREQUENTS NATURAL JOIN LIKES NATURAL JOIN SERVES))ORDER BY bar ASC)
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 46. Query syntax may be incorrect""}
+"
+"SELECT f.bar, SUM(f.times_a_week * s.price) AS amount
+FROM frequents AS f, serves AS s, likes AS l 
+WHERE f.drinker = l.drinker AND l.beer = s.beer AND s.bar = f.bar
+GROUP BY f.bar
+ORDER BY amount DESC, f.bar
+;
+/* amount = price of drink * how many times/week it was bought
+find the table of drinkers who go to bars that serve some beers they like, and the price of that beer
+and how many times the drinker goes to said bar.
+and then group by bar to see how much was spent at that bar. 
+Then order by decreasing amount
+then check for null case at the beginning ... but how? */","{""failed"":true}
+"
+"
+
+
+-- calculate amount of money per week, sort desc, alph
+
+-- drinkers will buy 1 OF EACH they like at every bar (or nothing)
+
+--for every bar $ made
+
+-- which bar, who buys what
+
+select drinker, array_agg(beer) from
+likes group by drinker
+","{""failed"":true,""errorMsg"":""From line 12, column 17 to line 12, column 31: No match found for function signature ARRAY_AGG(<CHARACTER>)""}
+"
+"SELECT G.name, G.total FROM
+(SELECT T.name, SUM(T.num) as total FROM
+(SELECT bar as name, 0 as num FROM serves
+UNION
+(SELECT U.bar, SUM(U.times_a_week*U.price) FROM
+(SELECT frequents.bar, serves.price, frequents.times_a_week
+FROM serves, likes, frequents
+WHERE serves.beer=likes.beer AND frequents.bar=serves.bar AND likes.drinker=frequents.drinker) AS U
+GROUP BY U.bar)) AS T
+GROUP BY T.name) AS G
+ORDER BY G.total DESC;","{""failed"":true}
+"
+"--Worked with Richard Vargo
+select * from (select name, coalesce (sum,0) as total from (select name, sum from bar b left outer join (select bar, sum(money) from (select bar,drinker,price*times_a_week as money from (select * from likes natural join (select * from serves natural join frequents) as bleh) as jesus) as legend group by bar) as gg on gg.bar = b.name) as goat) as final_res order by total desc, name;","{""failed"":true,""errorMsg"":""Parsing error at line 2, column 39. Query syntax may be incorrect""}
+"
+"select bar, sum from ((select serves.bar, sum(serves.price*frequents.times_a_week) from serves, frequents, likes where serves.bar=frequents.bar and likes.drinker=frequents.drinker and serves.beer=likes.beer group by serves.bar) union (select distinct bar.name, serves.price-serves.price from bar, serves where bar.name in ((select bar.name from bar) except (select serves.bar from serves, frequents, likes where serves.bar=frequents.bar and likes.drinker=frequents.drinker and serves.beer=likes.beer group by serves.bar)))) as foo order by sum desc, bar asc","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 13. Query syntax may be incorrect""}
+"
+"with o as (
+with p as (select f.drinker,f.times_a_week, f.bar, sum(s.price) as m 
+		from frequents f, serves s, likes l 
+		where l.beer = s.beer 
+		and s.bar = f.bar 
+		and f.drinker = l.drinker 
+		group by f.drinker, f.bar, f.times_a_week) 
+select distinct
+case when bars.name not in (select p.bar from p) then bars.name else p.bar end as tbar, 
+case when bars.name not in (select p.bar from p) then 0 
+	 when bars.name in (select p.bar from p) then sum(p.m * p.times_a_week) end as money
+from p, bar as bars
+	group by tbar, bars.name
+	order by money desc, tbar asc)
+select tbar, money from o;
+
+","{""failed"":true,""errorMsg"":""From line 13, column 11 to line 13, column 14: Column 'TBAR' not found in any table""}
+"
+"SELECT BAR, SUM(SUM) FROM ((SELECT BAR, SUM(PRICE*TIMES_A_WEEK) FROM (select * from likes natural join serves natural join frequents) F GROUP BY BAR) UNION (SELECT NAME,0 FROM BAR)) G GROUP BY BAR ORDER BY SUM DESC, BAR ASC;
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 17. Query syntax may be incorrect""}
+"
+"(SELECT name, COALESCE(amount, 0) FROM (SELECT bar2.name, amount FROM (SELECT bar, SUM(price) AS amount FROM (SELECT drinker, bar, (SUM(price) * times_a_week) AS price FROM (frequents NATURAL JOIN likes NATURAL JOIN serves) WHERE frequents.drinker = likes.drinker AND beer IN (SELECT beer FROM likes WHERE drinker = frequents.drinker) GROUP BY bar, drinker) AS perperson GROUP BY bar) AS profits RIGHT OUTER JOIN (SELECT name FROM bar) AS bar2 ON bar2.name = profits.bar) AS allbars) ORDER BY amount DESC NULLS LAST, name;","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 175. Query syntax may be incorrect""}
+"
+"with profits(bars, income) as (select bar, sum(price*times_a_week) from serves natural join frequents natural join likes group by bar) ((select bars, income from profits) union (select name, 0 from bar where name not in (select bars from profits))) order by 2 desc, 1; ","{""failed"":true,""errorMsg"":""From line 1, column 131 to line 1, column 133: Column 'BAR' is ambiguous""}
+"
+"/* Collaborated during UTA office hours */
+WITH Earnings AS ((WITH id AS
+
+	(WITH LikesFrequents AS (SELECT likes.drinker, beer, bar, times_a_week
+		FROM likes INNER JOIN frequents ON likes.drinker = frequents.drinker)
+		SELECT drinker,
+		LikesFrequents.beer, LikesFrequents.bar, times_a_week, price
+		FROM LikesFrequents JOIN serves ON serves.beer = LikesFrequents.beer
+		AND serves.bar = LikesFrequents.bar)
+
+	SELECT bar, SUM(times_a_week*price) AS dollars FROM id GROUP BY bar)
+
+	UNION
+
+	(WITH zeros AS
+	(SELECT name FROM Bar
+
+	EXCEPT
+
+	(WITH id AS
+
+		(WITH LikesFrequents AS (SELECT likes.drinker, beer, bar, times_a_week
+			FROM likes JOIN frequents ON likes.drinker = frequents.drinker)
+			SELECT drinker, LikesFrequents.beer, LikesFrequents.bar, times_a_week, price
+			FROM LikesFrequents INNER JOIN serves ON serves.beer = LikesFrequents.beer
+			AND serves.bar = LikesFrequents.bar)
+
+		SELECT bar AS name FROM id GROUP BY bar))
+
+	SELECT name, 0.0 AS dollars FROM zeros))
+
+SELECT * FROM Earnings ORDER BY dollars desc, bar;
+","{""failed"":true}
+"
+"select t.bar, money from
+((select frequents.bar, sum(frequents.times_a_week * serves.price) as money from frequents join serves
+ on frequents.bar = serves.bar join likes on (likes.beer = serves.beer and likes.drinker = frequents.drinker
+) group by frequents.bar)
+union
+(select x.name, 0 as money from (select bar.name from bar except (select distinct frequents.bar from frequents join serves
+ on frequents.bar = serves.bar join likes on likes.beer = serves.beer and likes.drinker = frequents.drinker))x)) t
+ order by money desc, t.bar;
+","{""failed"":true}
+"
+"(select distinct bar.name, sum(frequents.times_a_week*serves.price) as amount
+from bar, frequents, likes, serves 
+where (bar.name=frequents.bar and frequents.bar=serves.bar and serves.beer=likes.beer and likes.drinker=frequents.drinker)
+group by name)
+
+union
+
+(select distinct bar.name, 0 as amount
+from bar
+where (bar.name in (select D.name from ((select name from bar)except(select distinct serves.bar from likes, serves, frequents where likes.beer=serves.beer 
+and likes.drinker=frequents.drinker and frequents.bar=serves.bar)) as D)) group by name)
+order by amount DESC, name ASC;","{""failed"":true}
+"
+"with total as ((with tool as (with lover as
+(select likes.drinker, beer, bar, times_a_week from likes inner join frequents on likes.drinker = frequents.drinker) select drinker, lover.beer, lover.bar, times_a_week, price from lover join serves on serves.bar = lover.bar and serves.beer = lover.beer )
+select bar, sum(times_a_week*price) as amount from tool group by bar)
+union
+(with zeros as (select name from bar
+except
+(with tool as (with lover as (select likes.drinker, beer, bar, times_a_week from likes inner join frequents on likes.drinker = frequents.drinker) select drinker, lover.beer, lover.bar, times_a_week, price from lover join serves on serves.bar = lover.bar and serves.beer = lover.beer)
+select bar as name from tool group by bar))
+select name, 0.0 as amount from zeros))
+select * from total order by amount desc, bar;
+","{""failed"":true}
+"
+"SELECT name, COALESCE(sum(times_a_week * price), 0) as amount
+FROM bar LEFT JOIN (
+  SELECT f.drinker, f.bar, f.times_a_week, s.beer, s.price
+  FROM frequents AS f, serves AS s, likes AS l
+  WHERE f.bar = s.bar
+  AND f.drinker = l.drinker
+  AND s.beer = l.beer
+) AS a ON bar.name = a.bar
+GROUP BY name
+ORDER BY amount DESC, name ASC;
+","{""failed"":true}
+"
+"select bar, sum(amount) as amount from
+((SELECT bar.name as bar, 0.0 as amount from bar)
+UNION
+(SELECT bar, SUM(amount) AS amount
+FROM (select likeTable.bar, (likeTable.times_a_week * likeTable.price) as amount from (select frequents.times_a_week, serves.bar, serves.price from drinker, serves, frequents, likes where serves.bar = frequents.bar and drinker.name = frequents.drinker and likes.beer = serves.beer and likes.drinker = frequents.drinker)as likeTable) as totalTable
+GROUP BY bar
+ORDER BY amount DESC, bar)) as finalTable
+GROUP BY bar
+ORDER BY amount DESC, bar; 
+
+
+","{""failed"":true}
+"
+"WITH temp1 (drinker, bar, beer, price, times_a_week) AS 
+(SELECT drinker, bar, beer, price, times_a_week FROM frequents NATURAL JOIN serves),
+
+temp2(drinker, bar, beer, price, times_a_week) AS 
+(SELECT drinker, bar, beer, price, times_a_week FROM temp1 NATURAL JOIN likes),
+
+temp3(name, profit) AS (
+SELECT bar, SUM(price*times_a_week) AS profit
+FROM temp2
+GROUP BY bar
+ORDER BY profit DESC, bar ASC),
+
+temp4(bar, profit) AS (
+SELECT bar.name, profit
+FROM temp3 RIGHT OUTER JOIN bar ON temp3.name = bar.name
+ORDER BY profit DESC, name ASC)
+
+SELECT bar,
+CASE WHEN profit ISNULL THEN 0
+ELSE profit 
+END
+FROM temp4
+ORDER BY profit DESC, bar ASC;
+","{""failed"":true,""errorMsg"":""Parsing error at line 19, column 18. Query syntax may be incorrect""}
+"
+"SELECT bar, SUM(times_a_week * price) AS total
+FROM (SELECT Frequents.drinker, Frequents.bar, Likes.beer, Frequents.times_a_week, Serves.price
+FROM Frequents, Likes, Serves
+WHERE Frequents.drinker = Likes.drinker AND Frequents.bar = Serves.bar AND Serves.beer = Likes.beer) AS foo
+GROUP BY bar
+ORDER BY total DESC, bar;","{""failed"":true}
+"
+"--(k) Suppose that each time a drinker visits a bar (according to the frequency in Frequents), he or she always buys one glass of each beer served at this bar that he or she likes; if no such beer exists, he or she will not buy anything. Calculate, for each bar, the total amount of money it expects to get per week (over all drinkers in our database). List the (bar, amount) pairs in decreasing order of amount; in case of ties, sort alphabetically by bar. Be sure to handle the case when a bar doesn’t expect to sell any beer to our drinkers—you need to show an amount of 0.
+select bar, coalesce(amount, 0) as amount  -- Replace null with 0
+from ((select name as bar from bar) as bar_names  -- Rename
+      natural left outer join  -- Bars that do not appear in the huge natural-join table will have amount as null
+      (select bar, sum(times_a_week * price) as amount  -- Sum up all drinkers' amount on all beers spent at each bar
+       from (frequents natural join likes natural join serves)  -- For each bar, lists each drinker (can repeat) and each beer he'll buy, with times_a_week and price
+       group by bar) as amounts)
+order by amount desc, bar;
+","{""failed"":true,""errorMsg"":""Parsing error at line 3, column 37. Query syntax may be incorrect""}
+"
+"WITH TEMP1 AS
+(SELECT *
+ FROM frequents NATURAL JOIN serves NATURAL JOIN likes),
+
+TEMP2(bar, amount) AS
+(SELECT bar, SUM(price*times_a_week) AS amount FROM TEMP1
+ GROUP BY bar),
+
+TEMP3(bar, amount) AS
+(SELECT bar.name, amount FROM TEMP2 
+ RIGHT OUTER JOIN bar ON bar.name = TEMP2.bar)
+
+SELECT bar,
+         CASE WHEN amount IS NULL THEN 0
+                     ELSE amount
+         END
+ FROM TEMP3 ORDER BY amount DESC, bar;
+","{""failed"":true}
+"
+"SELECT name, final FROM 
+
+(SELECT name, coalesce (sum,0) AS final FROM 
+(SELECT name, sum FROM bar b LEFT OUTER JOIN 
+(SELECT bar, sum(p) FROM 
+(SELECT bar,drinker,price * times_a_week AS p FROM 
+(SELECT * FROM likes NATURAL JOIN 
+(SELECT * FROM serves NATURAL JOIN frequents)
+ AS y) 
+ AS z) 
+ AS k group by bar) 
+AS t on t.bar = b.name) AS x) 
+AS final_sub ORDER BY final desc, name;
+
+/* Worked with TJ on number 2 */ ","{""failed"":true,""errorMsg"":""Parsing error at line 3, column 25. Query syntax may be incorrect""}
+"
+"SELECT *
+FROM (
+SELECT t.name,
+CASE
+	WHEN t.profit IS NULL THEN 0
+	ELSE t.profit
+END
+FROM (
+SELECT bn.name AS name, bp.profit AS profit
+FROM (
+	SELECT DISTINCT name
+	FROM bar
+) AS bn
+
+LEFT OUTER JOIN
+
+(SELECT bar, SUM(custSpend) AS profit
+FROM (
+	SELECT bar, price * times_a_week AS custSpend
+	FROM frequents NATURAL JOIN serves NATURAL JOIN likes
+) AS bpp
+GROUP BY bar
+) as bp
+
+ON bn.name = bp.bar
+) AS t
+) s
+
+ORDER BY s.profit DESC, s.name ASC
+;
+","{""failed"":true,""errorMsg"":""From line 19, column 9 to line 19, column 11: Column 'BAR' is ambiguous""}
+"
+"--Find who frequents a bar that serves beer they like
+--Find what beer that is
+--Find the price the bar serves that beer for, total that, print
+
+
+-- I Know this did not account for edge case, however it passed the most number of tests
+SELECT DISTINCT freq1.bar, SUM(times_a_week*serv1.price) AS sum
+			FROM Frequents freq1, Serves serv1, Likes like1
+			WHERE freq1.drinker = like1.drinker AND serv1.beer = like1.beer AND
+			serv1.bar = freq1.bar AND
+			EXISTS (SELECT * FROM Serves, Likes
+								WHERE freq1.bar = Serves.bar 
+								AND freq1.drinker = Likes.drinker
+								AND Serves.beer = Likes.beer)
+GROUP BY freq1.bar
+ORDER BY sum DESC, freq1.bar ASC
+
+--This was my attempt at using those bars that were not frequented, and so could
+--Not expect to make money. In this way, however, I did not have them sorted yet 
+--(although I knew I would be able to figure that out) and also gave an empty
+--row due to the first case giving empty rows for those bars that were frequented.
+--The problem with the first switch was that although I could give the amount
+--they would make as 0, if they would make money (they were frequented) I could not
+--take the data from the second part statement to make it work.
+/*
+(SELECT CASE 
+		WHEN Bar.name NOT IN (SELECT bar FROM Frequents) THEN Bar.name
+		END AS bar,
+		CASE
+		WHEN Bar.name NOT IN (SELECT bar FROM Frequents) THEN 0 
+		END AS sum
+		FROM Bar)
+UNION
+(SELECT DISTINCT freq1.bar, SUM(times_a_week*serv1.price) AS sum
+			FROM Frequents freq1, Serves serv1, Likes like1
+			WHERE freq1.drinker = like1.drinker AND serv1.beer = like1.beer AND
+			serv1.bar = freq1.bar AND
+			EXISTS (SELECT * FROM Serves, Likes
+								WHERE freq1.bar = Serves.bar 
+								AND freq1.drinker = Likes.drinker
+								AND Serves.beer = Likes.beer)
+GROUP BY freq1.bar
+ORDER BY sum DESC, freq1.bar ASC)
+*/","{""failed"":true,""errorMsg"":""Parsing error at line 7, column 61. Query syntax may be incorrect""}
+"
+"-- Suppose that each time a drinker visits a bar, he or she  always buys one glass of each beer served at this bar that he or she likes.
+-- If no such beer exists, he or she will not buy anything. Calculate, for each bar, the total amount of money it expects to get per week (over all drinkers).
+-- List (bar, amount) pairs in decreasing order of amount.
+-- In cases of ties, sort alphabetically by bar.
+-- Be sure to handle teh case when a bar doesn't expect to sell any beer to our drinkers -- you need to show an amount of 0.
+
+-- Collaborated with Rahul Sengottuvelu
+
+WITH moneys(bar, drinker, times_a_week, beer, price) 
+AS (SELECT * FROM (frequents NATURAL JOIN serves)
+s1 WHERE EXISTS (SELECT drinker, beer FROM likes WHERE s1.drinker = drinker and beer = s1.beer)),
+moneymade(bar,price) AS (SELECT bar, SUM(times_a_week * price) AS price FROM moneys AS b GROUP BY bar),
+
+un(bar,price) AS ((SELECT bar, price FROM moneymade as u)
+UNION ALL 
+(SELECT bar, 0 AS price FROM (SELECT name AS bar FROM bar) AS b))
+
+
+SELECT * FROM un u WHERE NOT EXISTS (SELECT * FROM un WHERE bar = u.bar AND  price > u.price)
+ORDER BY price DESC, bar ASC; ","{""failed"":true,""errorMsg"":""Parsing error at line 10, column 20. Query syntax may be incorrect""}
+"
+"/*Suppose that each time a drinker visits a bar (according to the frequency in Frequents), he or she
+always buys one glass of each beer served at this bar that he or she likes; if no such beer exists, he or
+she will not buy anything. Calculate, for each bar, the total amount of money it expects to get per
+week (over all drinkers in our database). List the (drinker, amount) pairs in decreasing order of amount.
+Be sure to handle the case when a bar doesn’t expect to sell any beer to our drinkers—you need to
+show an amount of 0.
+Note: You might find SQL conditional expressions useful. For syntax and examples, see
+https://www.postgresql.org/docs/current/static/functions-conditional.htm
+*/
+/*
+WORKS:
+SELECT results.bar as bar, sum(results.sub_sum) as amount FROM (
+	SELECT drinker, bar, beer, price*count as sub_sum FROM (
+
+		SELECT frequents.drinker as drinker, frequents.bar as bar, A.beer as beer, A.price as price, frequents.times_a_week as count FROM 
+			
+			(SELECT likes.drinker as drinker, likes.beer as beer, serves.bar as bar, serves.price as price FROM likes INNER JOIN serves
+				ON likes.beer=serves.beer) as A
+
+		INNER JOIN frequents ON A.drinker=frequents.drinker AND A.bar=frequents.bar
+
+	) as step
+) AS results GROUP BY results.bar ORDER BY amount DESC, bar ASC
+
+
+Now.. 0s MUST BE ADDED:
+*/
+SELECT results.bar as bar, sum(results.sub_sum) as amount FROM (
+
+
+	SELECT bar, price*count as sub_sum FROM (
+
+		SELECT frequents.drinker as drinker, frequents.bar as bar, A.beer as beer, A.price as price, frequents.times_a_week as count FROM 
+			
+			(SELECT likes.drinker as drinker, likes.beer as beer, serves.bar as bar, serves.price as price FROM likes INNER JOIN serves
+				ON likes.beer=serves.beer) as A
+
+		INNER JOIN frequents ON A.drinker=frequents.drinker AND A.bar=frequents.bar
+
+	) as step
+	UNION ALL 
+	SELECT bar.name as bar, serves.price*0 as sub_sum FROM bar INNER JOIN serves ON bar.name=serves.bar
+
+
+) AS results GROUP BY results.bar ORDER BY amount DESC, bar ASC
+
+
+","{""failed"":true,""errorMsg"":""Parsing error at line 2, column 75. Query syntax may be incorrect""}
+"
+"
+/*if bar serves beer drinker likes
+times_a_week*price 
+keep the row  */
+
+/*if bar serves no beer drinker likes
+then return null??? */
+
+/*select bar, multiply timew a week with price, group by bar */
+
+-- CASE WHEN l1.beer = s1.bber 
+-- THEN f1.times_a_week*s1.price
+
+/*find all bars, give bars without purchases amount 0*/
+
+/*all the bar with purchases */
+
+SELECT answer.barname, answer.amount 
+FROM (
+(SELECT jointable.bar AS barname, SUM(jointable.times_a_week*jointable.price) as amount
+FROM
+(SELECT f1.drinker,f1.bar,f1.times_a_week, l1.beer, s1.beer, s1.price
+FROM Frequents f1
+JOIN Likes l1 ON f1.drinker = l1.drinker
+JOIN Serves s1 ON f1.bar = s1.bar
+WHERE l1.beer = s1.beer) jointable 
+GROUP BY jointable.bar
+ORDER BY amount DESC, jointable.bar)
+UNION
+/*Bars without purchases from drinkers */
+((SELECT name as barname, 0.0 as amount 
+FROM bar)
+EXCEPT
+(SELECT f1.bar, 0.0 as amount 
+FROM Frequents f1
+JOIN Likes l1 ON f1.drinker = l1.drinker
+JOIN Serves s1 ON f1.bar = s1.bar
+WHERE l1.beer = s1.beer))) answer 
+GROUP BY answer.barname, answer.amount 
+ORDER BY answer.amount DESC, answer.barname; 
+","{""failed"":true}
+"
+"SELECT b.name, COALESCE(total,0) total
+FROM bar b LEFT OUTER JOIN
+(SELECT bar, sum(total) total
+FROM
+(SELECT l.drinker, l.beer, bar, price * times_a_week total FROM Likes l, 
+(SELECT drinker, f.bar, beer, price, times_a_week
+FROM frequents f, serves s
+WHERE f.bar = s.bar) t
+WHERE l.drinker = t.drinker 
+AND l.beer = t.beer) t1
+GROUP BY bar) t2 
+ON b.name = t2.bar
+ORDER BY total DESC, name;","{""failed"":true}
+"
+"/* Collaborated during undergrad ta office hours */
+
+WITH unordered AS (
+
+	(WITH listofBars AS
+
+		(WITH joinLikesFreq AS
+			(SELECT likes.drinker, beer, bar, times_a_week FROM likes INNER JOIN frequents ON likes.drinker = frequents.drinker)
+			SELECT drinker, joinLikesFreq.beer, joinLikesFreq.bar, times_a_week, price FROM joinLikesFreq JOIN serves ON serves.beer = joinLikesFreq.beer AND serves.bar = joinLikesFreq.bar)
+
+		SELECT bar, SUM(times_a_week*price) AS amount FROM listofBars GROUP BY bar)
+
+	UNION
+
+		(WITH allZeros AS
+			(SELECT name FROM Bar
+
+			EXCEPT
+			(WITH listofBars AS
+
+				(WITH joinLikesFreq AS (SELECT likes.drinker, beer, bar, times_a_week FROM likes JOIN frequents ON likes.drinker = frequents.drinker)
+					SELECT drinker, joinLikesFreq.beer, joinLikesFreq.bar, times_a_week, price FROM joinLikesFreq INNER JOIN serves ON serves.bar = joinLikesFreq.bar AND serves.beer = joinLikesFreq.beer)
+
+			SELECT bar AS name FROM listofBars GROUP BY bar))
+
+	SELECT name, 0.0 AS amount FROM allZeros)
+)
+
+SELECT * FROM unordered ORDER BY amount desc, bar;
+","{""failed"":true}
+"
+"select bar.name, coalesce(sum(income),0) result
+from bar
+left join (select serves.bar barnames, serves.price * frequents.times_a_week income
+	   from serves, frequents, likes
+	   where frequents.bar = serves.bar
+		 AND likes.drinker = frequents.drinker
+		 AND serves.beer = likes.beer) T 
+on bar.name = T.barnames
+group by bar.name
+order by result desc, bar.name asc;","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 42. Query syntax may be incorrect""}
+"
+"with charlie as (select serves.bar as bar, sum(serves.price*frequents.times_a_week) as amount
+from serves 
+join likes on serves.beer = likes.beer 
+join frequents on frequents.drinker = likes.drinker and frequents.bar = serves.bar
+group by serves.bar)
+
+select bar.name,
+
+case when bar.name in (select bar from charlie) then (select amount from charlie where bar=bar.name)
+else 0
+end as amount
+
+from
+bar
+
+order by amount DESC, bar ASC
+;
+","{""failed"":true,""errorMsg"":""From line 16, column 23 to line 16, column 25: Column 'BAR' not found in any table""}
+"
+"WITH table1 AS
+/* set up table for correlating drinker, bar, beer, and price*frequency */
+(SELECT frequents.drinker, frequents.bar, likes.beer, (frequents.times_a_week*serves.price) AS ""price""
+FROM frequents, likes, serves
+WHERE frequents.drinker=likes.drinker and serves.bar=frequents.bar and serves.beer=likes.beer)
+/* sum over table to get total profit*/
+SELECT bar, SUM(price) AS ""weeklyprofit""
+FROM table1
+GROUP BY bar
+ORDER BY weeklyprofit DESC, bar;","{""failed"":true}
+"
+"WITH fs AS(SELECT *
+FROM frequents
+NATURAL JOIN  
+serves)
+((SELECT bar, sum(price*times_a_week) AS amount
+FROM likes
+INNER JOIN fs
+ON (likes.drinker = fs.drinker AND likes.beer = fs.beer)
+GROUP BY bar
+ORDER BY amount DESC, bar)
+UNION
+(SELECT name, 0 AS amount
+FROM bar
+EXCEPT
+(SELECT bar, 0 AS amount
+FROM likes
+INNER JOIN fs
+ON (likes.drinker = fs.drinker AND likes.beer = fs.beer)
+GROUP BY bar
+ORDER BY amount DESC, bar)
+))
+ORDER BY amount DESC, bar; 
+
+
+
+--Ben, Satisfaction, Full Sail
+--Dan, The Edge, Corona
+--Ben, JJP, Amstel 
+
+
+
+--bar, drinkers at bar and beers the bar serve First in diff: beers the bar serves but customers don't like
+--bar, drinkers at bar, beers drinkers like First in diff: beers drinkers like but not served","{""failed"":true}
+"
+"SELECT res1.bar, res1.amount FROM (SELECT bar, sum(price * times_a_week) amount FROM (select drinker, frequents.bar, times_a_week, beer, price FROM frequents JOIN serves on frequents.bar = serves.bar) AS t1 join likes on t1.beer = likes.beer where t1.drinker = likes.drinker group by bar UNION SELECT x1.bar, round(serves.price-serves.price) amount from (select name as bar from bar except select bar from (select drinker, frequents.bar, times_a_week, beer, price from frequents join serves on frequents.bar = serves.bar) as t2 join likes on t2.beer = likes.beer where t2.drinker = likes.drinker) as x1, serves) as res1 order by res1.amount desc, res1.bar asc;","{""failed"":true}
+"
+"select * from
+(
+
+(select bar.name, 0 as price 
+from bar 
+where name not in 
+(select frequents.bar
+ 	from likes, serves, frequents
+ 	where likes.beer = serves.beer and frequents.drinker = likes.drinker and frequents.bar = serves.bar))
+
+
+union
+
+ 	(select serves.bar as barA, sum(price * frequents.times_a_week) as spend
+ 	from likes, serves, frequents where likes.beer = serves.beer and frequents.drinker = likes.drinker and frequents.bar = serves.bar
+ 	group by barA))F
+
+	order by 2 desc, 1 asc;  ","{""failed"":true,""errorMsg"":""From line 16, column 12 to line 16, column 15: Column 'BARA' not found in any table""}
+"
+"with v as ((with u as (with l as (select likes.drinker, beer, bar, times_a_week from likes join frequents on likes.drinker = frequents.drinker) select drinker, l.beer, l.bar, times_a_week, price from l join serves on serves.beer = l.beer and serves.bar = l.bar) select bar, sum(times_a_week * price) as amount from u group by bar)
+union
+(with s as (select name from bar except (with t as (with w as (select likes.drinker, beer, bar, times_a_week from likes join frequents on likes.drinker = frequents.drinker) select drinker, w.beer, w.bar, times_a_week, price from w join serves on serves.beer = w.beer and serves.bar = w.bar) select bar as name from t group by bar)) select name, 0.0 as amount from s))
+select * from v order by amount desc, bar;
+","{""failed"":true}
+"
+"SELECT relation.bar, SUM(earnings) AS earnings
+FROM 
+((SELECT bar, SUM(price*times_a_week) AS earnings
+FROM serves NATURAL JOIN likes NATURAL JOIN frequents	
+GROUP BY bar
+ORDER BY earnings DESC, bar)
+
+UNION ALL
+
+(SELECT name AS bar, 0 AS earnings
+ FROM bar))
+AS relation
+GROUP BY bar
+ORDER BY earnings DESC, bar;","{""failed"":true,""errorMsg"":""From line 5, column 10 to line 5, column 12: Column 'BAR' is ambiguous""}
+"
+"SELECT bar,
+      CASE WHEN tot_rev IS NOT NULL THEN tot_rev
+           ELSE 0 END AS amount
+      FROM (SELECT bar.name AS bar,tot_rev
+           FROM (SELECT bar as name,SUM(ind_rev) AS tot_rev
+                FROM (SELECT times_a_week*serves.price AS ind_rev,frequents.bar
+                          FROM likes,serves,frequents WHERE likes.beer=serves.beer AND serves.bar=frequents.bar AND likes.drinker=frequents.drinker
+                ) AS f GROUP BY bar
+            ) AS r
+            RIGHT OUTER JOIN
+            bar ON bar.name=r.name
+      ) AS final
+      ORDER BY amount DESC,bar;
+","{""failed"":true}
+"
+"select b.bar, case when amount is null then 0
+					else amount
+					end
+from
+(select name as bar from bar) as b
+left outer join
+(select bar, sum(revenue) as amount
+from
+(select fs.drinker, l.beer, fs.bar, fs.price, fs.times_a_week, price*times_a_week as revenue
+	from likes as l
+	full outer join
+	(select f.drinker, f.bar, s.beer as sbeer, s.price, f.times_a_week
+	from
+	frequents as f
+	full outer join
+	serves as s
+	on f.bar = s.bar) as fs
+	on l.drinker = fs.drinker
+	where fs.sbeer = l.beer) as fls
+group by bar) as r
+on b.bar = r.bar
+
+order by amount DESC, bar","{""failed"":true}
+"
+"SELECT bar.name, CASE WHEN lol.SUM IS NULL OR lol.SUM = 0.00 THEN 0
+				 	  ELSE lol.SUM
+				 END
+
+FROM bar
+FULL JOIN
+
+(SELECT revenue.bar, SUM(revenue) FROM 
+
+(SELECT *, sub.price * sub.CASE as revenue FROM
+
+(SELECT frequents.times_a_week, serves.bar, serves.price, serves.beer, likes.beer,
+			CASE WHEN serves.beer = likes.beer THEN frequents.times_a_week
+				 ELSE 0
+			END
+ FROM
+frequents 
+JOIN serves 
+	ON frequents.bar = serves.bar
+JOIN likes
+	ON frequents.drinker = likes.drinker) sub) revenue
+
+GROUP BY revenue.bar
+) lol
+
+ON lol.bar=bar.name
+
+ORDER BY SUM DESC, bar.name ASC
+;
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 31. Query syntax may be incorrect""}
+"
+"SELECT *
+FROM (
+SELECT t.name, 
+CASE 
+	WHEN t.profit IS NULL THEN 0
+	ELSE t.profit
+END
+FROM (
+SELECT bn.name AS name, bp.profit AS profit
+FROM (
+	SELECT DISTINCT name
+	FROM bar
+) AS bn
+
+LEFT OUTER JOIN 
+
+(SELECT bar, SUM(custSpend) AS profit
+FROM (
+	SELECT bar, price * times_a_week AS custSpend
+	FROM frequents NATURAL JOIN serves NATURAL JOIN likes
+) AS bpp
+GROUP BY bar
+) as bp
+
+ON bn.name = bp.bar
+) AS t
+) s
+
+ORDER BY s.profit DESC, s.name ASC
+;
+","{""failed"":true,""errorMsg"":""From line 19, column 9 to line 19, column 11: Column 'BAR' is ambiguous""}
+"
+"SELECT barNames, revenue FROM (SELECT a.bar as barNames, SUM(a.price*a.times_a_week) as revenue FROM (SELECT * FROM ((frequents NATURAL JOIN serves) NATURAL JOIN likes) AS b) as a GROUP BY a.bar) as c ORDER BY revenue DESC, barNames;
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 119. Query syntax may be incorrect""}
+"
+"SELECT bar, SUM(sale) FROM (SELECT * FROM (SELECT bar, price * times_a_week sale FROM (SELECT drinker, Frequents.bar, times_a_week, beer, price FROM Frequents JOIN Serves ON Frequents.bar = Serves.bar) AS join1 JOIN Likes ON join1.beer = Likes.beer WHERE join1.drinker = Likes.drinker) as join2 UNION ALL SELECT join4.name bar, times_a_week - times_a_week FROM (SELECT name FROM bar EXCEPT SELECT bar FROM (SELECT bar, price * times_a_week sale FROM (SELECT drinker, Frequents.bar, times_a_week, beer, price FROM Frequents JOIN Serves ON Frequents.bar = Serves.bar) AS join1 JOIN Likes ON join1.beer = Likes.beer WHERE join1.drinker = Likes.drinker) AS join3) AS join4 CROSS JOIN Frequents) AS join5 GROUP BY bar ORDER BY sum DESC, bar ASC;","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 723. Query syntax may be incorrect""}
+"
+"SELECT b.name, CASE WHEN revenue.revenue is NULL THEN 0
+				ELSE revenue.revenue
+				END amt
+FROM (bar b LEFT JOIN
+(SELECT bar, SUM(revenue) revenue FROM(
+
+select menu.bar, menu.times_a_week*menu.price revenue FROM
+(SELECT s1.* , s2.price FROM ((SELECT f1.*, l1.beer FROM                                                   
+frequents f1 INNER JOIN likes l1 ON f1.drinker = l1.drinker) s1 INNER JOIN
+(SELECT l1.drinker, s.*
+ FROM likes l1 INNER JOIN serves s on l1.beer = s.beer)s2 ON s1.drinker = s2.drinker AND s1.beer = s2.beer AND s1.bar = s2.bar)) menu) revs
+ 
+ GROUP BY bar) revenue
+
+ ON b.name = revenue.bar)
+ ORDER BY amt DESC, b.name ASC;","{""failed"":true,""errorMsg"":""Parsing error at line 4, column 7. Query syntax may be incorrect""}
+"
+"SELECT name, COALESCE(U.moneyAmount, 0) AS moneyAmount FROM Bar LEFT JOIN (SELECT T.bar, SUM(T.moneyAmount) AS moneyAmount FROM (SELECT B.bar, B.times_a_week*B.price AS moneyAmount FROM Likes NATURAL JOIN (SELECT * FROM Frequents NATURAL JOIN Serves) AS B) AS T GROUP BY T.bar) AS U ON name = U.bar ORDER BY moneyAmount DESC, name;","{""failed"":true}
+"
+"select whatever.name, SUM(whatever.income) AS answer
+from
+((select name, 0 AS income from bar)
+
+union
+
+(select frequents.bar, SUM(price*times_a_week) AS income from frequents, serves, likes                                                                                       
+	 where serves.bar=frequents.bar and serves.beer=likes.beer and likes.drinker=frequents.drinker
+	 GROUP BY frequents.bar
+	 ORDER BY income DESC, frequents.bar)
+) AS whatever
+
+GROUP BY name
+ORDER BY answer DESC, name;","{""failed"":true}
+"
+"select bigTable.bar, sum(bigTable.sum)
+from 
+
+((Select f1.bar, sum(s1.price*f1.times_a_week)
+From Frequents as f1, Likes as l1, Serves as s1
+Where f1.drinker=l1.drinker and l1.beer=s1.beer and f1.bar=s1.bar
+Group by f1.bar)
+union
+(select distinct b1.name, 0
+from Bar as b1)) as bigTable
+
+
+
+Group by bigTable.bar
+order by 2 desc, 1 asc;
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 34. Query syntax may be incorrect""}
+"
+"with tmp1(drinker, bar, times_a_week, beer) as 
+(select * from (
+frequents
+natural join
+likes)),
+tmp2(drinker, bar, times_a_week, beer, price) as
+(select drinker, serves.bar, tmp1.times_a_week, serves.beer, serves.price from (
+tmp1 
+join 
+serves
+on tmp1.beer = serves.beer and tmp1.bar = serves.bar 
+)), 
+tmp3(bar, amount) as 
+(select bar, sum(times_a_week * price) 
+from tmp2
+group by bar),
+tmp4(bar) as 
+((select name as bar from bar)
+except 
+(select bar from tmp3)
+), 
+tmp5(bar, amount) as (
+select bar, 0 from tmp4
+)
+select * from (
+(select bar, amount from tmp3)
+union 
+(select bar, amount from tmp5)
+order by amount DESC, bar ASC) res;","{""failed"":true,""errorMsg"":""Parsing error at line 3, column 1. Query syntax may be incorrect""}
+"
+"WITH
+tmp0 AS
+(SELECT * FROM Likes NATURAL JOIN Serves),
+
+tmp1(bar,price,times_a_week) AS
+(SELECT tmp0.bar, price, times_a_week FROM tmp0 JOIN Frequents ON tmp0.drinker=Frequents.drinker AND tmp0.bar=Frequents.bar),
+
+tmp2(bar, revenue) AS
+(SELECT bar, tmp1.price*tmp1.times_a_week FROM tmp1),
+
+tmp3(bar, price) AS
+(SELECT bar, SUM(revenue) FROM tmp2 GROUP BY bar),
+
+tmp4(bar) AS
+((SELECT name FROM Bar) EXCEPT (SELECT bar FROM tmp3)),
+
+tmp5(bar, revenue) AS
+(SELECT bar, 0 FROM tmp4),
+
+tmp6(bar, revenue) AS
+(SELECT * FROM tmp5 UNION SELECT * FROM tmp3),
+
+tmp7(bar, revenue) AS 
+(SELECT * FROM tmp6 ORDER BY revenue DESC, bar)
+
+
+SELECT * FROM tmp7;","{""blocks"":{""id"":""BLOCK_SELECT@281f23f2"",""fields"":[""BAR VARCHAR(100)"",""REVENUE DECIMAL(19, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_STAR@30814f43"",""value"":""*"",""pos"":{""lineNum"":27,""columnNum"":8,""endLineNum"":27,""endColumnNum"":8,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@7a231dfd""],""fromNode"":{""id"":""JOIN_OPERAND@87abc48"",""value"":""NS_IDENT@7a231dfd"",""pos"":{""lineNum"":27,""columnNum"":15,""endLineNum"":27,""endColumnNum"":18,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":27,""columnNum"":1,""endLineNum"":27,""endColumnNum"":18,""quoted"":false},""children"":{}},""tables"":{""NS_IDENT@256aa5f2"":{""tableId"":""NS_IDENT@256aa5f2"",""identifier"":""SERVES"",""dbTableName"":""SERVES"",""fields"":[""bar VARCHAR(100)"",""beer VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":3,""columnNum"":35,""endLineNum"":3,""endColumnNum"":40,""quoted"":false}},""NS_IDENT@7a231dfd"":{""tableId"":""NS_IDENT@7a231dfd"",""identifier"":""TMP7"",""dbTableName"":""TMP7"",""fields"":[""BAR VARCHAR(100)"",""REVENUE DECIMAL(19, 2)""],""cursor"":[0],""pos"":{""lineNum"":27,""columnNum"":15,""endLineNum"":27,""endColumnNum"":18,""quoted"":false}},""NS_IDENT@1cc9cfb2"":{""tableId"":""NS_IDENT@1cc9cfb2"",""identifier"":""BAR"",""dbTableName"":""BAR"",""fields"":[""name VARCHAR(100)"",""address VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":15,""columnNum"":20,""endLineNum"":15,""endColumnNum"":22,""quoted"":false}},""NS_IDENT@592238c5"":{""tableId"":""NS_IDENT@592238c5"",""identifier"":""TMP2"",""dbTableName"":""TMP2"",""fields"":[""BAR VARCHAR(100)"",""REVENUE DECIMAL(15, 2)""],""cursor"":[0],""pos"":{""lineNum"":12,""columnNum"":32,""endLineNum"":12,""endColumnNum"":35,""quoted"":false}},""NS_IDENT@7bb35cc6"":{""tableId"":""NS_IDENT@7bb35cc6"",""identifier"":""LIKES"",""dbTableName"":""LIKES"",""fields"":[""drinker VARCHAR(100)"",""beer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":3,""columnNum"":16,""endLineNum"":3,""endColumnNum"":20,""quoted"":false}},""NS_IDENT@7918c7f8"":{""tableId"":""NS_IDENT@7918c7f8"",""identifier"":""TMP4"",""dbTableName"":""TMP4"",""fields"":[""BAR VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":18,""columnNum"":21,""endLineNum"":18,""endColumnNum"":24,""quoted"":false}},""NS_IDENT@b8e246c"":{""tableId"":""NS_IDENT@b8e246c"",""identifier"":""FREQUENTS"",""dbTableName"":""FREQUENTS"",""fields"":[""drinker VARCHAR(100)"",""bar VARCHAR(100)"",""times_a_week INTEGER""],""cursor"":[0],""pos"":{""lineNum"":6,""columnNum"":54,""endLineNum"":6,""endColumnNum"":62,""quoted"":false}},""NS_IDENT@3c6aa04a"":{""tableId"":""NS_IDENT@3c6aa04a"",""identifier"":""TMP3"",""dbTableName"":""TMP3"",""fields"":[""BAR VARCHAR(100)"",""PRICE DECIMAL(19, 2)""],""cursor"":[0],""pos"":{""lineNum"":21,""columnNum"":41,""endLineNum"":21,""endColumnNum"":44,""quoted"":false}},""NS_IDENT@14bf57b2"":{""tableId"":""NS_IDENT@14bf57b2"",""identifier"":""TMP3"",""dbTableName"":""TMP3"",""fields"":[""BAR VARCHAR(100)"",""PRICE DECIMAL(19, 2)""],""cursor"":[0],""pos"":{""lineNum"":15,""columnNum"":49,""endLineNum"":15,""endColumnNum"":52,""quoted"":false}},""NS_IDENT@2b56f5f8"":{""tableId"":""NS_IDENT@2b56f5f8"",""identifier"":""TMP1"",""dbTableName"":""TMP1"",""fields"":[""BAR VARCHAR(100)"",""PRICE DECIMAL(5, 2)"",""TIMES_A_WEEK INTEGER""],""cursor"":[0],""pos"":{""lineNum"":9,""columnNum"":48,""endLineNum"":9,""endColumnNum"":51,""quoted"":false}},""NS_IDENT@616b241a"":{""tableId"":""NS_IDENT@616b241a"",""identifier"":""TMP0"",""dbTableName"":""TMP0"",""fields"":[""beer VARCHAR(100)"",""drinker VARCHAR(100)"",""bar VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":6,""columnNum"":44,""endLineNum"":6,""endColumnNum"":47,""quoted"":false}},""NS_IDENT@7144655b"":{""tableId"":""NS_IDENT@7144655b"",""identifier"":""TMP6"",""dbTableName"":""TMP6"",""fields"":[""BAR VARCHAR(100)"",""REVENUE DECIMAL(19, 2)""],""cursor"":[0],""pos"":{""lineNum"":24,""columnNum"":16,""endLineNum"":24,""endColumnNum"":19,""quoted"":false}},""NS_IDENT@345cf395"":{""tableId"":""NS_IDENT@345cf395"",""identifier"":""TMP5"",""dbTableName"":""TMP5"",""fields"":[""BAR VARCHAR(100)"",""REVENUE INTEGER""],""cursor"":[0],""pos"":{""lineNum"":21,""columnNum"":16,""endLineNum"":21,""endColumnNum"":19,""quoted"":false}}},""corrTables"":[],""withBlocks"":[{""id"":""BLOCK_SELECT@1d207fad"",""alias"":""TMP0"",""fields"":[""beer VARCHAR(100)"",""drinker VARCHAR(100)"",""bar VARCHAR(100)"",""price DECIMAL(5, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_STAR@2116b68b"",""value"":""*"",""pos"":{""lineNum"":3,""columnNum"":9,""endLineNum"":3,""endColumnNum"":9,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@7bb35cc6"",""NS_IDENT@256aa5f2""],""fromNode"":{""id"":""OP_JOIN@488b50ec"",""value"":""INNER"",""pos"":{""lineNum"":3,""columnNum"":30,""endLineNum"":3,""endColumnNum"":33,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@5d58c727"",""value"":""NS_IDENT@7bb35cc6"",""pos"":{""lineNum"":3,""columnNum"":16,""endLineNum"":3,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@27b22f74"",""value"":""NS_IDENT@256aa5f2"",""pos"":{""lineNum"":3,""columnNum"":35,""endLineNum"":3,""endColumnNum"":40,""quoted"":false},""children"":[]}],""natural"":true},""isAggregate"":false,""identifiers"":[],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":3,""columnNum"":2,""endLineNum"":3,""endColumnNum"":40,""quoted"":false},""children"":{}},{""id"":""BLOCK_SELECT@6edc4161"",""alias"":""TMP1"",""fields"":[""BAR VARCHAR(100)"",""PRICE DECIMAL(5, 2)"",""TIMES_A_WEEK INTEGER""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@1f387978"",""value"":""NS_IDENT@616b241a.BAR"",""pos"":{""lineNum"":6,""columnNum"":9,""endLineNum"":6,""endColumnNum"":16,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4441d567"",""value"":""NS_IDENT@616b241a.PRICE"",""pos"":{""lineNum"":6,""columnNum"":19,""endLineNum"":6,""endColumnNum"":23,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@62b969c4"",""value"":""NS_IDENT@b8e246c.TIMES_A_WEEK"",""pos"":{""lineNum"":6,""columnNum"":26,""endLineNum"":6,""endColumnNum"":37,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@616b241a"",""NS_IDENT@b8e246c""],""fromNode"":{""id"":""OP_JOIN@5486887b"",""value"":""INNER"",""pos"":{""lineNum"":6,""columnNum"":49,""endLineNum"":6,""endColumnNum"":52,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@5226e402"",""value"":""NS_IDENT@616b241a"",""pos"":{""lineNum"":6,""columnNum"":44,""endLineNum"":6,""endColumnNum"":47,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@1440c311"",""value"":""NS_IDENT@b8e246c"",""pos"":{""lineNum"":6,""columnNum"":54,""endLineNum"":6,""endColumnNum"":62,""quoted"":false},""children"":[]}],""natural"":false,""joinCondition"":{""id"":""OP_BINARY@6d4c273c"",""value"":""AND"",""pos"":{""lineNum"":6,""columnNum"":67,""endLineNum"":6,""endColumnNum"":123,""quoted"":false},""children"":[{""id"":""OP_BINARY@22bb5646"",""value"":""="",""pos"":{""lineNum"":6,""columnNum"":67,""endLineNum"":6,""endColumnNum"":96,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@7b3315a5"",""value"":""NS_IDENT@616b241a.drinker"",""pos"":{""lineNum"":6,""columnNum"":67,""endLineNum"":6,""endColumnNum"":78,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@540dbda9"",""value"":""NS_IDENT@b8e246c.drinker"",""pos"":{""lineNum"":6,""columnNum"":80,""endLineNum"":6,""endColumnNum"":96,""quoted"":false},""children"":[]}]},{""id"":""OP_BINARY@153d4abb"",""value"":""="",""pos"":{""lineNum"":6,""columnNum"":102,""endLineNum"":6,""endColumnNum"":123,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@1be59f28"",""value"":""NS_IDENT@616b241a.bar"",""pos"":{""lineNum"":6,""columnNum"":102,""endLineNum"":6,""endColumnNum"":109,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@2ce45a7b"",""value"":""NS_IDENT@b8e246c.bar"",""pos"":{""lineNum"":6,""columnNum"":111,""endLineNum"":6,""endColumnNum"":123,""quoted"":false},""children"":[]}]}]}},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@4441d567"",""value"":""NS_IDENT@616b241a.PRICE"",""pos"":{""lineNum"":6,""columnNum"":19,""endLineNum"":6,""endColumnNum"":23,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@2ce45a7b"",""value"":""NS_IDENT@b8e246c.bar"",""pos"":{""lineNum"":6,""columnNum"":111,""endLineNum"":6,""endColumnNum"":123,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@540dbda9"",""value"":""NS_IDENT@b8e246c.drinker"",""pos"":{""lineNum"":6,""columnNum"":80,""endLineNum"":6,""endColumnNum"":96,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@1f387978"",""value"":""NS_IDENT@616b241a.BAR"",""pos"":{""lineNum"":6,""columnNum"":9,""endLineNum"":6,""endColumnNum"":16,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@62b969c4"",""value"":""NS_IDENT@b8e246c.TIMES_A_WEEK"",""pos"":{""lineNum"":6,""columnNum"":26,""endLineNum"":6,""endColumnNum"":37,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@7b3315a5"",""value"":""NS_IDENT@616b241a.drinker"",""pos"":{""lineNum"":6,""columnNum"":67,""endLineNum"":6,""endColumnNum"":78,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@1be59f28"",""value"":""NS_IDENT@616b241a.bar"",""pos"":{""lineNum"":6,""columnNum"":102,""endLineNum"":6,""endColumnNum"":109,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":6,""columnNum"":2,""endLineNum"":6,""endColumnNum"":123,""quoted"":false},""children"":{}},{""id"":""BLOCK_SELECT@783ec989"",""alias"":""TMP2"",""fields"":[""BAR VARCHAR(100)"",""EXPR$1 DECIMAL(15, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@79d743e6"",""value"":""NS_IDENT@2b56f5f8.BAR"",""pos"":{""lineNum"":9,""columnNum"":9,""endLineNum"":9,""endColumnNum"":11,""quoted"":false},""children"":[]},{""id"":""OP_BINARY@42fcc7e6"",""value"":""*"",""pos"":{""lineNum"":9,""columnNum"":14,""endLineNum"":9,""endColumnNum"":41,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@3fae596"",""value"":""NS_IDENT@2b56f5f8.PRICE"",""pos"":{""lineNum"":9,""columnNum"":14,""endLineNum"":9,""endColumnNum"":23,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4a0df195"",""value"":""NS_IDENT@2b56f5f8.TIMES_A_WEEK"",""pos"":{""lineNum"":9,""columnNum"":25,""endLineNum"":9,""endColumnNum"":41,""quoted"":false},""children"":[]}]}],""fromItemIds"":[""NS_IDENT@2b56f5f8""],""fromNode"":{""id"":""JOIN_OPERAND@1ddd3478"",""value"":""NS_IDENT@2b56f5f8"",""pos"":{""lineNum"":9,""columnNum"":48,""endLineNum"":9,""endColumnNum"":51,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@79d743e6"",""value"":""NS_IDENT@2b56f5f8.BAR"",""pos"":{""lineNum"":9,""columnNum"":9,""endLineNum"":9,""endColumnNum"":11,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4a0df195"",""value"":""NS_IDENT@2b56f5f8.TIMES_A_WEEK"",""pos"":{""lineNum"":9,""columnNum"":25,""endLineNum"":9,""endColumnNum"":41,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@3fae596"",""value"":""NS_IDENT@2b56f5f8.PRICE"",""pos"":{""lineNum"":9,""columnNum"":14,""endLineNum"":9,""endColumnNum"":23,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":9,""columnNum"":2,""endLineNum"":9,""endColumnNum"":51,""quoted"":false},""children"":{}},{""id"":""BLOCK_SELECT@4d33940d"",""alias"":""TMP3"",""fields"":[""BAR VARCHAR(100)"",""EXPR$1 DECIMAL(19, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@6ee8dcd3"",""value"":""NS_IDENT@592238c5.BAR"",""pos"":{""lineNum"":12,""columnNum"":9,""endLineNum"":12,""endColumnNum"":11,""quoted"":false},""children"":[]},{""id"":""OP_AGG_FUNC@5cdf39b2"",""value"":""SUM"",""pos"":{""lineNum"":12,""columnNum"":14,""endLineNum"":12,""endColumnNum"":25,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@14f3c6fc"",""value"":""NS_IDENT@592238c5.REVENUE"",""pos"":{""lineNum"":12,""columnNum"":18,""endLineNum"":12,""endColumnNum"":24,""quoted"":false},""children"":[]}]}],""fromItemIds"":[""NS_IDENT@592238c5""],""fromNode"":{""id"":""JOIN_OPERAND@43cf6ea3"",""value"":""NS_IDENT@592238c5"",""pos"":{""lineNum"":12,""columnNum"":32,""endLineNum"":12,""endColumnNum"":35,""quoted"":false},""children"":[]},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@21fdfefc"",""value"":""NS_IDENT@592238c5.BAR"",""pos"":{""lineNum"":12,""columnNum"":46,""endLineNum"":12,""endColumnNum"":48,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@14f3c6fc"",""value"":""NS_IDENT@592238c5.REVENUE"",""pos"":{""lineNum"":12,""columnNum"":18,""endLineNum"":12,""endColumnNum"":24,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@21fdfefc"",""value"":""NS_IDENT@592238c5.BAR"",""pos"":{""lineNum"":12,""columnNum"":46,""endLineNum"":12,""endColumnNum"":48,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@6ee8dcd3"",""value"":""NS_IDENT@592238c5.BAR"",""pos"":{""lineNum"":12,""columnNum"":9,""endLineNum"":12,""endColumnNum"":11,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":12,""columnNum"":2,""endLineNum"":12,""endColumnNum"":48,""quoted"":false},""children"":{}},{""id"":""BLOCK_SETOP@2c16fadb"",""alias"":""TMP4"",""fields"":[""NAME VARCHAR(100)""],""opName"":""EXCEPT"",""all"":false,""leftBlockId"":""BLOCK_SELECT@248deced"",""rightBlockId"":""BLOCK_SELECT@1e9804b9"",""pos"":{""lineNum"":15,""columnNum"":3,""endLineNum"":15,""endColumnNum"":52,""quoted"":false},""children"":{""BLOCK_SELECT@1e9804b9"":{""id"":""BLOCK_SELECT@1e9804b9"",""parentId"":""BLOCK_SETOP@2c16fadb"",""fields"":[""BAR VARCHAR(100)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@46d9aec8"",""value"":""NS_IDENT@14bf57b2.BAR"",""pos"":{""lineNum"":15,""columnNum"":40,""endLineNum"":15,""endColumnNum"":42,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@14bf57b2""],""fromNode"":{""id"":""JOIN_OPERAND@543e593"",""value"":""NS_IDENT@14bf57b2"",""pos"":{""lineNum"":15,""columnNum"":49,""endLineNum"":15,""endColumnNum"":52,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@46d9aec8"",""value"":""NS_IDENT@14bf57b2.BAR"",""pos"":{""lineNum"":15,""columnNum"":40,""endLineNum"":15,""endColumnNum"":42,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":15,""columnNum"":33,""endLineNum"":15,""endColumnNum"":52,""quoted"":false},""children"":{}},""BLOCK_SELECT@248deced"":{""id"":""BLOCK_SELECT@248deced"",""parentId"":""BLOCK_SETOP@2c16fadb"",""fields"":[""NAME VARCHAR(100)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@cfbc8e8"",""value"":""NS_IDENT@1cc9cfb2.NAME"",""pos"":{""lineNum"":15,""columnNum"":10,""endLineNum"":15,""endColumnNum"":13,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@1cc9cfb2""],""fromNode"":{""id"":""JOIN_OPERAND@2227a6c1"",""value"":""NS_IDENT@1cc9cfb2"",""pos"":{""lineNum"":15,""columnNum"":20,""endLineNum"":15,""endColumnNum"":22,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@cfbc8e8"",""value"":""NS_IDENT@1cc9cfb2.NAME"",""pos"":{""lineNum"":15,""columnNum"":10,""endLineNum"":15,""endColumnNum"":13,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":15,""columnNum"":3,""endLineNum"":15,""endColumnNum"":22,""quoted"":false},""children"":{}}}},{""id"":""BLOCK_SELECT@51ec2df1"",""alias"":""TMP5"",""fields"":[""BAR VARCHAR(100)"",""EXPR$1 INTEGER""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@17740dae"",""value"":""NS_IDENT@7918c7f8.BAR"",""pos"":{""lineNum"":18,""columnNum"":9,""endLineNum"":18,""endColumnNum"":11,""quoted"":false},""children"":[]},{""id"":""LITERAL_NUMERIC@1f966492"",""value"":""0"",""pos"":{""lineNum"":18,""columnNum"":14,""endLineNum"":18,""endColumnNum"":14,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@7918c7f8""],""fromNode"":{""id"":""JOIN_OPERAND@f8f56b9"",""value"":""NS_IDENT@7918c7f8"",""pos"":{""lineNum"":18,""columnNum"":21,""endLineNum"":18,""endColumnNum"":24,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@17740dae"",""value"":""NS_IDENT@7918c7f8.BAR"",""pos"":{""lineNum"":18,""columnNum"":9,""endLineNum"":18,""endColumnNum"":11,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":18,""columnNum"":2,""endLineNum"":18,""endColumnNum"":24,""quoted"":false},""children"":{}},{""id"":""BLOCK_SETOP@4f186450"",""alias"":""TMP6"",""fields"":[""BAR VARCHAR(100)"",""REVENUE DECIMAL(19, 2)""],""opName"":""UNION"",""all"":false,""leftBlockId"":""BLOCK_SELECT@7fab4be7"",""rightBlockId"":""BLOCK_SELECT@4d74c3ba"",""pos"":{""lineNum"":21,""columnNum"":2,""endLineNum"":21,""endColumnNum"":44,""quoted"":false},""children"":{""BLOCK_SELECT@7fab4be7"":{""id"":""BLOCK_SELECT@7fab4be7"",""parentId"":""BLOCK_SETOP@4f186450"",""fields"":[""BAR VARCHAR(100)"",""REVENUE INTEGER""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_STAR@bc4d5e1"",""value"":""*"",""pos"":{""lineNum"":21,""columnNum"":9,""endLineNum"":21,""endColumnNum"":9,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@345cf395""],""fromNode"":{""id"":""JOIN_OPERAND@a64e035"",""value"":""NS_IDENT@345cf395"",""pos"":{""lineNum"":21,""columnNum"":16,""endLineNum"":21,""endColumnNum"":19,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":21,""columnNum"":2,""endLineNum"":21,""endColumnNum"":19,""quoted"":false},""children"":{}},""BLOCK_SELECT@4d74c3ba"":{""id"":""BLOCK_SELECT@4d74c3ba"",""parentId"":""BLOCK_SETOP@4f186450"",""fields"":[""BAR VARCHAR(100)"",""PRICE DECIMAL(19, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_STAR@2257fadf"",""value"":""*"",""pos"":{""lineNum"":21,""columnNum"":34,""endLineNum"":21,""endColumnNum"":34,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@3c6aa04a""],""fromNode"":{""id"":""JOIN_OPERAND@41c204a0"",""value"":""NS_IDENT@3c6aa04a"",""pos"":{""lineNum"":21,""columnNum"":41,""endLineNum"":21,""endColumnNum"":44,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":21,""columnNum"":27,""endLineNum"":21,""endColumnNum"":44,""quoted"":false},""children"":{}}}},{""id"":""BLOCK_SELECT@49dbaaf3"",""alias"":""TMP7"",""fields"":[""BAR VARCHAR(100)"",""REVENUE DECIMAL(19, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_STAR@5c82cd4f"",""value"":""*"",""pos"":{""lineNum"":24,""columnNum"":9,""endLineNum"":24,""endColumnNum"":9,""quoted"":false},""children"":[]}],""fromItemIds"":[""NS_IDENT@7144655b""],""fromNode"":{""id"":""JOIN_OPERAND@22d9c961"",""value"":""NS_IDENT@7144655b"",""pos"":{""lineNum"":24,""columnNum"":16,""endLineNum"":24,""endColumnNum"":19,""quoted"":false},""children"":[]},""isAggregate"":false,""orderByList"":[{""id"":""OP_POSTFIX@24e08d59"",""value"":""DESC"",""pos"":{""lineNum"":24,""columnNum"":30,""endLineNum"":24,""endColumnNum"":41,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@6a0ac48e"",""value"":""NS_IDENT@7144655b.REVENUE"",""pos"":{""lineNum"":24,""columnNum"":30,""endLineNum"":24,""endColumnNum"":36,""quoted"":false},""children"":[]}]},{""id"":""COLUMN_LOCAL@77cb9cd1"",""value"":""NS_IDENT@7144655b.BAR"",""pos"":{""lineNum"":24,""columnNum"":44,""endLineNum"":24,""endColumnNum"":46,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@6a0ac48e"",""value"":""NS_IDENT@7144655b.REVENUE"",""pos"":{""lineNum"":24,""columnNum"":30,""endLineNum"":24,""endColumnNum"":36,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@77cb9cd1"",""value"":""NS_IDENT@7144655b.BAR"",""pos"":{""lineNum"":24,""columnNum"":44,""endLineNum"":24,""endColumnNum"":46,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":24,""columnNum"":2,""endLineNum"":24,""endColumnNum"":19,""quoted"":false},""children"":{}}]}
+"
+"SELECT * FROM
+
+(
+(SELECT f1.bar, SUM(f1.price * f1.times_a_week) AS amount FROM
+(SELECT frequents.bar, frequents.drinker, serves.beer, serves.price, frequents.times_a_week
+FROM serves JOIN frequents 
+ON serves.bar = frequents.bar) AS f1, likes
+WHERE f1.drinker = likes.drinker AND f1.beer = likes.beer
+GROUP BY f1.bar) -- up to here returns all the bars and prices ecept those that don't expect to sell beer (0 dollars)
+
+UNION
+
+(SELECT DISTINCT n2, f4.money FROM
+	(SELECT name AS n2 FROM BAR
+		EXCEPT
+		SELECT f1.bar FROM
+		(SELECT frequents.bar, frequents.drinker, serves.beer, serves.price, frequents.times_a_week
+		FROM serves
+		JOIN frequents 
+		ON serves.bar = frequents.bar) AS f1, likes
+		WHERE f1.drinker = likes.drinker AND f1.beer = likes.beer
+		GROUP BY f1.bar
+	) AS f3
+
+	LEFT OUTER JOIN --get in the bars doesn’t expect to sell any beer to our drinkers
+
+	(SELECT DISTINCT frequents.bar AS f2, (frequents.times_a_week * 0) AS money
+	FROM frequents LEFT OUTER JOIN serves
+	ON serves.bar = frequents.bar) As f4
+ON n2=f4.f2)) AS f6
+WHERE bar IS NOT NULL AND amount IS NOT NULL
+ORDER BY amount DESC, trim(bar) ASC;
+
+","{""failed"":true}
+"
+"(select bar, sum(price*times_a_week) as profit from serves natural join likes natural join frequents
+group by 
+bar) 
+union 
+(select name, 0 from ((select name from bar) except (select bar from serves natural join likes natural join frequents)) as nosale)
+order by profit DESC, bar; 
+
+","{""failed"":true,""errorMsg"":""From line 3, column 1 to line 3, column 3: Column 'BAR' is ambiguous""}
+"
+"WITH PROF(name, profit) AS (
+  SELECT bar.name, 0
+  FROM bar
+  WHERE bar.name NOT IN (SELECT frequents.bar as name
+    FROM frequents, likes, serves
+    WHERE frequents.drinker = likes.drinker AND likes.beer = serves.beer AND frequents.bar = serves.bar)
+  UNION
+  SELECT T.bar, COALESCE(SUM(T.price * T.times_a_week),0) as profit
+  FROM
+  (SELECT frequents.bar, frequents.drinker, frequents.times_a_week, likes.beer, serves.price
+    FROM frequents, likes, serves
+    WHERE frequents.drinker = likes.drinker AND likes.beer = serves.beer AND frequents.bar = serves.bar) T
+  GROUP BY T.bar)
+SELECT *
+FROM PROF
+ORDER BY PROF.profit DESC, PROF.name;
+","{""failed"":true}
+"
+"SELECT bar, sum(total_week_earnings) AS final_total_week_earnings
+FROM
+(SELECT name AS bar, 0.0 AS total_week_earnings 
+FROM bar
+UNION
+
+
+SELECT bar, sum(drinker_pay_per_drink) AS total_week_earnings
+FROM (
+SELECT bar, times_a_week*price AS drinker_pay_per_drink
+FROM 
+(SELECT likes.drinker, frequents.times_a_week, serves.bar, serves.beer, serves.price
+FROM likes, frequents, serves
+WHERE likes.drinker = frequents.drinker AND likes.beer = serves.beer AND frequents.bar = serves.bar) AS drinker_pay_table
+) AS week_earnings_table
+GROUP BY bar) AS bar_total_week_earnings
+
+GROUP BY bar
+ORDER BY final_total_week_earnings DESC, bar;","{""failed"":true}
+"
+"SELECT name, final FROM 
+
+(SELECT name, coalesce (sum,0) AS final FROM 
+(SELECT name, sum FROM bar b LEFT OUTER JOIN 
+(SELECT bar, sum(p) FROM 
+(SELECT bar,drinker,price * times_a_week AS p FROM 
+(SELECT * FROM likes NATURAL JOIN 
+(SELECT * FROM serves NATURAL JOIN frequents)
+ AS y) 
+ AS z) 
+ AS k group by bar) 
+AS t on t.bar = b.name) AS x) 
+AS final_sub ORDER BY final desc, name;
+
+/* Worked with Trilok Sadarangani */","{""failed"":true,""errorMsg"":""Parsing error at line 3, column 25. Query syntax may be incorrect""}
+"
+"--select bar,sum(times_a_week*price) from (select likes.drinker, frequents.bar, likes.beer, times_a_week, price from likes, frequents, serves where frequents.drinker = likes.drinker and frequents.bar = serves.bar and likes.beer = serves.beer) as LFW group by LFW.bar order by sum desc, bar;
+
+
+SELECT bar, sum(amount) from 
+	(SELECT bar, sum(times_a_week*price) as amount from
+		 (SELECT likes.drinker, frequents.bar, likes.beer, times_a_week, price from likes
+			, frequents, serves where frequents.drinker = likes.drinker and frequents.bar 
+			= serves.bar and likes.beer = serves.beer) AS LFW group by LFW.bar
+			UNION  
+			SELECT name, sum(0) from bar group by name) as SumLFW group by SUMLFW.bar 
+	ORDER BY sum DESC, bar;","{""failed"":true,""errorMsg"":""Parsing error at line 11, column 11. Query syntax may be incorrect""}
+"
+"select final_chart.name as bar, SUM(income) as income from (select name, 0 as income from bar union (select chart.bar, SUM(chart.times_a_week*chart.price) as income from (select likes.drinker, likes.beer, frequents_likes.bar, frequents_likes.times_a_week, frequents_likes.price from likes inner join (select frequents.drinker, frequents.bar, frequents.times_a_week, serves.beer, serves.price from frequents inner join serves on frequents.bar = serves.bar) as frequents_likes on frequents_likes.drinker = likes.drinker and frequents_likes.beer = likes.beer) as chart group by chart.bar order by income DESC, bar ASC)) as final_chart group by final_chart.name order by income DESC, bar ASC;","{""failed"":true}
+"
+"SELECT name, CASE
+             WHEN amount IS NULL THEN 0
+             WHEN amount IS NOT NULL THEN amount
+             END AS amount
+FROM bar LEFT OUTER JOIN (
+SELECT bar, SUM(times_a_week * price) as amount
+FROM frequents NATURAL JOIN serves NATURAL JOIN likes
+GROUP BY bar) AS revenue
+ON name = revenue.bar
+ORDER BY amount DESC, name;
+","{""failed"":true,""errorMsg"":""From line 8, column 10 to line 8, column 12: Column 'BAR' is ambiguous""}
+"
+"SELECT bar, SUM(contributes) FROM 
+(SELECT bar, contributes FROM 
+ (SELECT Serves.bar, Serves.beer, Serves.price, Frequents.drinker, Frequents.times_a_week, Serves.price*Frequents.times_a_week AS contributes FROM Serves, Frequents, Likes 
+  WHERE Serves.bar = Frequents.bar AND Frequents.drinker = Likes.drinker AND Serves.beer = Likes.beer) as moo
+ UNION ALL
+ (SELECT Bar.name AS bar, 0 AS contributes FROM Bar)) as foo
+GROUP BY bar
+ORDER BY sum DESC, bar ASC;","{""failed"":true,""errorMsg"":""Parsing error at line 8, column 10. Query syntax may be incorrect""}
+"
+"SELECT bar.name, COALESCE(temp.amount, 0) AS amount
+FROM bar LEFT OUTER JOIN 
+	(SELECT bar.name, SUM(frequents.times_a_week * serves.price) AS amount
+	FROM bar JOIN serves ON bar.name = serves.bar 
+	JOIN frequents ON bar.name = frequents.bar
+	JOIN likes ON likes.drinker = frequents.drinker
+	WHERE serves.beer = likes.beer
+	GROUP BY bar.name) AS temp ON bar.name = temp.name
+ORDER BY amount DESC, bar.name","{""failed"":true}
+"
+"SELECT name, COALESCE(t1.amount,0) AS amount 
+FROM Bar LEFT JOIN (SELECT t2.bar, SUM(t2.amount) 
+					AS amount FROM (SELECT t3.bar, t3.times_a_week*t3.price 
+									AS amount 
+									FROM Likes l NATURAL JOIN (SELECT * FROM Frequents f NATURAL JOIN Serves s) AS t3) 
+					AS t2 GROUP BY t2.bar) 
+AS t1 ON name = t1.bar ORDER BY amount DESC, name;
+","{""failed"":true}
+"
+"SELECT Bars.bar, COALESCE(SUM(times_a_week*price), 0) total FROM
+(SELECT Bar.name bar FROM Bar) Bars LEFT OUTER JOIN
+(SELECT Frequents.drinker, Frequents.bar, Frequents.times_a_week, Serves.price
+FROM Frequents, Likes, Serves WHERE
+Frequents.drinker = Likes.drinker AND Frequents.bar = Serves.bar AND Likes.beer = Serves.beer) Purchase
+ON Bars.bar = Purchase.bar GROUP BY Bars.bar ORDER BY total DESC, Bars.bar;","{""failed"":true}
+"
+"-- worked with Diane Hu --
+SELECT * FROM
+(SELECT DISTINCT serves.bar, CASE WHEN set3.money IS NULL THEN 0 ELSE set3.money END profits FROM
+(SELECT
+   set2.bar, SUM(set2.times_a_week * set2.price) money FROM
+(SELECT set1.drinker, set1.bar, set1.times_a_week, set1.beer, serves.price
+FROM serves
+JOIN
+(SELECT frequents.drinker, frequents.bar, frequents.times_a_week, likes.beer
+FROM frequents
+JOIN likes
+ON frequents.drinker = likes.drinker) set1
+ON serves.bar = set1.bar AND serves.beer = set1.beer) set2
+GROUP BY bar)
+set3
+RIGHT JOIN
+serves
+ON set3.bar = serves.bar) set4
+ORDER BY profits DESC, bar;
+","{""failed"":true}
+"
+"SELECT Bar.name, SUM(
+  -- Account for the case where a bar
+  -- has no frequenters. Could account
+  -- for other cases up here too but
+  -- that would make the cross product
+  -- in FROM very large.
+  CASE WHEN Bar.name = Frequents.bar
+       THEN Serves.price * times_a_week
+       ELSE 0
+  END
+) AS amount
+FROM Bar, Frequents, Serves, Likes
+WHERE Frequents.bar = Serves.bar
+AND Frequents.drinker = Likes.drinker
+AND Serves.beer = Likes.beer
+GROUP BY Bar.name
+ORDER BY amount DESC, Bar.name ASC;
+","{""failed"":true}
+"
+"WITH Money_table AS
+(SELECT Frequents.bar, Serves.price * times_a_week AS money
+FROM Frequents, Likes, Serves
+WHERE Frequents.drinker = Likes.drinker
+AND Serves.bar = Frequents.bar
+AND Serves.beer = Likes.beer
+UNION ALL
+SELECT name AS bar, 0 AS money
+FROM Bar)
+SELECT bar, SUM(money) AS money
+FROM Money_table
+GROUP BY bar
+ORDER BY money DESC, bar;","{""blocks"":{""id"":""BLOCK_SELECT@3241713e"",""fields"":[""BAR VARCHAR(100)"",""MONEY DECIMAL(19, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@365553de"",""value"":""NS_IDENT@5177e388.BAR"",""pos"":{""lineNum"":10,""columnNum"":8,""endLineNum"":10,""endColumnNum"":10,""quoted"":false},""children"":[]},{""id"":""OP_AGG_FUNC@21fdfefc"",""value"":""SUM"",""pos"":{""lineNum"":10,""columnNum"":13,""endLineNum"":10,""endColumnNum"":22,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@cc239ba"",""value"":""NS_IDENT@5177e388.MONEY"",""pos"":{""lineNum"":10,""columnNum"":17,""endLineNum"":10,""endColumnNum"":21,""quoted"":false},""children"":[]}],""alias"":""MONEY""}],""fromItemIds"":[""NS_IDENT@5177e388""],""fromNode"":{""id"":""JOIN_OPERAND@5ecba515"",""value"":""NS_IDENT@5177e388"",""pos"":{""lineNum"":11,""columnNum"":6,""endLineNum"":11,""endColumnNum"":16,""quoted"":false},""children"":[]},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@64138b0c"",""value"":""NS_IDENT@5177e388.BAR"",""pos"":{""lineNum"":12,""columnNum"":10,""endLineNum"":12,""endColumnNum"":12,""quoted"":false},""children"":[]}],""orderByList"":[{""id"":""OP_POSTFIX@51e0301d"",""value"":""DESC"",""pos"":{""lineNum"":13,""columnNum"":10,""endLineNum"":13,""endColumnNum"":19,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@14fc5d40"",""value"":""NS_IDENT@5177e388.MONEY"",""pos"":{""lineNum"":13,""columnNum"":10,""endLineNum"":13,""endColumnNum"":14,""quoted"":false},""children"":[]}]},{""id"":""COLUMN_LOCAL@47d7bfb3"",""value"":""NS_IDENT@5177e388.BAR"",""pos"":{""lineNum"":13,""columnNum"":22,""endLineNum"":13,""endColumnNum"":24,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@47d7bfb3"",""value"":""NS_IDENT@5177e388.BAR"",""pos"":{""lineNum"":13,""columnNum"":22,""endLineNum"":13,""endColumnNum"":24,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@365553de"",""value"":""NS_IDENT@5177e388.BAR"",""pos"":{""lineNum"":10,""columnNum"":8,""endLineNum"":10,""endColumnNum"":10,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@64138b0c"",""value"":""NS_IDENT@5177e388.BAR"",""pos"":{""lineNum"":12,""columnNum"":10,""endLineNum"":12,""endColumnNum"":12,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@14fc5d40"",""value"":""NS_IDENT@5177e388.MONEY"",""pos"":{""lineNum"":13,""columnNum"":10,""endLineNum"":13,""endColumnNum"":14,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@cc239ba"",""value"":""NS_IDENT@5177e388.MONEY"",""pos"":{""lineNum"":10,""columnNum"":17,""endLineNum"":10,""endColumnNum"":21,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":10,""columnNum"":1,""endLineNum"":12,""endColumnNum"":12,""quoted"":false},""children"":{}},""tables"":{""NS_IDENT@5c748168"":{""tableId"":""NS_IDENT@5c748168"",""identifier"":""LIKES"",""dbTableName"":""LIKES"",""fields"":[""drinker VARCHAR(100)"",""beer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":3,""columnNum"":17,""endLineNum"":3,""endColumnNum"":21,""quoted"":false}},""NS_IDENT@42b21d99"":{""tableId"":""NS_IDENT@42b21d99"",""identifier"":""BAR"",""dbTableName"":""BAR"",""fields"":[""name VARCHAR(100)"",""address VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":9,""columnNum"":6,""endLineNum"":9,""endColumnNum"":8,""quoted"":false}},""NS_IDENT@ea9e141"":{""tableId"":""NS_IDENT@ea9e141"",""identifier"":""FREQUENTS"",""dbTableName"":""FREQUENTS"",""fields"":[""drinker VARCHAR(100)"",""bar VARCHAR(100)"",""times_a_week INTEGER""],""cursor"":[0],""pos"":{""lineNum"":3,""columnNum"":6,""endLineNum"":3,""endColumnNum"":14,""quoted"":false}},""NS_IDENT@6441c486"":{""tableId"":""NS_IDENT@6441c486"",""identifier"":""SERVES"",""dbTableName"":""SERVES"",""fields"":[""bar VARCHAR(100)"",""beer VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":3,""columnNum"":24,""endLineNum"":3,""endColumnNum"":29,""quoted"":false}},""NS_IDENT@5177e388"":{""tableId"":""NS_IDENT@5177e388"",""identifier"":""MONEY_TABLE"",""dbTableName"":""MONEY_TABLE"",""fields"":[""BAR VARCHAR(100)"",""MONEY DECIMAL(15, 2)""],""cursor"":[0],""pos"":{""lineNum"":11,""columnNum"":6,""endLineNum"":11,""endColumnNum"":16,""quoted"":false}}},""corrTables"":[],""withBlocks"":[{""id"":""BLOCK_SETOP@6090f3ca"",""alias"":""MONEY_TABLE"",""fields"":[""BAR VARCHAR(100)"",""MONEY DECIMAL(15, 2)""],""opName"":""UNION ALL"",""all"":true,""leftBlockId"":""BLOCK_SELECT@6872f9c8"",""rightBlockId"":""BLOCK_SELECT@1c025cb"",""pos"":{""lineNum"":2,""columnNum"":2,""endLineNum"":9,""endColumnNum"":8,""quoted"":false},""children"":{""BLOCK_SELECT@6872f9c8"":{""id"":""BLOCK_SELECT@6872f9c8"",""parentId"":""BLOCK_SETOP@6090f3ca"",""fields"":[""BAR VARCHAR(100)"",""MONEY DECIMAL(15, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@234a8f27"",""value"":""NS_IDENT@ea9e141.BAR"",""pos"":{""lineNum"":2,""columnNum"":9,""endLineNum"":2,""endColumnNum"":21,""quoted"":false},""children"":[]},{""id"":""OP_BINARY@31c2affc"",""value"":""*"",""pos"":{""lineNum"":2,""columnNum"":24,""endLineNum"":2,""endColumnNum"":50,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@1dc2de84"",""value"":""NS_IDENT@6441c486.PRICE"",""pos"":{""lineNum"":2,""columnNum"":24,""endLineNum"":2,""endColumnNum"":35,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@58d63b16"",""value"":""NS_IDENT@ea9e141.TIMES_A_WEEK"",""pos"":{""lineNum"":2,""columnNum"":39,""endLineNum"":2,""endColumnNum"":50,""quoted"":false},""children"":[]}],""alias"":""MONEY""}],""fromItemIds"":[""NS_IDENT@ea9e141"",""NS_IDENT@5c748168"",""NS_IDENT@6441c486""],""fromNode"":{""id"":""OP_JOIN@52a36910"",""value"":""COMMA"",""pos"":{""lineNum"":3,""columnNum"":22,""endLineNum"":3,""endColumnNum"":22,""quoted"":false},""children"":[{""id"":""OP_JOIN@3a095ec0"",""value"":""COMMA"",""pos"":{""lineNum"":3,""columnNum"":15,""endLineNum"":3,""endColumnNum"":15,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@21fff664"",""value"":""NS_IDENT@ea9e141"",""pos"":{""lineNum"":3,""columnNum"":6,""endLineNum"":3,""endColumnNum"":14,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@1440c311"",""value"":""NS_IDENT@5c748168"",""pos"":{""lineNum"":3,""columnNum"":17,""endLineNum"":3,""endColumnNum"":21,""quoted"":false},""children"":[]}],""natural"":false},{""id"":""JOIN_OPERAND@f973499"",""value"":""NS_IDENT@6441c486"",""pos"":{""lineNum"":3,""columnNum"":24,""endLineNum"":3,""endColumnNum"":29,""quoted"":false},""children"":[]}],""natural"":false},""whereNode"":{""id"":""OP_BINARY@441cc260"",""value"":""AND"",""pos"":{""lineNum"":4,""columnNum"":7,""endLineNum"":6,""endColumnNum"":28,""quoted"":false},""children"":[{""id"":""OP_BINARY@64030b91"",""value"":""AND"",""pos"":{""lineNum"":4,""columnNum"":7,""endLineNum"":5,""endColumnNum"":30,""quoted"":false},""children"":[{""id"":""OP_BINARY@67001148"",""value"":""="",""pos"":{""lineNum"":4,""columnNum"":7,""endLineNum"":4,""endColumnNum"":39,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@20ed3303"",""value"":""NS_IDENT@ea9e141.drinker"",""pos"":{""lineNum"":4,""columnNum"":7,""endLineNum"":4,""endColumnNum"":23,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@562c877a"",""value"":""NS_IDENT@5c748168.drinker"",""pos"":{""lineNum"":4,""columnNum"":27,""endLineNum"":4,""endColumnNum"":39,""quoted"":false},""children"":[]}]},{""id"":""OP_BINARY@3eed0f5"",""value"":""="",""pos"":{""lineNum"":5,""columnNum"":5,""endLineNum"":5,""endColumnNum"":30,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@989da1"",""value"":""NS_IDENT@6441c486.bar"",""pos"":{""lineNum"":5,""columnNum"":5,""endLineNum"":5,""endColumnNum"":14,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@31cb96e1"",""value"":""NS_IDENT@ea9e141.bar"",""pos"":{""lineNum"":5,""columnNum"":18,""endLineNum"":5,""endColumnNum"":30,""quoted"":false},""children"":[]}]}]},{""id"":""OP_BINARY@383f1975"",""value"":""="",""pos"":{""lineNum"":6,""columnNum"":5,""endLineNum"":6,""endColumnNum"":28,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@2032e725"",""value"":""NS_IDENT@6441c486.beer"",""pos"":{""lineNum"":6,""columnNum"":5,""endLineNum"":6,""endColumnNum"":15,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4d23015c"",""value"":""NS_IDENT@5c748168.beer"",""pos"":{""lineNum"":6,""columnNum"":19,""endLineNum"":6,""endColumnNum"":28,""quoted"":false},""children"":[]}]}]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@58d63b16"",""value"":""NS_IDENT@ea9e141.TIMES_A_WEEK"",""pos"":{""lineNum"":2,""columnNum"":39,""endLineNum"":2,""endColumnNum"":50,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@989da1"",""value"":""NS_IDENT@6441c486.bar"",""pos"":{""lineNum"":5,""columnNum"":5,""endLineNum"":5,""endColumnNum"":14,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@2032e725"",""value"":""NS_IDENT@6441c486.beer"",""pos"":{""lineNum"":6,""columnNum"":5,""endLineNum"":6,""endColumnNum"":15,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4d23015c"",""value"":""NS_IDENT@5c748168.beer"",""pos"":{""lineNum"":6,""columnNum"":19,""endLineNum"":6,""endColumnNum"":28,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@562c877a"",""value"":""NS_IDENT@5c748168.drinker"",""pos"":{""lineNum"":4,""columnNum"":27,""endLineNum"":4,""endColumnNum"":39,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@234a8f27"",""value"":""NS_IDENT@ea9e141.BAR"",""pos"":{""lineNum"":2,""columnNum"":9,""endLineNum"":2,""endColumnNum"":21,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@1dc2de84"",""value"":""NS_IDENT@6441c486.PRICE"",""pos"":{""lineNum"":2,""columnNum"":24,""endLineNum"":2,""endColumnNum"":35,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@31cb96e1"",""value"":""NS_IDENT@ea9e141.bar"",""pos"":{""lineNum"":5,""columnNum"":18,""endLineNum"":5,""endColumnNum"":30,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@20ed3303"",""value"":""NS_IDENT@ea9e141.drinker"",""pos"":{""lineNum"":4,""columnNum"":7,""endLineNum"":4,""endColumnNum"":23,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":2,""columnNum"":2,""endLineNum"":6,""endColumnNum"":28,""quoted"":false},""children"":{}},""BLOCK_SELECT@1c025cb"":{""id"":""BLOCK_SELECT@1c025cb"",""parentId"":""BLOCK_SETOP@6090f3ca"",""fields"":[""BAR VARCHAR(100)"",""MONEY INTEGER""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@68dcfd52"",""value"":""NS_IDENT@42b21d99.NAME"",""pos"":{""lineNum"":8,""columnNum"":8,""endLineNum"":8,""endColumnNum"":11,""quoted"":false},""children"":[],""alias"":""BAR""},{""id"":""LITERAL_NUMERIC@476ec9d0"",""value"":""0"",""pos"":{""lineNum"":8,""columnNum"":21,""endLineNum"":8,""endColumnNum"":21,""quoted"":false},""children"":[],""alias"":""MONEY""}],""fromItemIds"":[""NS_IDENT@42b21d99""],""fromNode"":{""id"":""JOIN_OPERAND@50825a02"",""value"":""NS_IDENT@42b21d99"",""pos"":{""lineNum"":9,""columnNum"":6,""endLineNum"":9,""endColumnNum"":8,""quoted"":false},""children"":[]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@68dcfd52"",""value"":""NS_IDENT@42b21d99.NAME"",""pos"":{""lineNum"":8,""columnNum"":8,""endLineNum"":8,""endColumnNum"":11,""quoted"":false},""children"":[],""alias"":""BAR""}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":8,""columnNum"":1,""endLineNum"":9,""endColumnNum"":8,""quoted"":false},""children"":{}}}}]}
+"
+"SELECT third.bar, third.tot FROM	
+	(SELECT second.bar, SUM(second.sum) AS tot FROM 
+			((SELECT start.bar, SUM(start.times_a_week*start.price) AS sum FROM
+				(SELECT frequents.bar, serves.price, frequents.times_a_week 
+					FROM frequents, serves, likes
+					WHERE frequents.bar = serves.bar 
+						AND serves.beer = likes.beer 
+						AND likes.drinker = frequents.drinker) start
+			GROUP BY start.bar)
+				UNION
+			SELECT name AS bar, 0 AS sum FROM bar) second
+	GROUP BY second.bar) third
+ORDER BY third.tot DESC, third.bar;","{""failed"":true,""errorMsg"":""Parsing error at line 2, column 10. Query syntax may be incorrect""}
+"
+"Select g.name, CASE WHEN sum(times_a_week*price) is null THEN 0 ELSE sum(times_a_week*price) END as amount from (select d.name, d.drinker, d.times_a_week, d.beer, serves.price from serves right join (select f.name, f.drinker, f.times_a_week, likes.beer from likes right join (select bar.name, frequents.drinker, frequents.times_a_week from bar full outer  join frequents on bar.name=frequents.bar) as f on f.drinker=likes.drinker) as d on serves.beer=d.beer and serves.bar=d.name) as g group by g.name order by amount desc, name;
+","{""failed"":true}
+"
+"SELECT Frequents.bar, SUM(Frequents.times_a_week * Serves.price)
+FROM Frequents
+NATURAL JOIN Likes 
+NATURAL JOIN Serves
+GROUP BY Frequents.bar
+ORDER BY SUM(Frequents.times_a_week * Serves.price) DESC, Frequents.bar ASC;
+","{""blocks"":{""id"":""BLOCK_SELECT@4bdcaf36"",""fields"":[""BAR VARCHAR(100)"",""EXPR$1 DECIMAL(19, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@540dbda9"",""value"":""NS_IDENT@2d2acd89.BAR"",""pos"":{""lineNum"":1,""columnNum"":8,""endLineNum"":1,""endColumnNum"":20,""quoted"":false},""children"":[]},{""id"":""OP_AGG_FUNC@1be59f28"",""value"":""SUM"",""pos"":{""lineNum"":1,""columnNum"":23,""endLineNum"":1,""endColumnNum"":64,""quoted"":false},""children"":[{""id"":""OP_BINARY@2ce45a7b"",""value"":""*"",""pos"":{""lineNum"":1,""columnNum"":27,""endLineNum"":1,""endColumnNum"":63,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@153d4abb"",""value"":""NS_IDENT@2d2acd89.TIMES_A_WEEK"",""pos"":{""lineNum"":1,""columnNum"":27,""endLineNum"":1,""endColumnNum"":48,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@5a67e962"",""value"":""NS_IDENT@f72203.PRICE"",""pos"":{""lineNum"":1,""columnNum"":52,""endLineNum"":1,""endColumnNum"":63,""quoted"":false},""children"":[]}]}]}],""fromItemIds"":[""NS_IDENT@2d2acd89"",""NS_IDENT@8ed9cf"",""NS_IDENT@f72203""],""fromNode"":{""id"":""OP_JOIN@afb5821"",""value"":""INNER"",""pos"":{""lineNum"":4,""columnNum"":9,""endLineNum"":4,""endColumnNum"":12,""quoted"":false},""children"":[{""id"":""OP_JOIN@4bff2185"",""value"":""INNER"",""pos"":{""lineNum"":3,""columnNum"":9,""endLineNum"":3,""endColumnNum"":12,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@4690f583"",""value"":""NS_IDENT@2d2acd89"",""pos"":{""lineNum"":2,""columnNum"":6,""endLineNum"":2,""endColumnNum"":14,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@6090f3ca"",""value"":""NS_IDENT@8ed9cf"",""pos"":{""lineNum"":3,""columnNum"":14,""endLineNum"":3,""endColumnNum"":18,""quoted"":false},""children"":[]}],""natural"":true},{""id"":""JOIN_OPERAND@6872f9c8"",""value"":""NS_IDENT@f72203"",""pos"":{""lineNum"":4,""columnNum"":14,""endLineNum"":4,""endColumnNum"":19,""quoted"":false},""children"":[]}],""natural"":true},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@6b587673"",""value"":""NS_IDENT@2d2acd89.bar"",""pos"":{""lineNum"":5,""columnNum"":10,""endLineNum"":5,""endColumnNum"":22,""quoted"":false},""children"":[]}],""orderByList"":[{""id"":""OP_POSTFIX@4e628b52"",""value"":""DESC"",""pos"":{""lineNum"":6,""columnNum"":10,""endLineNum"":6,""endColumnNum"":56,""quoted"":false},""children"":[{""id"":""OP_AGG_FUNC@543e593"",""value"":""SUM"",""pos"":{""lineNum"":6,""columnNum"":10,""endLineNum"":6,""endColumnNum"":51,""quoted"":false},""children"":[{""id"":""OP_BINARY@1e9804b9"",""value"":""*"",""pos"":{""lineNum"":6,""columnNum"":14,""endLineNum"":6,""endColumnNum"":50,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@248deced"",""value"":""NS_IDENT@2d2acd89.times_a_week"",""pos"":{""lineNum"":6,""columnNum"":14,""endLineNum"":6,""endColumnNum"":35,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@2227a6c1"",""value"":""NS_IDENT@f72203.price"",""pos"":{""lineNum"":6,""columnNum"":39,""endLineNum"":6,""endColumnNum"":50,""quoted"":false},""children"":[]}]}]}]},{""id"":""COLUMN_LOCAL@51ec2df1"",""value"":""NS_IDENT@2d2acd89.bar"",""pos"":{""lineNum"":6,""columnNum"":59,""endLineNum"":6,""endColumnNum"":71,""quoted"":false},""children"":[]}],""identifiers"":[{""id"":""COLUMN_LOCAL@153d4abb"",""value"":""NS_IDENT@2d2acd89.TIMES_A_WEEK"",""pos"":{""lineNum"":1,""columnNum"":27,""endLineNum"":1,""endColumnNum"":48,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@51ec2df1"",""value"":""NS_IDENT@2d2acd89.bar"",""pos"":{""lineNum"":6,""columnNum"":59,""endLineNum"":6,""endColumnNum"":71,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@2227a6c1"",""value"":""NS_IDENT@f72203.price"",""pos"":{""lineNum"":6,""columnNum"":39,""endLineNum"":6,""endColumnNum"":50,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@248deced"",""value"":""NS_IDENT@2d2acd89.times_a_week"",""pos"":{""lineNum"":6,""columnNum"":14,""endLineNum"":6,""endColumnNum"":35,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@5a67e962"",""value"":""NS_IDENT@f72203.PRICE"",""pos"":{""lineNum"":1,""columnNum"":52,""endLineNum"":1,""endColumnNum"":63,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@6b587673"",""value"":""NS_IDENT@2d2acd89.bar"",""pos"":{""lineNum"":5,""columnNum"":10,""endLineNum"":5,""endColumnNum"":22,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@540dbda9"",""value"":""NS_IDENT@2d2acd89.BAR"",""pos"":{""lineNum"":1,""columnNum"":8,""endLineNum"":1,""endColumnNum"":20,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":1,""columnNum"":1,""endLineNum"":5,""endColumnNum"":22,""quoted"":false},""children"":{}},""tables"":{""NS_IDENT@8ed9cf"":{""tableId"":""NS_IDENT@8ed9cf"",""identifier"":""LIKES"",""dbTableName"":""LIKES"",""fields"":[""drinker VARCHAR(100)"",""beer VARCHAR(100)""],""cursor"":[0],""pos"":{""lineNum"":3,""columnNum"":14,""endLineNum"":3,""endColumnNum"":18,""quoted"":false}},""NS_IDENT@f72203"":{""tableId"":""NS_IDENT@f72203"",""identifier"":""SERVES"",""dbTableName"":""SERVES"",""fields"":[""bar VARCHAR(100)"",""beer VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":4,""columnNum"":14,""endLineNum"":4,""endColumnNum"":19,""quoted"":false}},""NS_IDENT@2d2acd89"":{""tableId"":""NS_IDENT@2d2acd89"",""identifier"":""FREQUENTS"",""dbTableName"":""FREQUENTS"",""fields"":[""drinker VARCHAR(100)"",""bar VARCHAR(100)"",""times_a_week INTEGER""],""cursor"":[0],""pos"":{""lineNum"":2,""columnNum"":6,""endLineNum"":2,""endColumnNum"":14,""quoted"":false}}},""corrTables"":[]}
+"
+"select distinct beforegroup.fbar, sum(beforegroup.famount) as amount
+from (select distinct finalsum.fbar, finalsum.fdrinker,
+		case
+			when (exists (select bar, drinker from frequents where finalsum.fbar = frequents.bar and finalsum.fdrinker = frequents.drinker)) 
+				then fsum * (select times_a_week from frequents where finalsum.fbar = frequents.bar and finalsum.fdrinker = frequents.drinker)
+			else 0
+		end as famount
+	from
+		(select fbar, fdrinker, 0 as fsum
+		from
+			(select distinct bar.name as fbar, drinker.name as fdrinker
+			from bar, drinker
+			except
+			(select distinct bar, drinker
+			from (select bar, drinker, likes.beer, price
+					from serves, likes
+					where serves.beer = likes.beer) as sum1
+			group by bar, drinker
+			order by bar)) as coy
+		union
+		(select distinct bar, drinker, sum(price) as sum
+		from (select bar, drinker, likes.beer, price
+				from serves, likes
+				where serves.beer = likes.beer) as sum1
+		group by bar, drinker
+		order by bar)) as finalsum
+	group by finalsum.fbar, finalsum.fdrinker, finalsum.fsum
+	order by famount desc, finalsum.fbar) as beforegroup
+group by beforegroup.fbar
+order by amount desc, beforegroup.fbar;
+
+--        fbar       | amount 
+-- ------------------+--------
+--  James Joyce Pub  |  40.75
+--  Satisfaction     |  31.00
+--  Down Under Pub   |  16.00
+--  Talk of the Town |  14.10
+--  The Edge         |   8.25
+-- (5 rows)
+
+---separate steps----
+
+-- select fbar, fdrinker, 0 as fsum
+-- from
+-- 	(select distinct bar.name as fbar, drinker.name as fdrinker
+-- 	from bar, drinker
+-- 	except
+-- 	(select distinct bar, drinker
+-- 	from (select bar, drinker, likes.beer, price
+-- 			from serves, likes
+-- 			where serves.beer = likes.beer) as sum1
+-- 	group by bar, drinker
+-- 	order by bar)) as coy
+-- union
+-- (select distinct bar, drinker, sum(price) as sum
+-- from (select bar, drinker, likes.beer, price
+-- 		from serves, likes
+-- 		where serves.beer = likes.beer) as sum1
+-- group by bar, drinker
+-- order by bar);
+
+--        fbar       | fdrinker |  sum  
+-- ------------------+----------+-------
+--  Down Under Pub   | Amy      |  5.75
+--  Down Under Pub   | Ben      |  5.00
+--  Down Under Pub   | Coy      |     0
+--  Down Under Pub   | Dan      |  8.00
+--  Down Under Pub   | Eve      |  5.75
+--  James Joyce Pub  | Amy      |  6.25
+--  James Joyce Pub  | Ben      |  3.00
+--  James Joyce Pub  | Coy      |  3.00
+--  James Joyce Pub  | Dan      | 12.75
+--  James Joyce Pub  | Eve      |  6.25
+--  Satisfaction     | Amy      |  5.50
+--  Satisfaction     | Ben      |  5.00
+--  Satisfaction     | Coy      |  2.75
+--  Satisfaction     | Dan      | 10.50
+--  Satisfaction     | Eve      |  5.50
+--  Talk of the Town | Amy      |  2.50
+--  Talk of the Town | Ben      |  4.70
+--  Talk of the Town | Coy      |     0
+--  Talk of the Town | Dan      |  4.70
+--  Talk of the Town | Eve      |  2.50
+--  The Edge         | Amy      |  5.75
+--  The Edge         | Ben      |  5.25
+--  The Edge         | Coy      |     0
+--  The Edge         | Dan      |  8.25
+--  The Edge         | Eve      |  5.75
+--  [25 rows]
+
+
+-- -- select distinct finalsum.fbar, finalsum.fdrinker,
+-- -- 	case
+-- -- 		when (exists (select bar, drinker from frequents where finalsum.fbar = frequents.bar and finalsum.fdrinker = frequents.drinker)) then times_a_week * fsum
+-- -- 		else 0
+-- -- 	end as amount
+-- -- from frequents natural join
+-- -- 	(select fbar, fdrinker, 0 as fsum
+-- -- 	from
+-- -- 		(select distinct bar.name as fbar, drinker.name as fdrinker
+-- -- 		from bar, drinker
+-- -- 		except
+-- -- 		(select distinct bar, drinker
+-- -- 		from (select bar, drinker, likes.beer, price
+-- -- 				from serves, likes
+-- -- 				where serves.beer = likes.beer) as sum1
+-- -- 		group by bar, drinker
+-- -- 		order by bar)) as coy
+-- -- 	union
+-- -- 	(select distinct bar, drinker, sum(price) as sum
+-- -- 	from (select bar, drinker, likes.beer, price
+-- -- 			from serves, likes
+-- -- 			where serves.beer = likes.beer) as sum1
+-- -- 	group by bar, drinker
+-- -- 	order by bar)) as finalsum
+-- -- -- where frequents.bar = finalsum.fbar and frequents.drinker = finalsum.fdrinker
+-- -- group by finalsum.fbar, finalsum.fdrinker, times_a_week, finalsum.fsum
+-- -- order by amount desc, finalsum.fbar;
+
+-- --        bar        | drinker | amount 
+-- -- ------------------+---------+--------
+-- --  Satisfaction     | Dan     |  21.00
+-- --  Down Under Pub   | Dan     |  16.00
+-- --  James Joyce Pub  | Dan     |  12.75
+-- --  James Joyce Pub  | Amy     |  12.50
+-- --  James Joyce Pub  | Eve     |  12.50
+-- --  Satisfaction     | Ben     |  10.00
+-- --  Talk of the Town | Dan     |   9.40
+-- --  The Edge         | Dan     |   8.25
+-- --  Talk of the Town | Ben     |   4.70
+-- --  James Joyce Pub  | Ben     |   3.00
+-- --  [10 rows]
+
+
+-- -- select fbar, fdrinker
+-- -- from
+-- -- 	(select distinct bar.name as fbar, drinker.name as fdrinker
+-- -- 	from bar, drinker
+-- -- 	except
+-- -- 	(select distinct bar, drinker
+-- -- 	from (select bar, drinker, likes.beer, price
+-- -- 			from serves, likes
+-- -- 			where serves.beer = likes.beer) as sum1
+-- -- 	group by bar, drinker
+-- -- 	order by bar)) as coy
+-- -- 	union
+-- -- 	(select distinct bar, drinker
+-- -- 	from (select bar, drinker, likes.beer, price
+-- -- 			from serves, likes
+-- -- 			where serves.beer = likes.beer) as sum1
+-- -- 	group by bar, drinker
+-- -- 	order by bar)
+-- -- except
+-- -- select distinct bar, drinker from frequents;
+
+-- --        fbar       | fdrinker 
+-- -- ------------------+----------
+-- --  Down Under Pub   | Amy
+-- --  Down Under Pub   | Ben
+-- --  Down Under Pub   | Eve
+-- --  James Joyce Pub  | Coy
+-- --  Satisfaction     | Amy
+-- --  Satisfaction     | Coy
+-- --  Satisfaction     | Eve
+-- --  Talk of the Town | Amy
+-- --  Talk of the Town | Coy
+-- --  Talk of the Town | Eve
+-- --  The Edge         | Amy
+-- --  The Edge         | Ben
+-- --  The Edge         | Eve
+-- -- (13 rows)
+
+
+
+-- select distinct finalsum.fbar, finalsum.fdrinker,
+-- 	case
+-- 		when (exists (select bar, drinker from frequents where finalsum.fbar = frequents.bar and finalsum.fdrinker = frequents.drinker)) 
+-- 			then fsum * (select times_a_week from frequents where finalsum.fbar = frequents.bar and finalsum.fdrinker = frequents.drinker)
+-- 		else 0
+-- 	end as famount
+-- from
+-- 	(select fbar, fdrinker, 0 as fsum
+-- 	from
+-- 		(select distinct bar.name as fbar, drinker.name as fdrinker
+-- 		from bar, drinker
+-- 		except
+-- 		(select distinct bar, drinker
+-- 		from (select bar, drinker, likes.beer, price
+-- 				from serves, likes
+-- 				where serves.beer = likes.beer) as sum1
+-- 		group by bar, drinker
+-- 		order by bar)) as coy
+-- 	union
+-- 	(select distinct bar, drinker, sum(price) as sum
+-- 	from (select bar, drinker, likes.beer, price
+-- 			from serves, likes
+-- 			where serves.beer = likes.beer) as sum1
+-- 	group by bar, drinker
+-- 	order by bar)) as finalsum
+-- -- where frequents.bar = finalsum.fbar and frequents.drinker = finalsum.fdrinker
+-- group by finalsum.fbar, finalsum.fdrinker, finalsum.fsum
+-- order by famount desc, finalsum.fbar;
+
+--        fbar       | fdrinker | amount 
+-- ------------------+----------+--------
+--  Satisfaction     | Dan      |  21.00
+--  Down Under Pub   | Dan      |  16.00
+--  James Joyce Pub  | Dan      |  12.75
+--  James Joyce Pub  | Amy      |  12.50
+--  James Joyce Pub  | Eve      |  12.50
+--  Satisfaction     | Ben      |  10.00
+--  Talk of the Town | Dan      |   9.40
+--  The Edge         | Dan      |   8.25
+--  Talk of the Town | Ben      |   4.70
+--  James Joyce Pub  | Ben      |   3.00
+--  Down Under Pub   | Amy      |      0
+--  Down Under Pub   | Ben      |      0
+--  Down Under Pub   | Coy      |      0
+--  Down Under Pub   | Eve      |      0
+--  James Joyce Pub  | Coy      |      0
+--  Satisfaction     | Amy      |      0
+--  Satisfaction     | Coy      |      0
+--  Satisfaction     | Eve      |      0
+--  Talk of the Town | Amy      |      0
+--  Talk of the Town | Coy      |      0
+--  Talk of the Town | Eve      |      0
+--  The Edge         | Amy      |      0
+--  The Edge         | Ben      |      0
+--  The Edge         | Coy      |      0
+--  The Edge         | Eve      |      0
+--  [25 rows]
+
+
+","{""failed"":true,""errorMsg"":""Parsing error at line 21, column 48. Query syntax may be incorrect""}
+"
+"with profitbars(bar, drinker, times_a_week, beer, price) as (select *
+from (frequents natural join serves) fs
+where exists (select drinker, beer from likes where fs.drinker = drinker and beer = fs.beer)),
+actualprofits(bar, price) as (select bar, sum(times_a_week * price) as price from profitbars as b group by bar),
+un(bar, price) as ((select bar, price from actualprofits as u)
+union all
+(select bar, 0 as price from (select name as bar from bar) as b))
+
+select * from un u
+  where not exists (select * from un where bar = u.bar and price > u.price) order by price desc, bar asc;
+","{""failed"":true,""errorMsg"":""Parsing error at line 2, column 7. Query syntax may be incorrect""}
+"
+"SELECT bar, SUM(amt) amt FROM ((SELECT DISTINCT bar, SUM(price * times_a_week) amt FROM serves NATURAL JOIN likes NATURAL JOIN frequents GROUP BY bar) UNION (SELECT name, 0 FROM bar)) a2 GROUP BY bar ORDER BY amt DESC, bar;","{""failed"":true,""errorMsg"":""From line 1, column 147 to line 1, column 149: Column 'BAR' is ambiguous""}
+"
+"--CREATE VIEW Rev AS (SELECT c.bar AS bar, c.times_a_week AS times_a_week, c.price AS price FROM (SELECT * FROM (SELECT * FROM frequents NATURAL JOIN likes) AS a, (SELECT serves.bar AS bar2, serves.beer AS beer2, serves.price AS price FROM serves) AS b WHERE a.bar=b.bar2 AND a.beer=b.beer2) AS c);
+
+--(SELECT z.bar AS bar, z.sum AS amount FROM (SELECT bar, SUM(amount) FROM (SELECT bar, price*times_a_week AS amount FROM Rev) AS foo GROUP BY bar ORDER BY sum DESC, bar) AS z) UNION (SELECT d.name AS bar, 0 AS amount FROM ((SELECT name FROM bar) EXCEPT (SELECT bar FROM (SELECT * FROM (SELECT z.bar AS bar, z.sum AS amount FROM (SELECT bar, SUM(amount) FROM (SELECT bar, price*times_a_week AS amount FROM Rev) AS foo GROUP BY bar ORDER BY sum DESC, bar) AS z) AS foo WHERE foo.amount>-1) AS foof)) AS d ORDER BY bar);
+
+--(SELECT z.bar AS bar, z.sum AS amount FROM (SELECT bar, SUM(amount) FROM (SELECT bar, price*times_a_week AS amount FROM ((SELECT c.bar AS bar, c.times_a_week AS times_a_week, c.price AS price FROM (SELECT * FROM (SELECT * FROM frequents NATURAL JOIN likes) AS a, (SELECT serves.bar AS bar2, serves.beer AS beer2, serves.price AS price FROM serves) AS b WHERE a.bar=b.bar2 AND a.beer=b.beer2) AS c) AS foofofofo)) AS foo GROUP BY bar ORDER BY sum DESC, bar) AS z) UNION (SELECT d.name AS bar, 0 AS amount FROM ((SELECT name FROM bar) EXCEPT (SELECT bar FROM (SELECT * FROM (SELECT z.bar AS bar, z.sum AS amount FROM (SELECT bar, SUM(amount) FROM (SELECT bar, price*times_a_week AS amount FROM ((SELECT c.bar AS bar, c.times_a_week AS times_a_week, c.price AS price FROM (SELECT * FROM (SELECT * FROM frequents NATURAL JOIN likes) AS a, (SELECT serves.bar AS bar2, serves.beer AS beer2, serves.price AS price FROM serves) AS b WHERE a.bar=b.bar2 AND a.beer=b.beer2) AS c) AS foofofofo)) AS foo GROUP BY bar ORDER BY sum DESC, bar) AS z) AS foo WHERE foo.amount>-1) AS foof)) AS d ORDER BY bar);
+
+/*
+The three tables we need are: frequents, likes, and serves
+
+1) First, we need to join frequents and likes based on drinker. 
+	Then, we will have a table with columns {drinker, bar, times_a_week, beer}. Let's call this a
+2) Second, we take a and cross it with serves (where we rename the columns in serves to be {bar2, beer2, price}).
+	This will result in a table with columns {drinker, bar, times_a_week, beer, bar2, beer2, price}
+3) Third, we will select tuples where bar=bar2 and beer=beer2
+4) Fourth, we will add a column to the table called ""amount"" which will simply be times_a_week * price
+	This will result in a table w/ schema {drinker, bar, times_a_week, beer, bar2, beer2, price, amount}
+5) From this table, all we care about is the bar and it's amount. So, we will only select bar and amount.
+	This will give us a table with schema {bar, amount}
+6) Now, it's possible that some bars are expected to have 0 amount. To account for this, we need to join this
+	current table with the names of bars in the bar table. Bars that do not have a amount will now be in the table and 
+	have an expected amount of NULL
+7) We need to convert all NULLs to 0s
+8) We need to now sort in descending order, then in case of ties alphabetically. This should complete the problem!
+*/
+
+--(SELECT c.bar AS bar, c.times_a_week AS times_a_week, c.price AS price FROM (SELECT * FROM (SELECT * FROM frequents NATURAL JOIN likes) AS a, (SELECT serves.bar AS bar2, serves.beer AS beer2, serves.price AS price FROM serves) AS b WHERE a.bar=b.bar2 AND a.beer=b.beer2) AS c) AS fooo
+
+
+(SELECT z.bar AS bar, z.sum AS amount FROM (SELECT bar, SUM(amount) FROM (SELECT fooo.bar, fooo.price*fooo.times_a_week AS amount FROM (SELECT c.bar AS bar, c.times_a_week AS times_a_week, c.price AS price FROM (SELECT * FROM (SELECT * FROM frequents NATURAL JOIN likes) AS a, (SELECT serves.bar AS bar2, serves.beer AS beer2, serves.price AS price FROM serves) AS b WHERE a.bar=b.bar2 AND a.beer=b.beer2) AS c) AS fooo) AS foo GROUP BY bar ORDER BY sum DESC, bar) AS z) UNION (SELECT d.name AS bar, 0 AS amount FROM ((SELECT name FROM bar) EXCEPT (SELECT bar FROM (SELECT * FROM (SELECT z.bar AS bar, z.sum AS amount FROM (SELECT bar, SUM(amount) FROM (SELECT fooo.bar, fooo.price*fooo.times_a_week AS amount FROM (SELECT c.bar AS bar, c.times_a_week AS times_a_week, c.price AS price FROM (SELECT * FROM (SELECT * FROM frequents NATURAL JOIN likes) AS a, (SELECT serves.bar AS bar2, serves.beer AS beer2, serves.price AS price FROM serves) AS b WHERE a.bar=b.bar2 AND a.beer=b.beer2) AS c) AS fooo) AS foo GROUP BY bar ORDER BY sum DESC, bar) AS z) AS foo WHERE foo.amount>-1) AS foof)) AS d ORDER BY bar) ORDER BY amount DESC, bar;","{""failed"":true,""errorMsg"":""Parsing error at line 29, column 24. Query syntax may be incorrect""}
+"
+"SELECT bar, SUM(subtotal) AS amount 
+FROM 
+	(
+		SELECT Serves.bar, Likes.drinker, Serves.beer, 
+			CASE 
+				WHEN times_a_week IS NOT NULL THEN (price * times_a_week) 
+				ELSE 0 
+			END 
+			AS subtotal 
+		FROM Serves LEFT OUTER JOIN (Frequents JOIN Likes ON Frequents.drinker = Likes.drinker) ON Serves.beer = Likes.beer AND Serves.bar = Frequents.bar
+	) 
+	AS T 
+GROUP BY bar 
+ORDER BY amount DESC, bar;
+","{""failed"":true,""errorMsg"":""Parsing error at line 10, column 32. Query syntax may be incorrect""}
+"
+"
+
+SELECT c.bar, c.amount FROM
+	(SELECT b.bar, SUM(b.times_a_week) as amount FROM
+		(SELECT name as bar, 0 as times_a_week FROM bar
+			UNION
+		SELECT a.bar, SUM(a.times_a_week*a.price) FROM
+			(SELECT frequents.bar, serves.price, frequents.times_a_week FROM serves, likes, frequents
+				WHERE serves.beer=likes.beer AND frequents.bar=serves.bar AND likes.drinker= frequents.drinker) a
+			GROUP BY a.bar) b
+			GROUP BY b.bar) c
+		ORDER BY c.amount DESC, c.bar ASC;
+	
+
+","{""failed"":true}
+"
+"
+
+
+select * from (select name, coalesce (sum,0) as total from (select name, sum from bar b left outer join (select bar, sum(money) from 
+(select bar,drinker,price*times_a_week as money from 
+(select * from likes natural join 
+(select * from serves natural join frequents)
+ as sub2) 
+ as sub3) 
+ as sub4 group by bar) 
+as sub5 on sub5
+.bar = b.name) as sub1) as final_sub order by total desc, name;
+
+/* worked with Riley  Hockett */ 
+
+","{""failed"":true,""errorMsg"":""Parsing error at line 4, column 39. Query syntax may be incorrect""}
+"
+"WITH p(bar, amount) AS
+	(SELECT bar, times_a_week*price AS amount
+	FROM frequents NATURAL JOIN serves NATURAL JOIN likes),
+profits(bar,amount) AS
+	(SELECT bar, SUM(amount) AS amount FROM p GROUP BY bar),
+b(bar) AS
+	(SELECT name AS bar FROM bar)
+
+SELECT b.bar, CASE
+	WHEN amount IS NULL THEN 0
+	ELSE amount
+	END
+
+	FROM b LEFT OUTER JOIN profits
+		ON b.bar = profits.bar
+	ORDER BY amount DESC, bar;
+","{""failed"":true,""errorMsg"":""From line 2, column 10 to line 2, column 12: Column 'BAR' is ambiguous""}
+"
+"WITH foo1 AS (SELECT DISTINCT name bar from Bar)
+, foo2 AS (SELECT f.bar, SUM(s.price * f.times_a_week) amount
+FROM Frequents f, Serves s, Likes l
+WHERE f.bar = s.bar AND s.beer = l.beer AND f.drinker = l.drinker
+GROUP BY f.bar)
+SELECT DISTINCT bar, COALESCE(amount, 0) amount
+FROM foo1 NATURAL LEFT OUTER JOIN foo2
+ORDER BY amount DESC, bar ASC;","{""failed"":true,""errorMsg"":""From line 6, column 17 to line 6, column 19: Column 'BAR' is ambiguous""}
+"
+"SELECT bar, SUM(total) AS total2 FROM ((SELECT serves.bar, serves.price * frequents.times_a_week AS total FROM likes, serves, frequents WHERE likes.drinker=frequents.drinker AND serves.bar=frequents.bar AND likes.beer=serves.beer) UNION ALL (SELECT name, 0 FROM bar)) AS t1 GROUP BY bar ORDER BY total2 DESC, bar;","{""failed"":true}
+"
+"select * from (select answer.bar, sum(answer.sum) from ((select distinct bar, 0 as sum from serves) union (select ans.bar, sum(ans.times_a_week*ans.price) from (frequents natural join likes natural join serves) ans group by bar)) answer group by answer.bar) final order by final.sum desc, final.bar;","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 45. Query syntax may be incorrect""}
+"
+"SELECT info.name, SUM(info.case)
+FROM (SELECT bar.name, 
+		CASE WHEN (likes.beer=serves.beer AND likes.drinker=frequents.drinker AND frequents.bar=serves.bar) THEN serves.price * frequents.times_a_week 
+		ELSE '0'
+		END
+	FROM frequents,likes,serves, bar
+	WHERE bar.name=serves.bar AND frequents.drinker=likes.drinker) AS info
+GROUP BY info.name
+ORDER BY SUM(info.case) DESC, info.name;
+
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 27. Query syntax may be incorrect""}
+"
+"SELECT bar,sum FROM ((SELECT bar, SUM(money) FROM (SELECT bar, times_a_week*price AS money FROM (SELECT frequents.bar,frequents.drinker,frequents.times_a_week,serves.beer,serves.price FROM serves,likes,frequents WHERE frequents.bar = serves.bar AND likes.beer = serves.beer AND frequents.drinker = likes.drinker) as subTable) AS sub GROUP BY bar )UNION (SELECT bar, 0.0 FROM ((SELECT name AS bar FROM bar)EXCEPT(SELECT bar FROM (SELECT bar, SUM(money) FROM (SELECT bar, times_a_week*price AS money FROM (SELECT frequents.bar,frequents.drinker,frequents.times_a_week,serves.beer,serves.price FROM serves,likes,frequents WHERE frequents.bar = serves.bar AND likes.beer = serves.beer AND frequents.drinker = likes.drinker) as subTable) AS sub GROUP BY bar)AS T)) AS GIT))as G ORDER BY sum DESC,bar;
+
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 12. Query syntax may be incorrect""}
+"
+"SELECT serves.bar, SUM(price*times_a_week) AS amount
+ 	FROM serves, frequents, likes
+ 	WHERE serves.bar = frequents.bar AND likes.beer = serves.beer
+ 	GROUP BY serves.bar
+	ORDER BY amount DESC;","{""failed"":true}
+"
+"with allsum as (
+	select frequents.bar, sum(times_a_week*price) 
+	from frequents join serves 
+	on frequents.bar=serves.bar 
+	join likes on likes.beer=serves.beer and likes.drinker=frequents.drinker 
+	group by frequents.bar) 
+select bar, 0 as sum 
+from (
+	select name as bar 
+	from bar 
+	except 
+	select bar 
+	from allsum
+	) as t 
+union select * from allsum 
+order by sum desc, bar asc;","{""failed"":true,""errorMsg"":""Parsing error at line 7, column 18. Query syntax may be incorrect""}
+"
+"--Get all bar, amount pairs where amount > 0
+((SELECT bar, SUM(earnings) AS amount
+FROM (SELECT Frequents.drinker, Frequents.bar, Likes.beer, Serves.price*Frequents.times_a_week AS earnings
+FROM Frequents, Likes, Serves
+WHERE Frequents.drinker=Likes.drinker
+AND Frequents.bar=Serves.bar
+AND Likes.beer=Serves.beer) AS M --M contains tuples of how much a drinker spends at a bar for a certain drink per week
+GROUP BY bar)
+--Add bars with 0 as their sum, which is all bars not in the above query
+UNION
+(SELECT name AS bar, 0 AS amount
+FROM Bar
+WHERE name NOT IN (SELECT Frequents.bar
+FROM Frequents, Likes, Serves
+WHERE Frequents.drinker=Likes.drinker
+AND Frequents.bar=Serves.bar
+AND Likes.beer=Serves.beer)))
+ORDER BY amount DESC, bar;","{""failed"":true}
+"
+"WITH earnings(bar,amount) AS 
+(SELECT f.bar,times_a_week*price FROM frequents f, serves s, likes l 
+	WHERE(f.bar = s.bar AND f.drinker = l.drinker AND l.beer = s.beer))
+
+SELECT bar,SUM(amount) total FROM earnings GROUP BY bar
+
+UNION SELECT name,0.00 AS total FROM 
+(SELECT name FROM bar EXCEPT SELECT bar FROM earnings) AS badbeer ORDER BY total DESC, bar ASC;","{""failed"":true}
+"
+"WITH entry AS (
+  SELECT f.bar, f.drinker, f.times_a_week, s.beer, s.price
+  FROM frequents f, likes l, serves s
+  WHERE f.drinker = l.drinker AND f.bar = s.bar AND s.beer = l.beer
+)
+
+(SELECT bar, sum(times_a_week * price)
+ FROM entry
+ GROUP BY bar)
+UNION
+(SELECT name, 0
+ FROM (
+   (SELECT name FROM bar)
+   EXCEPT
+   (SELECT bar FROM entry)
+ ) nosale)
+ORDER BY sum DESC, bar;
+","{""failed"":true,""errorMsg"":""Parsing error at line 17, column 10. Query syntax may be incorrect""}
+"
+"SELECT b.name, SUM(s.price * f.times_a_week) FROM Bar AS b, Serves AS s, Frequents As f WHERE s.beer IN (SELECT l.beer FROM Likes AS l WHERE l.drinker IN (SELECT f.drinker WHERE f.bar = s.bar AND f.bar = b.name)) GROUP BY b.name UNION SELECT b.name, 0 FROM Bar AS b WHERE NOT EXISTS (SELECT s.beer FROM Serves AS s WHERE NOT EXISTS (SELECT 1.beer FROM Likes AS l WHERE l.drinker IN (SELECT drinker FROM Frequents WHERE bar=b.name AND s.bar=b.name AND s.beer = l.beer))) ORDER BY 2 DESC,1 ASC;
+","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 173. Query syntax may be incorrect""}
+"
+"select bar, sum(price) as price from
+(select frequents.bar, times_a_week * price as price from frequents,serves
+where frequents.bar=serves.bar) as RES group by RES.bar order by price desc;
+","{""blocks"":{""id"":""BLOCK_SELECT@61d01788"",""fields"":[""BAR VARCHAR(100)"",""PRICE DECIMAL(19, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@2e3cdec2"",""value"":""NS_SELECT@253b380a.BAR"",""pos"":{""lineNum"":1,""columnNum"":8,""endLineNum"":1,""endColumnNum"":10,""quoted"":false},""children"":[]},{""id"":""OP_AGG_FUNC@1f52eb6f"",""value"":""SUM"",""pos"":{""lineNum"":1,""columnNum"":13,""endLineNum"":1,""endColumnNum"":22,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@4a0df195"",""value"":""NS_SELECT@253b380a.PRICE"",""pos"":{""lineNum"":1,""columnNum"":17,""endLineNum"":1,""endColumnNum"":21,""quoted"":false},""children"":[]}],""alias"":""PRICE""}],""fromItemIds"":[""NS_SELECT@253b380a""],""fromNode"":{""id"":""JOIN_OPERAND@6f099cef"",""value"":""BLOCK_SELECT@6f099cef"",""pos"":{""lineNum"":2,""columnNum"":2,""endLineNum"":3,""endColumnNum"":30,""quoted"":false},""children"":[]},""isAggregate"":true,""groupByList"":[{""id"":""COLUMN_LOCAL@415156bf"",""value"":""NS_SELECT@253b380a.BAR"",""pos"":{""lineNum"":3,""columnNum"":49,""endLineNum"":3,""endColumnNum"":55,""quoted"":false},""children"":[]}],""orderByList"":[{""id"":""OP_POSTFIX@79ab34c1"",""value"":""DESC"",""pos"":{""lineNum"":3,""columnNum"":66,""endLineNum"":3,""endColumnNum"":75,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@73ba6fe6"",""value"":""NS_SELECT@253b380a.PRICE"",""pos"":{""lineNum"":3,""columnNum"":66,""endLineNum"":3,""endColumnNum"":70,""quoted"":false},""children"":[]}]}],""identifiers"":[{""id"":""COLUMN_LOCAL@415156bf"",""value"":""NS_SELECT@253b380a.BAR"",""pos"":{""lineNum"":3,""columnNum"":49,""endLineNum"":3,""endColumnNum"":55,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@73ba6fe6"",""value"":""NS_SELECT@253b380a.PRICE"",""pos"":{""lineNum"":3,""columnNum"":66,""endLineNum"":3,""endColumnNum"":70,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@4a0df195"",""value"":""NS_SELECT@253b380a.PRICE"",""pos"":{""lineNum"":1,""columnNum"":17,""endLineNum"":1,""endColumnNum"":21,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@2e3cdec2"",""value"":""NS_SELECT@253b380a.BAR"",""pos"":{""lineNum"":1,""columnNum"":8,""endLineNum"":1,""endColumnNum"":10,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":1,""columnNum"":1,""endLineNum"":3,""endColumnNum"":55,""quoted"":false},""children"":{""BLOCK_SELECT@6f099cef"":{""id"":""BLOCK_SELECT@6f099cef"",""parentId"":""BLOCK_SELECT@61d01788"",""alias"":""RES"",""fields"":[""BAR VARCHAR(100)"",""PRICE DECIMAL(15, 2)""],""isDistinct"":false,""selectList"":[{""id"":""COLUMN_LOCAL@31e72cbc"",""value"":""NS_IDENT@29c2c826.BAR"",""pos"":{""lineNum"":2,""columnNum"":9,""endLineNum"":2,""endColumnNum"":21,""quoted"":false},""children"":[]},{""id"":""OP_BINARY@6dcd5639"",""value"":""*"",""pos"":{""lineNum"":2,""columnNum"":24,""endLineNum"":2,""endColumnNum"":43,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@3b36e000"",""value"":""NS_IDENT@29c2c826.TIMES_A_WEEK"",""pos"":{""lineNum"":2,""columnNum"":24,""endLineNum"":2,""endColumnNum"":35,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@629ae7e"",""value"":""NS_IDENT@2ba33e2c.PRICE"",""pos"":{""lineNum"":2,""columnNum"":39,""endLineNum"":2,""endColumnNum"":43,""quoted"":false},""children"":[]}],""alias"":""PRICE""}],""fromItemIds"":[""NS_IDENT@29c2c826"",""NS_IDENT@2ba33e2c""],""fromNode"":{""id"":""OP_JOIN@46c00568"",""value"":""COMMA"",""pos"":{""lineNum"":2,""columnNum"":68,""endLineNum"":2,""endColumnNum"":68,""quoted"":false},""children"":[{""id"":""JOIN_OPERAND@488b50ec"",""value"":""NS_IDENT@29c2c826"",""pos"":{""lineNum"":2,""columnNum"":59,""endLineNum"":2,""endColumnNum"":67,""quoted"":false},""children"":[]},{""id"":""JOIN_OPERAND@25b865b5"",""value"":""NS_IDENT@2ba33e2c"",""pos"":{""lineNum"":2,""columnNum"":69,""endLineNum"":2,""endColumnNum"":74,""quoted"":false},""children"":[]}],""natural"":false},""whereNode"":{""id"":""OP_BINARY@1bbae752"",""value"":""="",""pos"":{""lineNum"":3,""columnNum"":7,""endLineNum"":3,""endColumnNum"":30,""quoted"":false},""children"":[{""id"":""COLUMN_LOCAL@dffa30b"",""value"":""NS_IDENT@29c2c826.bar"",""pos"":{""lineNum"":3,""columnNum"":7,""endLineNum"":3,""endColumnNum"":19,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@7b2a3ff8"",""value"":""NS_IDENT@2ba33e2c.bar"",""pos"":{""lineNum"":3,""columnNum"":21,""endLineNum"":3,""endColumnNum"":30,""quoted"":false},""children"":[]}]},""isAggregate"":false,""identifiers"":[{""id"":""COLUMN_LOCAL@31e72cbc"",""value"":""NS_IDENT@29c2c826.BAR"",""pos"":{""lineNum"":2,""columnNum"":9,""endLineNum"":2,""endColumnNum"":21,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@3b36e000"",""value"":""NS_IDENT@29c2c826.TIMES_A_WEEK"",""pos"":{""lineNum"":2,""columnNum"":24,""endLineNum"":2,""endColumnNum"":35,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@629ae7e"",""value"":""NS_IDENT@2ba33e2c.PRICE"",""pos"":{""lineNum"":2,""columnNum"":39,""endLineNum"":2,""endColumnNum"":43,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@dffa30b"",""value"":""NS_IDENT@29c2c826.bar"",""pos"":{""lineNum"":3,""columnNum"":7,""endLineNum"":3,""endColumnNum"":19,""quoted"":false},""children"":[]},{""id"":""COLUMN_LOCAL@7b2a3ff8"",""value"":""NS_IDENT@2ba33e2c.bar"",""pos"":{""lineNum"":3,""columnNum"":21,""endLineNum"":3,""endColumnNum"":30,""quoted"":false},""children"":[]}],""incomingIdentifiers"":[],""corrTableIds"":[],""corrCtxIds"":[],""pos"":{""lineNum"":2,""columnNum"":2,""endLineNum"":3,""endColumnNum"":30,""quoted"":false},""children"":{}}}},""tables"":{""NS_SELECT@253b380a"":{""tableId"":""NS_SELECT@253b380a"",""identifier"":""RES"",""blockId"":""BLOCK_SELECT@6f099cef"",""fields"":[""BAR VARCHAR(100)"",""PRICE DECIMAL(15, 2)""],""cursor"":[0],""pos"":{""lineNum"":2,""columnNum"":2,""endLineNum"":3,""endColumnNum"":38,""quoted"":false}},""NS_IDENT@2ba33e2c"":{""tableId"":""NS_IDENT@2ba33e2c"",""identifier"":""SERVES"",""dbTableName"":""SERVES"",""fields"":[""bar VARCHAR(100)"",""beer VARCHAR(100)"",""price DECIMAL(5, 2)""],""cursor"":[0],""pos"":{""lineNum"":2,""columnNum"":69,""endLineNum"":2,""endColumnNum"":74,""quoted"":false}},""NS_IDENT@29c2c826"":{""tableId"":""NS_IDENT@29c2c826"",""identifier"":""FREQUENTS"",""dbTableName"":""FREQUENTS"",""fields"":[""drinker VARCHAR(100)"",""bar VARCHAR(100)"",""times_a_week INTEGER""],""cursor"":[0],""pos"":{""lineNum"":2,""columnNum"":59,""endLineNum"":2,""endColumnNum"":67,""quoted"":false}}},""corrTables"":[]}
+"
+"WITH myView AS(SELECT freq.drinker, freq.bar, freq.times_a_week, sum(serv.price) AS theSum
+FROM serves serv, frequents freq, likes WHERE freq.bar = serv.bar AND likes.beer = serv.beer AND freq.drinker = likes.drinker
+GROUP BY freq.bar, freq.drinker, freq.times_a_week)
+
+SELECT allbars, emoney FROM
+(SELECT DISTINCT case WHEN bar.name NOT IN (SELECT myView.bar FROM myView) then bar.name else myView.bar end as allbars,
+case WHEN bar.name NOT IN (SELECT myVIEW.bar FROM myView) then 0
+WHEN bar.name in (SELECT myView.bar from myView) then sum(myView.theSum *myView.times_a_week) end as emoney
+FROM myView, bar
+GROUP BY allbars, bar.name
+ORDER BY emoney desc, allbars asc) AS r;","{""failed"":true,""errorMsg"":""From line 10, column 10 to line 10, column 16: Column 'ALLBARS' not found in any table""}
+"
+"(select bar, 0 as amount
+from ( (select name as bar
+from bar)
+except
+
+(select bar
+from((
+select * 
+		from frequents natural join serves)freq
+		join likes on 
+		freq.drinker = likes.drinker and freq.beer = likes.beer)newalias))newnew)
+
+
+union (
+
+(select bar , sum(times_a_week * price) as amount
+from (
+	select * from (
+		select * 
+		from frequents natural join serves)freq
+		join likes on 
+		freq.drinker = likes.drinker and freq.beer = likes.beer)alias
+group by bar
+order by amount DESC, bar))
+order by amount DESC, bar;","{""failed"":true,""errorMsg"":""Parsing error at line 9, column 38. Query syntax may be incorrect""}
+"
+"select input.bar, CAST (SUM(sum) AS numeric)
+from 
+	((select bar, CAST (SUM(t.product) AS numeric)
+			from (select f1.drinker, f1.bar, s1.beer, f1.times_a_week*price as product
+				from serves AS s1, frequents AS f1, likes AS l1
+				where s1.bar = f1.bar
+				and s1.beer = l1.beer
+				and l1.drinker = f1.drinker) AS t
+			group by bar)
+
+	UNION ALL
+
+	(select name,
+			CASE WHEN name = 'Down Under Pub' THEN cast (0 as numeric)
+						ELSE CAST (0 as numeric)
+			       END
+			from bar)) AS input
+group by bar
+order by sum desc, input.bar;","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 29. Query syntax may be incorrect""}
+"
+"(select serves.bar, sum(serves.price * frequents.times_a_week) from frequents, likes, serves where frequents.bar = serves.bar and serves.beer = likes.beer and frequents.drinker = likes.drinker group by serves.bar) union (select name, sum(0*0) from bar group by bar.name) except (select distinct serves.bar, sum(0*0) from frequents, likes, serves where frequents.bar = serves.bar and serves.beer = likes.beer and frequents.drinker = likes.drinker group by serves.bar) order by sum desc, bar;","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 477. Query syntax may be incorrect""}
+"
+"WITH NONZEROBARS(bar, amount) AS
+	(SELECT temp3.bar AS bar, SUM(amount) AS amount
+	FROM 
+		(SELECT temp2.bar, temp2.times_a_week*temp2.price AS amount
+		FROM
+			(SELECT f.drinker, f.bar, f.times_a_week, temp.beer, temp.price
+			FROM Frequents f,
+				(SELECT l.drinker, l.beer, s.bar, s.price
+				FROM Likes l, Serves s
+				WHERE l.beer = s.beer) AS temp
+			WHERE f.drinker = temp.drinker
+			AND f.bar = temp.bar) AS temp2) AS temp3
+	GROUP BY bar)
+SELECT b.name AS bar,
+	CASE WHEN (b.name IN (SELECT bar FROM NONZEROBARS)) THEN 
+		(SELECT amount FROM NONZEROBARS WHERE bar=b.name)
+		ELSE 0
+	END
+	AS amount
+FROM Bar b
+ORDER BY amount DESC, bar ASC;","{""failed"":true}
+"
+"
+
+SELECT total.t1, SUM(total.t4) FROM
+(SELECT t1, t2*t3 AS t4 FROM
+(SELECT Frequents.bar AS t1, Frequents.times_a_week AS t2, Serves.Price AS t3
+FROM Frequents, Likes, Serves
+WHERE Frequents.drinker=Likes.drinker
+AND Likes.beer=Serves.beer
+AND Frequents.bar=Serves.bar) As Vals) AS total
+GROUP BY total.t1 ORDER BY sum DESC;
+
+--Thus far, this code creates a table of frequents, likes, serves by merging like values (for beers and bars),
+-- multiplies the price per beer by the number of times a week the bar is frequented for a person,
+--then adds those values and groups  it by bar (in decscending order)
+--thus, it returns a table of beers bars and the amount of money they make per week
+
+--However, this code does not consider when a bar makes $0 a week
+--this could be fixed by adding a conditional in the initial joining of the table of Frequents, Likes, and Serves
+--This would solve the issue if a bar is not listed in ""frequents"" at all","{""failed"":true,""errorMsg"":""Parsing error at line 10, column 28. Query syntax may be incorrect""}
+"
+"SELECT
+  *
+FROM
+(
+  SELECT
+    temp4.name AS bar,
+    CASE WHEN temp4.amount IS NULL THEN 0
+         ELSE temp4.amount
+    END
+  FROM
+  (
+    (
+      SELECT
+        name
+      FROM
+        bar
+    ) AS temp5
+    LEFT OUTER JOIN
+    (
+      SELECT
+        temp3.bar,
+        SUM(temp3.price * temp3.times_a_week) as amount
+      FROM
+      (
+        frequents
+          NATURAL JOIN
+        (
+          SELECT
+            temp.bar,
+            temp.drinker,
+            SUM(temp.price) as price
+          FROM
+          (
+            likes
+              INNER JOIN
+            serves
+              ON
+            likes.beer = serves.beer
+          ) AS temp
+          WHERE
+            temp.bar IS NOT NULL
+          and
+            temp.drinker IS NOT NULL
+          GROUP BY
+            temp.bar, temp.drinker
+        ) AS temp2
+      ) AS temp3
+      GROUP BY
+        temp3.bar
+    ) AS temp6
+    ON
+      temp5.name = temp6.bar
+  ) AS temp4
+) AS temp7
+WHERE
+  temp7.bar IS NOT NULL
+ORDER BY
+  temp7.amount DESC, temp7.bar;
+","{""failed"":true,""errorMsg"":""Parsing error at line 17, column 7. Query syntax may be incorrect""}
+"
+"/*
+Suppose that each time a drinker visits a bar (according to the frequency in Frequents),
+her or she always buys one glass of each beer served at this bar that he or she likes;
+if no such beer exists, he or she will not buy anything. Calculate, for each bar, the total
+amount of money it expects to get per week (over all drinkers).
+List the (bar, amount) pairs in decreasing order of amount.
+In case of ties, sort alphabetically by bar.
+Be sure to handle the case when a bar doesn't expect to sell any beer to our drinkers –
+you should show an amount of 0.
+*/
+
+WITH t AS (
+    SELECT frequents.bar AS bar, SUM(serves.price * frequents.times_a_week) AS total
+    FROM frequents, serves, likes
+    WHERE frequents.bar = serves.bar
+    AND frequents.drinker = likes.drinker
+    AND serves.beer = likes.beer
+    GROUP BY frequents.bar
+)
+SELECT DISTINCT name AS bar,
+    CASE WHEN (name NOT IN (SELECT bar FROM t)) THEN 0
+        ELSE (SELECT t.total FROM t WHERE t.bar = name)
+    END AS value
+FROM bar, t
+ORDER BY value DESC, bar ASC;
+
+","{""failed"":true,""errorMsg"":""Parsing error at line 23, column 12. Query syntax may be incorrect""}
+"
+"SELECT
+bar,
+SUM(price) AS amount,
+CASE WHEN SUM(price) = 0 THEN '0'
+-- case when sum is equal to 0
+ELSE SUM(PRICE) = SUM(PRICE)
+-- every other case
+END
+FROM
+(SELECT
+bar,
+drinker,
+Serves.beer,
+price
+FROM
+Serves
+JOIN
+Likes
+ON serves.beer = likes.beer) ALLBEERS
+-- the bars that only serve beers that are in both Likes and Serves
+GROUP BY
+bar
+-- need a group by with an aggregate function
+ORDER BY
+amount DESC
+-- order by amount descending","{""failed"":true}
+"
+"select bar.name, coalesce(sum(foo.times_a_week * foo.price),0) 
+as amount from bar left join (select serves.bar, frequents.times_a_week, serves.price from serves, likes, frequents
+where likes.drinker = frequents.drinker
+and serves.beer = likes.beer
+and serves.bar = frequents.bar) as foo
+on bar.name = foo.bar
+group by bar.name
+ORDER BY amount DESC, bar.name ASC;","{""failed"":true}
+"
+"SELECT * FROM
+(SELECT DISTINCT serves.bar, CASE WHEN c.money IS NULL THEN 0 ELSE c.money END earnings FROM
+(SELECT b.bar, SUM(b.times_a_week * b.price) money FROM
+(SELECT a.drinker, a.bar, a.times_a_week, a.beer, serves.price
+FROM serves 
+JOIN
+(SELECT frequents.drinker, frequents.bar, frequents.times_a_week, likes.beer
+FROM frequents
+JOIN likes
+ON frequents.drinker = likes.drinker) a
+ON serves.bar = a.bar AND serves.beer = a.beer) b
+GROUP BY bar) c RIGHT JOIN serves ON c.bar = serves.bar) d ORDER BY earnings DESC, bar;","{""failed"":true}
+"
+"select a.name,sum(rev) from ((select r.name, sum(revenue) as rev  from (select frequents.drinker,bar.name,likes.beer,serves.price*times_a_week as revenue from frequents,likes,serves,bar where bar.name = frequents.bar and bar.name = serves.bar and frequents.drinker = likes.drinker and frequents.bar = serves.bar and serves.beer = likes.beer) as r group by r.name order by rev desc,r.name) union all select bar.name,case when bar.name = 'The Edge' THEN cast (0 as numeric) else cast (0 as numeric) end from bar) as a group by a.name order by sum desc,a.name;","{""failed"":true,""errorMsg"":""Parsing error at line 1, column 542. Query syntax may be incorrect""}
+"
+"/*drinkers frequent bars that serve certain beers*/
+with frequents_serves(bar, drinker, times_a_week, beer, price) as
+(select *
+from frequents natural join serves),
+
+weekly_income(bar, amount) as
+(select bar, sum(times_a_week*price) as amount
+from frequents_serves
+
+/*keep tuples where drinker frequents bar with drinker's liked drink*/
+where beer in (
+select beer
+from likes
+where likes.drinker=frequents_serves.drinker
+)
+
+group by bar 
+)
+
+select name as bar,
+case when name not in (select bar from weekly_income) then 0
+else (
+select amount
+from weekly_income
+where bar=name)
+end
+
+from bar
+order by amount DESC, name;
+","{""failed"":true,""errorMsg"":""From line 29, column 10 to line 29, column 15: Column 'AMOUNT' not found in any table""}
+"
+"
+SELECT bar, SUM (sum1) as sum2
+FROM	((SELECT bar, SUM(price * times_a_week) AS sum1
+		FROM	(SELECT frequents.bar, serves.price, frequents.times_a_week
+				FROM frequents, likes, serves
+				WHERE frequents.drinker = likes.drinker AND likes.beer = serves.beer AND frequents.bar = serves.bar) as T1
+		GROUP BY T1.bar)
+
+		UNION 
+
+		(SELECT bar.name, 0 AS sum1 
+		 FROM bar)) AS T2
+GROUP BY bar
+ORDER BY sum2 DESC, bar ASC;
+","{""failed"":true}
+"
+"WITH UNORG(name, profit) AS
+(
+  SELECT bar.name, 0
+  FROM bar
+  WHERE bar.name NOT IN
+  (
+    SELECT frequents.bar as name
+    FROM frequents, likes, serves
+    WHERE frequents.drinker = likes.drinker AND likes.beer = serves.beer AND frequents.bar = serves.bar
+  )
+  UNION
+  SELECT T.bar, COALESCE(SUM(T.price * T.times_a_week),0) as profit
+  FROM
+  (
+    SELECT frequents.bar, frequents.drinker, frequents.times_a_week, likes.beer, serves.price
+    FROM frequents, likes, serves
+    WHERE frequents.drinker = likes.drinker AND likes.beer = serves.beer AND frequents.bar = serves.bar
+  ) T
+  GROUP BY T.bar
+)
+SELECT *
+FROM UNORG
+ORDER BY UNORG.profit DESC, UNORG.name;
+","{""failed"":true}
+"
+"WITH total(bar, amount) AS
+(SELECT serves.bar, SUM(serves.price*frequents.times_a_week) as amount
+    FROM serves, frequents, likes
+    WHERE frequents.drinker=likes.drinker AND likes.beer=serves.beer AND serves.bar=frequents.bar GROUP BY serves.bar)
+
+(SELECT bar, amount FROM total) UNION
+    SELECT name, 0 as amount FROM bar WHERE name NOT IN (SELECT bar FROM total)
+    ORDER BY amount DESC, bar ASC;
+","{""failed"":true}
+"
+"select name,sum(total) from (
+
+(select name,0 total from bar)
+EXCEPT
+(select bar,sum(money) total from (
+	select bar,beer,sum1*price money from (
+		select bar,beer,sum(times_a_week) sum1,price from (
+			select f.bar,l.beer,f.times_a_week,s.price
+			from frequents f, likes l, serves s
+			where f.drinker=l.drinker and f.bar=s.bar and l.beer=s.beer
+		) foo
+		group by bar,beer,price
+	) foo1
+) foo2
+group by bar
+order by total DESC, bar)
+UNION
+(select bar,sum(money) total from (
+	select bar,beer,sum1*price money from (
+		select bar,beer,sum(times_a_week) sum1,price from (
+			select f.bar,l.beer,f.times_a_week,s.price
+			from frequents f, likes l, serves s
+			where f.drinker=l.drinker and f.bar=s.bar and l.beer=s.beer
+		) foo
+		group by bar,beer,price
+	) foo1
+) foo2
+group by bar
+order by total DESC, bar)
+
+) foo3
+group by name
+order by sum DESC, name;","{""failed"":true,""errorMsg"":""Parsing error at line 33, column 10. Query syntax may be incorrect""}
+"
+"SELECT bar, SUM(amount) as amount
+FROM ((SELECT bar, SUM(times_a_week * price) AS amount
+	  FROM serves NATURAL JOIN frequents NATURAL JOIN likes
+ 	  GROUP BY bar)
+	  UNION
+	  (SELECT name AS bar, 0 as amount
+	   FROM bar)) AS tabl
+GROUP BY bar
+ORDER BY amount DESC, bar ASC;
+/*consulted GTA Yameng*/","{""failed"":true,""errorMsg"":""From line 4, column 14 to line 4, column 16: Column 'BAR' is ambiguous""}
+"
+"WITH Answer AS ((WITH Data AS 
+
+(WITH Likers AS (SELECT likes.drinker, beer, bar, times_a_week 
+	             FROM Likes  inner join Frequents on likes.drinker = frequents.drinker) 
+                 SELECT drinker, likers.beer, likers.bar, times_a_week, price 
+                 FROM likers join serves on serves.beer = likers.beer 
+                 AND serves.bar = likers.bar)
+
+SELECT bar, sum(times_a_week*price) AS amount FROM Data GROUP BY bar)
+
+UNION
+
+(WITH zeros AS
+(SELECT name FROM bar
+EXCEPT
+
+(WITH Data AS 
+
+(WITH likers AS (SELECT likes.drinker, beer, bar, times_a_week 
+	             FROM likes inner join frequents on likes.drinker = frequents.drinker) 
+                 SELECT drinker, likers.beer, likers.bar, times_a_week, price 
+                 FROM likers join serves on serves.beer = likers.beer 
+                 AND serves.bar = likers.bar)
+
+SELECT bar AS name FROM Data GROUP BY bar))
+
+SELECT name, 0.0 AS amount FROM zeros))
+
+SELECT * FROM answer ORDER BY amount DESC, bar;","{""failed"":true}
+"
